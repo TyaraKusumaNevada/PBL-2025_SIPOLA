@@ -24,7 +24,6 @@ id="layout-navbar">
   <!-- /Search -->
 
   <ul class="navbar-nav flex-row align-items-center ms-md-auto">
-    <!-- Place this tag where you want the button to render. -->
     <li class="nav-item lh-1 me-4">
       <a
         class="github-button"
