@@ -26,7 +26,8 @@
 
         <link rel="stylesheet" href="{{ asset('template/assets/vendor/css/core.css') }}" />
         <link rel="stylesheet" href="{{ asset('template/assets/css/demo.css') }}" />
-
+        <link rel="stylesheet" href="{{ asset('template/assets/css/demo.css') }}" />
+        
         <!-- Vendors CSS -->
 
         <link rel="stylesheet" href="{{ asset('template/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
@@ -124,7 +125,7 @@
                 <!-- Layout container -->
                 <div class="layout-page">
                     <!-- Navbar -->
-                    @include('layouts.header')
+                    {{-- @include('layouts.header') --}}
                     <!-- / Navbar -->
 
                     <!-- Content wrapper -->
