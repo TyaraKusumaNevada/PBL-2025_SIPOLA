@@ -24,3 +24,7 @@ Route::get('/mahasiswa/profil', function () {
 Route::get('/mahasiswa/prestasi', function () {
     return view('mahasiswa.prestasi');
 });
+
+Route::get('/akses/login', function () {
+    return view('akses.login');
+});
