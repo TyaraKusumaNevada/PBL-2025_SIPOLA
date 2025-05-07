@@ -31,4 +31,4 @@ Route::get('/mahasiswa/prestasi', function () {
 Route::get('/login', function () {
     return view('akses.login');
 });
-Route::post('login', [loginController::class, 'login']);
+
