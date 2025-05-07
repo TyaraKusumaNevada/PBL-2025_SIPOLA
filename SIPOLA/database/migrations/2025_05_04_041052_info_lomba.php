@@ -13,7 +13,11 @@ return new class extends Migration
     {
         Schema::create('info_lomba', function (Blueprint $table) {
             $table->id('id_info');
-            $table->foreignId('id_lomba')->constrained('tambah_lomba');
+
+            $table->unsignedBigInteger('id_lomba');
+            $table->foreign('id_lomba')->references('id')->on('tambah_lomba')->onDelete('cascade');
+            
+
             $table->timestamps();
         });
     }
@@ -23,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('info_lomba');
     }
 };

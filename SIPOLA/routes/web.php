@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\loginController;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +28,7 @@ Route::get('/mahasiswa/prestasi', function () {
     return view('mahasiswa.prestasi');
 });
 
-Route::get('/akses/login', function () {
+Route::get('/login', function () {
     return view('akses.login');
 });
+Route::post('login', [loginController::class, 'login']);
