@@ -13,9 +13,17 @@ return new class extends Migration
     {
         Schema::create('rekomendasi', function (Blueprint $table) {
             $table->id('id_rekomendasi');
-            $table->foreignId('id_mahasiswa')->constrained('mahasiswa');
-            $table->foreignId('id_lomba')->constrained('tambah_lomba');
-            $table->foreignId('id_dosen')->nullable()->constrained('dospem');
+
+            $table->unsignedBigInteger('id_mahasiswa');
+            $table->foreign('id_mahasiswa')->references('id_mahasiswa')->on('mahasiswa')->onDelete('cascade');
+
+            $table->unsignedBigInteger('id_lomba');
+            $table->foreign('id_lomba')->references('id')->on('tambah_lomba')->onDelete('cascade');
+            
+
+            $table->unsignedBigInteger('id_dosen')->nullable();
+            $table->foreign('id_dosen')->references('id_dosen')->on('dospem')->onDelete('set null');
+            
             $table->timestamps();
         });
     }
@@ -25,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('rekomendasi');
     }
 };

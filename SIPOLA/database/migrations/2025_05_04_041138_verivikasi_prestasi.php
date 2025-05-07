@@ -13,12 +13,17 @@ return new class extends Migration
     {
         Schema::create('verifikasi_prestasi', function (Blueprint $table) {
             $table->id('id_verifikasi');
-            $table->foreignId('id_prestasi')->constrained('prestasi')->onDelete('cascade');
+
+            $table->unsignedBigInteger('id_prestasi');
+            $table->foreign('id_prestasi')->references('id')->on('prestasi')->onDelete('cascade');
+
             $table->enum('verifikator_type', ['admin', 'dosen']);
-            $table->unsignedBigInteger('id_verifikator');
+            $table->unsignedBigInteger('id_verifikator'); // tidak bisa di-foreign karena tergantung type
+
             $table->enum('status', ['Pending', 'Disetujui', 'Ditolak']);
             $table->text('catatan')->nullable();
             $table->dateTime('tanggal_verifikasi')->nullable();
+
             $table->timestamps();
         });
     }
@@ -28,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('verifikasi_prestasi');
     }
 };
