@@ -6,7 +6,7 @@
 <ul class="menu-inner py-1">
 
    <!-- Dashboard Admin -->
-  <li class="menu-item {{ Request::is('admin/dashboard') ? 'active open' : '' }}">
+  <li class="menu-item {{ Request::is('/admin/dashboard') ? 'active open' : '' }}">
     <a href="{{ url('/admin/dashboard') }}" class="menu-link">
       <i class="menu-icon tf-icons bx bx-home"></i>
       <div class="text-truncate" data-i18n="Dashboard">Dashboard</div>
@@ -14,7 +14,7 @@
   </li>
 
   <!-- Dashboard Dospem -->
-  <li class="menu-item {{ Request::is('dospem/dashboard') ? 'active open' : '' }}">
+  <li class="menu-item {{ Request::is('/dospem/dashboard') ? 'active open' : '' }}">
     <a href="{{ url('/dospem/dashboard') }}" class="menu-link">
       <i class="menu-icon tf-icons bx bx-home"></i>
       <div class="text-truncate" data-i18n="Dashboard">Dashboard</div>
@@ -22,7 +22,7 @@
   </li>
 
   <!-- Dashboard Mahasiswa -->
-  <li class="menu-item {{ Request::is('mahasiswa/dashboard') ? 'active open' : '' }}">
+  <li class="menu-item {{ Request::is('/mahasiswa/dashboard') ? 'active open' : '' }}">
     <a href="{{ url('/mahasiswa/dashboard') }}" class="menu-link">
       <i class="menu-icon tf-icons bx bx-home"></i>
       <div class="text-truncate" data-i18n="Dashboard">Dashboard</div>
@@ -54,7 +54,7 @@
   </li>
 
   <!-- Manajemen User -->
-  <li class="menu-item {{ Request::is('user*') ? 'active open' : '' }}">
+  <li class="menu-item {{ Request::is('/user*') ? 'active open' : '' }}">
     <a href="{{ url('/user') }}" class="menu-link">
       <i class="bi bi-people menu-icon"></i>
       <div class="text-truncate" data-i18n="ManajemenUser">Manajemen User</div>
@@ -62,7 +62,7 @@
   </li>
 
   <!-- Manajemen Lomba -->
-  <li class="menu-item {{ Request::is('lomba*') ? 'active open' : '' }}">
+  <li class="menu-item {{ Request::is('/lomba*') ? 'active open' : '' }}">
     <a href="{{ url('/lomba') }}" class="menu-link">
       <i class="bi bi-trophy menu-icon"></i>
       <div class="text-truncate" data-i18n="ManajemenLomba">Manajemen Lomba</div>
@@ -84,12 +84,13 @@
       <div class="text-truncate" data-i18n="VerifikasiLomba">Verifikasi Info Lomba</div>
     </a>
   </li>
-  
-  <!-- Memberikan jarak, agar logout di bawah -->
+
+
+
   <div style="flex-grow: 1;"></div>
 
   <li class="menu-item">
-    <a href="akses/login" class="menu-link">
+    <a href="#" class="menu-link">
       <i class="menu-icon tf-icons bx bx-log-out"></i>
       <div class="text-truncate" data-i18n="Misc">Logout</div>
     </a>

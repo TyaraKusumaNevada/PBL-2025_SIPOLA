@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('prestasi', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_mahasiswa')->constrained('mahasiswa');
+            $table->unsignedBigInteger('id_mahasiswa'); // Perbaiki nama kolom dari id_mahasiwa menjadi id_mahasiswa
+            $table->foreign('id_mahasiswa')->references('id_mahasiswa')->on('mahasiswa')->onDelete('cascade');
             $table->string('nama_prestasi');
             $table->enum('kategori_prestasi', ['akademik', 'non-akademik']);
             $table->enum('tingkat_prestasi', ['lokal', 'nasional', 'internasional']);
@@ -30,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('prestasi');
     }
 };
