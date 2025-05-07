@@ -28,7 +28,10 @@ Route::get('/mahasiswa/prestasi', function () {
     return view('mahasiswa.prestasi');
 });
 
-Route::get('/login', function () {
+Route::get('/akses/login', function () {
     return view('akses.login');
 });
 
+Route::get('/user', function () {
+    return view('user.index');
+});
