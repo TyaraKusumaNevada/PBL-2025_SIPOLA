@@ -32,3 +32,4 @@ Route::get('/login', function () {
     return view('akses.login');
 });
 
+

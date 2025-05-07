@@ -7,7 +7,6 @@
         color: white;
     }
 </style>
-</style>
 <div class="row">
     <div class="col-12">
         <div class="card p-4 min-vh-100">
