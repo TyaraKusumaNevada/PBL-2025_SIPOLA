@@ -9,9 +9,8 @@
           <div class="col-sm-12">
             <div class="card-body min-vh-50">
               <h5 class="card-title text-primary mb-3 fs-3">User Terdaftar</h5>
-              <a href="{{ url('/user/create_ajax') }}" class="btn btn-sm btn-outline-primary mt-3 mb-5 fs-6"> + Tambah Prestasi</a>
               <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-8 mt-4 mb-5">
                     <div class="form-group row">
                         <label class="col-1 control-label col-form-label">Filter:</label>
                         <div class="col-3">
@@ -24,10 +23,11 @@
                         </div>
                     </div>
                 </div>
-            </div>  
-            </div>  
-              <div class="w-100">
-                  <table class="table w-100" id="userTable">
+                <div class="col-md-4 text-end mb-5">
+                  <a href="{{ url('/user/create_ajax') }}" class="btn btn-sm btn-outline-primary mt-3 mb-5 fs-6"> + Tambah Prestasi</a>
+                </div>
+                <div class="w-100 mt-5">
+                  <table class="table w-100 mt-5" id="userTable">
                     <thead>
                       <tr>
                         <th>NO</th>
@@ -86,6 +86,8 @@
                   </table>
                 </div>
             </div>
+            </div>  
+            </div>  
       </div>
     </div>
 </div>
