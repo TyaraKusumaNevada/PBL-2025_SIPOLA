@@ -52,10 +52,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/mahasiswa/profil', function () {
-    return view('mahasiswa.profil');
+Route::get('/akses/login', function () {
+    return view('akses.login');
 });
 
-Route::get('/mahasiswa/prestasi', function () {
-    return view('mahasiswa.prestasi');
-});
+
