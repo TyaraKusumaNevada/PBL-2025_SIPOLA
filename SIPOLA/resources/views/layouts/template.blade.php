@@ -17,7 +17,7 @@
         <!-- DataTables Bootstrap 5 CSS -->
         <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
 
-        <!-- SweetAlert2 CSS -->
+        <!-- SweetAlert2 CSS (dari CDN) -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
         <!-- Bootstrap Icons -->
@@ -45,12 +45,6 @@
 
         <!-- Bootstrap 5 Bundle JS (sudah termasuk Popper) -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-        <!-- DataTables JS -->
-        <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-
-        <!-- DataTables Bootstrap 5 JS -->
-        <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 
         <!-- Helpers -->
         <script src="{{ asset('template/assets/vendor/js/helpers.js') }}"></script>
@@ -114,9 +108,18 @@
 
         <!-- jQuery -->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
         <!-- DataTables JS -->
-        <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-        <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+        <!-- DataTables Bootstrap 5 JS -->
+        <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+        <!-- SweetAlert2 JS (dari CDN) -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <!-- jQuery Validation -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/additional-methods.min.js"></script>
 
         @stack('js') <!-- Digunakan untuk memanggil custom js dari perintah push('js') pada masing-masing view -->
 
