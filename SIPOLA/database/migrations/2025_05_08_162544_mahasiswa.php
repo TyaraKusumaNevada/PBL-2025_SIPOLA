@@ -4,9 +4,12 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class mahasiswa extends Migration
+return new class extends Migration
 {
-    public function up()
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
     {
         Schema::create('mahasiswa', function (Blueprint $table) {
             $table->id('id_mahasiswa');
@@ -20,12 +23,18 @@ class mahasiswa extends Migration
             $table->text('minat')->nullable();
             $table->timestamps();
             $table->unsignedBigInteger('id_prodi');
-            $table->foreign('id_prodi')->references('id')->on('program_studi')->onDelete('cascade');
+            $table->foreign('id_prodi')->references('id_prodi')->on('program_studi')->onDelete('cascade');
+            
+            $table->unsignedBigInteger('id_angkatan')->nullable();
+            $table->foreign('id_angkatan')->references('id_angkatan')->on('angkatan')->onDelete('set null');
         });
     }
 
-    public function down()
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
     {
         Schema::dropIfExists('mahasiswa');
     }
-}
+};
