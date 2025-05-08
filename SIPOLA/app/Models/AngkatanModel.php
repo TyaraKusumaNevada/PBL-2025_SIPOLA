@@ -15,4 +15,3 @@ class AngkatanModel extends Model
         return $this->hasMany(MahasiswaModel::class, 'id_angkatan');
     }
 }
-

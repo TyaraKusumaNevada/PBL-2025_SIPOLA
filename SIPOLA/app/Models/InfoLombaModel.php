@@ -15,4 +15,3 @@ class InfoLombaModel extends Model
         return $this->belongsTo(TambahLomba::class, 'id_lomba');
     }
 }
-

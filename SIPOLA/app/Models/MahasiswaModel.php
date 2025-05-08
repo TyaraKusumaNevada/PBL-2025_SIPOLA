@@ -28,4 +28,3 @@ class MahasiswaModel extends Model
         return $this->hasMany(RekomendasiModel::class, 'id_mahasiswa');
     }
 }
-

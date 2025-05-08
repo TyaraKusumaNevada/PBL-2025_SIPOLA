@@ -15,4 +15,3 @@ class VerifikasiPrestasiModel extends Model
         return $this->belongsTo(PrestasiModel::class, 'id_prestasi');
     }
 }
-
