@@ -69,6 +69,14 @@
     </a>
   </li>
 
+  <!-- Manajemen Prodi -->
+  <li class="menu-item {{ Request::is('admin*') ? 'active open' : '' }}">
+    <a href="{{ url('/admin/ManajemenProdi') }}" class="menu-link">
+      <i class="bi bi-diagram-3 menu-icon"></i>
+      <div class="text-truncate" data-i18n="ManajemenProdi">Manajemen Prodi</div>
+    </a>
+  </li>
+
   <!-- Verifikasi Prestasi -->
   <li class="menu-item {{ Request::is('admin/verifikasiprestasi*') ? 'active open' : '' }}">
     <a href="{{ url('admin/verifikasi') }}" class="menu-link">
