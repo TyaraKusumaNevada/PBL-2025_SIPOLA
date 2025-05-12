@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use App\Models\PrestasiModel;
@@ -10,7 +9,19 @@ class MahasiswaModel extends Model
 {
     protected $table = 'mahasiswa';
     protected $primaryKey = 'id_mahasiswa';
-    protected $fillable = ['id_prodi', 'nama', 'nim', 'password', 'email', 'bidang_keahlian', 'minat', 'id_angkatan'];
+    
+    // Menambahkan 'id_role' ke dalam $fillable
+    protected $fillable = [
+        'id_prodi', 
+        'nama', 
+        'nim', 
+        'password', 
+        'email', 
+        'bidang_keahlian', 
+        'minat', 
+        'id_angkatan', 
+        'id_role', // Menambahkan id_role di sini
+    ];
 
     public function angkatan() {
         return $this->belongsTo(AngkatanModel::class, 'id_angkatan');

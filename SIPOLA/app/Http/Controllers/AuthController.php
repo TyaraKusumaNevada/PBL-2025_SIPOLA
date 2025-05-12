@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\Mahasiswa;
+use App\Models\MahasiswaModel;
+use App\Models\DospemModel;
+use App\Models\AdminModel;
 use App\Models\Dosen;
 use App\Models\Admin;
 use Illuminate\Http\Request;
@@ -48,7 +50,7 @@ class AuthController extends Controller
         $userData = null;
 
         // Check in mahasiswa table for NIM
-        $mahasiswa = Mahasiswa::where('nim', $request->username)->first();
+        $mahasiswa = MahasiswaModel::where('nim', $request->username)->first();
         
         if ($mahasiswa) {
             $userFound = true;
@@ -56,7 +58,7 @@ class AuthController extends Controller
             $userData = $mahasiswa;
         } else {
             // Check in dosen table for NIP/NIDN
-            $dosen = Dosen::where('nidn', $request->username)->first();
+            $dosen = DospemModel::where('nidn', $request->username)->first();
             
             if ($dosen) {
                 $userFound = true;
@@ -64,7 +66,7 @@ class AuthController extends Controller
                 $userData = $dosen;
             } else {
                 // Check in admin table
-                $admin = Admin::where('nama_admin', $request->username)->first();
+                $admin = AdminModel::where('nama_admin', $request->username)->first();
                 
                 if ($admin) {
                     $userFound = true;
@@ -103,15 +105,8 @@ class AuthController extends Controller
                 $request->session()->regenerate();
                 
                 // Redirect based on user role
-                $redirectTo = '/dashboard'; // Default redirect
                 
-                if ($userType === 'admin') {
-                    $redirectTo = '/admin/dashboard';
-                } elseif ($userType === 'student') {
-                    $redirectTo = '/student/dashboard';
-                } elseif ($userType === 'dosen') {
-                    $redirectTo = '/dosen/dashboard';
-                }
+              $redirectTo = '/';
                 
                 // Send response for the client-side alert (successful login)
                 return response()->json([

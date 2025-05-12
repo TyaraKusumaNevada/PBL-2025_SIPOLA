@@ -3,6 +3,7 @@
 // Route definitions for web interface
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\siginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProgramStudiController;
 
@@ -54,8 +55,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/akses/login', function () {
-    return view('akses.login');
+Route::get('/auth/login', function () {
+    return view('auth.login');
 });
 
 
