@@ -86,7 +86,7 @@
               <button onclick="modalAction('${base}/${row.id}/show_ajax')"  class="btn btn-sm btn-info">Detail</button>
               <button onclick="modalAction('${base}/${row.id}/edit_ajax')"  class="btn btn-sm btn-warning">Edit</button>
               <button onclick="deleteProdi(${row.id})"                      class="btn btn-sm btn-danger">Delete</button>
-            `;
+            `; 
           }
         }
       ]

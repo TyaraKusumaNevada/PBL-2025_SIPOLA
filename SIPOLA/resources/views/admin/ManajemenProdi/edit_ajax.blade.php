@@ -53,7 +53,7 @@
     $.ajax({
       url:    $f.attr('action'),
       method: 'PUT',
-      data:   $f.serialize(),
+      data:   $f.serialize(), 
       success() {
         // tutup modal & refresh DataTable
         $('#myModal').modal('hide');

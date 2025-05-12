@@ -12,7 +12,7 @@ class ProgramStudiController extends Controller
     public function index()
     {
         return view('admin.ManajemenProdi.index');
-    }
+    } 
 
     public function list(Request $request)
 {

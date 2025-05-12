@@ -109,8 +109,7 @@ Route::prefix('user')->group(function () {
     });
 });
 
-// ROUTE ADMin
-
+// ROUTE ADMIN
 
 Route::prefix('admin/ManajemenProdi')->group(function () {
   Route::get('/', [ProgramStudiController::class, 'index']);
