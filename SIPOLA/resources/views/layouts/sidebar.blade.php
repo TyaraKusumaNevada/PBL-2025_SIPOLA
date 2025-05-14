@@ -52,15 +52,7 @@
       <div class="text-truncate" data-i18n="MahasiswaProfil">Profil</div>
     </a>
   </li>
-@if (Auth::user()->id_rolee == 1)
-<!-- Manajemen User -->
-<li class="menu-item {{ Request::is('user*') ? 'active open' : '' }}">
-  <a href="{{ url('/user') }}" class="menu-link">
-    <i class="bi bi-people menu-icon"></i>
-    <div class="text-truncate" data-i18n="ManajemenUser">Manajemen User</div>
-  </a>
-</li>
-@endif
+
 
 <!-- Manajemen Lomba -->
 <li class="menu-item {{ Request::is('lomba*') ? 'active open' : '' }}">

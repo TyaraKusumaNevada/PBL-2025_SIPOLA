@@ -84,16 +84,18 @@ Route::prefix('user')->group(function () {
 // ----------------------------------------------------------------------------------------
 // ROUTE ADMIN (Manajemen Program Studi)
 Route::prefix('admin/ManajemenProdi')->group(function () {
-    Route::get('/', [ProgramStudiController::class, 'index']);
-    Route::get('list', [ProgramStudiController::class, 'list']);
-    Route::get('create_ajax', [ProgramStudiController::class, 'create_ajax']);
-    Route::post('store_ajax', [ProgramStudiController::class, 'store_ajax']);
-    Route::get('{id}/show_ajax', [ProgramStudiController::class, 'show_ajax']);
-    Route::get('{id}/edit_ajax', [ProgramStudiController::class, 'edit_ajax']);
-    Route::put('{id}/update_ajax', [ProgramStudiController::class, 'update_ajax']);
-    Route::delete('{id}/delete_ajax', [ProgramStudiController::class, 'delete_ajax']);
+  Route::get('/', [ProgramStudiController::class, 'index']);
+  Route::get('list', [ProgramStudiController::class, 'list']);
+  Route::get('create_ajax', [ProgramStudiController::class, 'create_ajax']);
+  Route::post('store_ajax', [ProgramStudiController::class, 'store_ajax']);
+  Route::get('{id}/show_ajax',[ProgramStudiController::class, 'show_ajax']);
+  Route::get('{id}/edit_ajax',[ProgramStudiController::class, 'edit_ajax']);
+  Route::put('{id}/update_ajax',[ProgramStudiController::class, 'update_ajax']);
+  Route::get('{id}/confirm_ajax', [ProgramStudiController::class, 'confirm_ajax']);
+  Route::delete('{id}/delete_ajax',[ProgramStudiController::class, 'delete_ajax']);
+   
 });
-// ----------------------------------------------------------------------------------------
+
 
 
 // ----------------------------------------------------------------------------------------

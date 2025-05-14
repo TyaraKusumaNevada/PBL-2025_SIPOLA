@@ -25,9 +25,9 @@ class ProgramStudiController extends Controller
     return DataTables::of($data)
         ->addIndexColumn()
         ->addColumn('aksi', function ($row) {
-            $detailBtn = '<button onclick="modalAction(\'' . url("admin/ManajemenProdi/{$row->id}/detail_ajax") . '\')" class="btn btn-sm btn-info">Detail</button>';
-            $editBtn = '<button onclick="modalAction(\'' . url("admin/ManajemenProdi/{$row->id}/edit_ajax") . '\')" class="btn btn-sm btn-warning">Edit</button>';
-            $deleteBtn = '<button onclick="modalAction(\'' . url("admin/ManajemenProdi/delete_ajax/{$row->id}") . '\')" class="btn btn-sm btn-danger">Hapus</button>';
+            $detailBtn = '<button onclick="modalAction(\'' . url("admin/ManajemenProdi/{$row->id_prodi}/show_ajax") . '\')" class="btn btn-sm btn-info">Detail</button>';
+            $editBtn = '<button onclick="modalAction(\'' . url("admin/ManajemenProdi/{$row->id_prodi}/edit_ajax") . '\')" class="btn btn-sm btn-warning">Edit</button>';
+            $deleteBtn = '<button onclick="modalAction(\'' . url("admin/ManajemenProdi/{$row->id_prodi}/delete_ajax") . '\')" class="btn btn-sm btn-danger">Hapus</button>';
             return $detailBtn . ' ' . $editBtn . ' ' . $deleteBtn;
         })
         ->rawColumns(['aksi'])
@@ -63,22 +63,50 @@ class ProgramStudiController extends Controller
 
     public function update_ajax(Request $request, $id)
     {
-        $request->validate([
-            'nama_prodi' => 'required|string|max:255',
-            'jenjang'    => 'required|in:D2,D3,D4',
-        ]);
-        $prodi = ProgramStudiModel::findOrFail($id);
-        $prodi->update($request->only('nama_prodi', 'jenjang'));
-        return response()->json(['success' => true]);
-        
+    $request->validate([
+        'nama_prodi' => 'required|string|max:255',
+        'jenjang'    => 'required|in:D2,D3,D4',
+    ]);
+
+    $prodi = ProgramStudiModel::findOrFail($id); 
+    $prodi->update([
+        'nama_prodi' => $request->nama_prodi,
+        'jenjang'    => $request->jenjang,
+    ]);
+
+    return response()->json(['success' => true, 'status' => true]);
     }
 
-    public function delete_ajax($id)
+
+   public function confirm_ajax($id)
     {
-        ProgramStudiModel::findOrFail($id)->delete();
-        return response()->json(['success' => true]);
+    $prodi = ProgramStudiModel::find($id);
+    return view('admin.ManajemenProdi.confirm_ajax', compact('prodi'));
+    }
+
+
+    // Menghapus data Program Studi via AJAX
+    public function delete_ajax(Request $request, $id)
+    {
+        if ($request->ajax() || $request->wantsJson()) {
+            $prodi = ProgramStudiModel::find($id);
+            if ($prodi) {
+                $prodi->delete();
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Data berhasil dihapus'
+                ]);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Data tidak ditemukan'
+                ]);
+            }
+        }
+        return redirect('/');
     }
 }
+
 
 
 
