@@ -15,7 +15,7 @@ class MahasiswaSeeder extends Seeder
                 'id_mahasiswa'   => 1,
                 'id_role'        => 3, // Role Mahasiswa
                 'id_prodi'       => 1, // Sesuaikan dengan id program_studi yang tersedia
-                'id'             => 1,
+                'id_angkatan'             => 1,
                 'nama'           => 'Ahmad Fauzi',
                 'nim'            => '2141720001',
                 'email'          => 'ahmadfauzi@students.polinema.ac.id',
@@ -29,7 +29,7 @@ class MahasiswaSeeder extends Seeder
                 'id_mahasiswa'   => 2,
                 'id_role'        => 3,
                 'id_prodi'       => 1,
-                'id'             => 1,
+                'id_angkatan'             => 1,
                 'nama'           => 'Rina Kurnia',
                 'nim'            => '2141720002',
                 'email'          => 'rinakurnia@students.polinema.ac.id',

@@ -12,7 +12,7 @@ class ProgramStudiSeeder extends Seeder
         DB::table('program_studi')->insert([
             [
                 'id'   => 1,
-                'nama_prodi' => 'Teknologi Informasi',
+                'nama_prodi' => 'Teknik Informatika',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

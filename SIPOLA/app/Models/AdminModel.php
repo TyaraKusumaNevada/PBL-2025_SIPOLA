@@ -10,4 +10,12 @@ class AdminModel extends Model
     protected $table = 'admin';
     protected $primaryKey = 'id_admin';
     protected $fillable = ['id_role', 'nama', 'email', 'password'];
+
+
+    public function role()
+        {
+            return $this->belongsTo(RoleModel::class, 'id_role');
+        }
+
+
 }

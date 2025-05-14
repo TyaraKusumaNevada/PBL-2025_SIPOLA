@@ -3,6 +3,7 @@
 // Route definitions for web interface
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\siginController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +22,22 @@ use Illuminate\Support\Facades\Route;
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->middleware('guest');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
+
+Route::middleware(['auth'])->group(function(){
+  Route::prefix('user')->name('user.')->group(function(){
+    // Halaman Blade index
+    Route::get('/', [UserController::class, 'index'])->name('index');
+    // DataTables JSON
+    Route::get('/list', [UserController::class, 'list'])->name('list');
+    // AJAX create/edit/delete
+    Route::get('/create_ajax', [UserController::class, 'create_ajax'])->name('create_ajax');
+    Route::post('/store_ajax', [UserController::class, 'store_ajax'])->name('store_ajax');
+    Route::get('/edit_ajax/{id}', [UserController::class, 'edit_ajax'])->name('edit_ajax');
+    Route::put('/update_ajax/{id}', [UserController::class, 'update_ajax'])->name('update_ajax');
+    Route::get('/confirm_ajax/{id}', [UserController::class, 'confirm_ajax'])->name('confirm_ajax');
+    Route::delete('/delete_ajax/{id}', [UserController::class, 'delete_ajax'])->name('delete_ajax');
+  });
+});
 
 // // Protected Routes (require authentication)
 // Route::middleware(['auth'])->group(function () {
@@ -45,9 +62,9 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middl
 // });
 
 // Redirect root to login
-Route::get('/', function () {
-    return redirect()->route('login');
-});
+// Route::get('/', function () {
+//     return redirect()->route('login');
+// });
 
 Route::get('/', function () {
     return view('welcome');
