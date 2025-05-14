@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ProgramStudiModel extends Model
 {
     protected $table = 'program_studi';
-    protected $primaryKey = 'id';
+    protected $primaryKey = 'id_prodi';
     protected $fillable = ['nama_prodi', 'jenjang'];
 
     public function mahasiswa() {

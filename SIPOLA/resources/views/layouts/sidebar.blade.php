@@ -69,6 +69,14 @@
     </a>
   </li>
 
+  <!-- Manajemen Periode/Angkatan -->
+  <li class="menu-item {{ Request::is('periode*') ? 'active open' : '' }}">
+    <a href="{{ url('/periode') }}" class="menu-link d-flex align-items-center">
+      <i class="bi bi-calendar2-week menu-icon fs-5"></i>
+      <span class="text-truncate" data-i18n="ManajemenProdi">Manajemen Periode</span>
+    </a>
+  </li>
+
   <!-- Manajemen Prodi -->
   <li class="menu-item {{ Request::is('admin*') ? 'active open' : '' }}">
     <a href="{{ url('/admin/ManajemenProdi') }}" class="menu-link">

@@ -3,6 +3,7 @@
 // Route definitions for web interface
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PeriodeController;
 use App\Http\Controllers\siginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProgramStudiController;
@@ -80,6 +81,7 @@ Route::prefix('user')->group(function () {
     });
 });
 
+// ----------------------------------------------------------------------------------------
 // ROUTE ADMIN (Manajemen Program Studi)
 Route::prefix('admin/ManajemenProdi')->group(function () {
     Route::get('/', [ProgramStudiController::class, 'index']);
@@ -91,6 +93,23 @@ Route::prefix('admin/ManajemenProdi')->group(function () {
     Route::put('{id}/update_ajax', [ProgramStudiController::class, 'update_ajax']);
     Route::delete('{id}/delete_ajax', [ProgramStudiController::class, 'delete_ajax']);
 });
+// ----------------------------------------------------------------------------------------
+
+
+// ----------------------------------------------------------------------------------------
+// ROUTE ADMIN (Manajemen Periode Semester)
+Route::prefix('periode')->group(function () {
+    Route::get('/', [PeriodeController::class, 'index']);
+    Route::post('list', [PeriodeController::class, 'list']);
+    Route::get('create_ajax', [PeriodeController::class, 'create_ajax']);
+    Route::post('/ajax', [PeriodeController::class, 'store_ajax']);
+    Route::get('{id}/show_ajax', [PeriodeController::class, 'show_ajax']);
+    Route::get('{id}/edit_ajax', [PeriodeController::class, 'edit_ajax']);
+    Route::put('{id}/update_ajax', [PeriodeController::class, 'update_ajax']);
+    Route::get('/{id}/delete_ajax', [PeriodeController::class, 'confirm_ajax']);     
+    Route::delete('/{id}/delete_ajax', [PeriodeController::class, 'delete_ajax']);    
+}); 
+// ----------------------------------------------------------------------------------------
 
 // ROUTE LOMBA
 Route::get('/lomba', function () {
