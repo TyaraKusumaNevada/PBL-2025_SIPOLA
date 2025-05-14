@@ -52,19 +52,20 @@
       <div class="text-truncate" data-i18n="MahasiswaProfil">Profil</div>
     </a>
   </li>
+@if (Auth::user()->id_rolee == 1)
+<!-- Manajemen User -->
+<li class="menu-item {{ Request::is('user*') ? 'active open' : '' }}">
+  <a href="{{ url('/user') }}" class="menu-link">
+    <i class="bi bi-people menu-icon"></i>
+    <div class="text-truncate" data-i18n="ManajemenUser">Manajemen User</div>
+  </a>
+</li>
+@endif
 
-  <!-- Manajemen User -->
-  <li class="menu-item {{ Request::is('user*') ? 'active open' : '' }}">
-    <a href="{{ url('/user') }}" class="menu-link">
-      <i class="bi bi-people menu-icon"></i>
-      <div class="text-truncate" data-i18n="ManajemenUser">Manajemen User</div>
-    </a>
-  </li>
-
-  <!-- Manajemen Lomba -->
-  <li class="menu-item {{ Request::is('lomba*') ? 'active open' : '' }}">
-    <a href="{{ url('/lomba') }}" class="menu-link">
-      <i class="bi bi-trophy menu-icon"></i>
+<!-- Manajemen Lomba -->
+<li class="menu-item {{ Request::is('lomba*') ? 'active open' : '' }}">
+  <a href="{{ url('/lomba') }}" class="menu-link">
+    <i class="bi bi-trophy menu-icon"></i>
       <div class="text-truncate" data-i18n="ManajemenLomba">Manajemen Lomba</div>
     </a>
   </li>
@@ -97,10 +98,14 @@
   <div style="flex-grow: 1;"></div>
 
   <li class="menu-item">
-    <a href="akses/login" class="menu-link">
+  <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
+    @csrf
+    <button type="submit" class="menu-link" style="border: none; background: none; width: 100%; text-align: left;">
       <i class="menu-icon tf-icons bx bx-log-out"></i>
       <div class="text-truncate" data-i18n="Misc">Logout</div>
-    </a>
-  </li>
+    </button>
+  </form>
+</li>
+
 </ul>
 <!-- / Menu -->
