@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('id_verifikasi');
 
             $table->unsignedBigInteger('id_prestasi');
-            $table->foreign('id_prestasi')->references('id')->on('prestasi')->onDelete('cascade');
+            $table->foreign('id_prestasi')->references('id_prestasi')->on('prestasi')->onDelete('cascade');
 
             $table->enum('verifikator_type', ['admin', 'dosen']);
             $table->unsignedBigInteger('id_verifikator'); // tidak bisa di-foreign karena tergantung type

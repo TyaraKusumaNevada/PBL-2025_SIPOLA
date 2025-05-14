@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('program_studi', function (Blueprint $table) {
-            $table->id();
-            $table->string('nama_prodi');
+        Schema::create('angkatan', function (Blueprint $table) {
+            $table->id('id_angkatan');
+            $table->string('semester');
+            $table->string('tahun_ajaran');
             $table->timestamps();
         });
     }

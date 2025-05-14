@@ -48,12 +48,15 @@
                                                 <td>
                                                     <a href="detail_ajax" class="btn btn-sm btn-info text-white"><i
                                                             class="bi bi-eye"></i><span class="ms-2">Lihat</span></a>
-                                                    <a href="detail_ajax" class="btn btn-sm btn-warning text-white"><i
+                                                    <a href="edit_ajax" class="btn btn-sm btn-warning text-white"><i
                                                             class="bi bi-pencil-square"></i><span
                                                             class="ms-2">Edit</span></a>
-                                                    <a href="detail_ajax" class="btn btn-sm btn-danger text-white"><i
+                                                    {{-- <a href="delete_ajax" class="btn btn-sm btn-danger text-white"><i
                                                             class="bi bi-trash"></i><span
-                                                            class="ms-2">Hapus</span></a>
+                                                            class="ms-2">Hapus</span></a> --}}
+                                                    <a href="javascript:void(0);" onclick="modalAction('{{ url('/confirm_ajax') }}')" class="btn btn-sm btn-danger text-white">
+                                                        <i class="bi bi-trash"></i><span class="ms-2">Hapus</span>
+                                                    </a>
                                                 </td>
                                             </tr>
                                             <tr>
