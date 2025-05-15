@@ -106,7 +106,3 @@ class ProgramStudiController extends Controller
         return redirect('/');
     }
 }
-
-
-
-

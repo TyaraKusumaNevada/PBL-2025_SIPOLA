@@ -93,9 +93,8 @@ Route::prefix('admin/ManajemenProdi')->group(function () {
   Route::put('{id}/update_ajax',[ProgramStudiController::class, 'update_ajax']);
   Route::get('{id}/confirm_ajax', [ProgramStudiController::class, 'confirm_ajax']);
   Route::delete('{id}/delete_ajax',[ProgramStudiController::class, 'delete_ajax']);
-   
 });
-
+// ----------------------------------------------------------------------------------------
 
 
 // ----------------------------------------------------------------------------------------
