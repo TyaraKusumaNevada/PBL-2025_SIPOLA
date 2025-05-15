@@ -15,14 +15,16 @@ class ProgramStudiSeeder extends Seeder
     {
         DB::table('program_studi')->insert([
             [
-                'id_prodi'   => 1,
+                'id_prodi'   => 3,
                 'nama_prodi' => 'Teknologi Informasi',
+                'jenjang'    => 'D4',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'id_prodi'   => 2,
+                'id_prodi'   => 4,
                 'nama_prodi' => 'Sistem Informasi Bisnis',
+                'jenjang'    => 'D4',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
