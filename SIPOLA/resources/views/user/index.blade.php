@@ -1,114 +1,49 @@
 @extends('layouts.template')
 
 @section('content')
-<div class="container-xxl flex-grow-1 container-p-y">
-    <div class="row">
-        <div class="col-xxl-12 mb-6 order-0">
-            <div class="card">
-                <div class="d-flex align-items-start row">
-                    <div class="col-sm-12">
-                        <div class="card-body min-vh-50">
-                            <h5 class="card-title text-primary mb-3 fs-3">User Terdaftar</h5>
-                            <div class="row">
-                                <div class="col-md-8 mt-4 mb-5">
-                                    <div class="form-group row">
-                                        <label class="col-1 control-label col-form-label">Filter:</label>
-                                        <div class="col-3">
-                                            <select class="form-control" id="level_id" name="level_id" required>
-                                                <option value="">- Semua - </option>
-                                                <option value="1">Dosen Pembimbing</option>
-                                                <option value="2">Mahasiswa</option>
-                                            </select>
-                                            <small class="form-text text-muted">Role User</small>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 text-end mb-5">
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <div class="row">
+            <div class="col-xxl-12 mb-6 order-0">
+                <div class="card">
+                    <div class="d-flex align-items-start row">
+                        <div class="col-sm-12">
+                            <div class="card-body min-vh-50 mb-5">
+                                <div class="d-flex justify-content-between align-items-center mb-5">
+                                    <h5 class="card-title text-primary fs-3 m-0">Kelola Pengguna</h5>
                                     <a href="javascript:void(0);"
                                         onclick="modalAction('{{ url('/user/create_ajax') }}')"
-                                        class="btn btn-sm btn-outline-primary mt-3 mb-5 fs-6"> + Tambah User</a>
+                                        class="btn btn-sm btn-outline-primary fs-6">+ Tambah</a>
                                 </div>
-                                <div class="w-100 mt-5">
-                                    <table class="table w-100 mt-5" id="userTable">
-                                        <thead>
-                                            <tr>
-                                                <th>NO</th>
-                                                <th>NIM / NIDN</th>
-                                                <th>NAMA</th>
-                                                <th>ROLE USER</th>
-                                                <th>AKSI</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="table-border-bottom-0">
-                                            <tr>
-                                                <td>1</td>
-                                                <td>2341720056</td>
-                                                <td>Rizkya Salsabila</td>
-                                                <td>Mahasiswa</td>
-                                                <td>
-                                                    <a href="detail_ajax" class="btn btn-sm btn-info text-white"><i
-                                                            class="bi bi-eye"></i><span class="ms-2">Lihat</span></a>
-                                                    <a href="edit_ajax" class="btn btn-sm btn-warning text-white"><i
-                                                            class="bi bi-pencil-square"></i><span
-                                                            class="ms-2">Edit</span></a>
-                                                    {{-- <a href="delete_ajax" class="btn btn-sm btn-danger text-white"><i
-                                                            class="bi bi-trash"></i><span
-                                                            class="ms-2">Hapus</span></a> --}}
-                                                    <a href="javascript:void(0);" onclick="modalAction('{{ url('/confirm_ajax') }}')" class="btn btn-sm btn-danger text-white">
-                                                        <i class="bi bi-trash"></i><span class="ms-2">Hapus</span>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>0120048501</td>
-                                                <td>Yan Daffa Putra Liandhie, S.Kom., M.Kom</td>
-                                                <td>Dosen Pembimbing</td>
-                                                <td>
-                                                    <a href="detail_ajax" class="btn btn-sm btn-info text-white"><i
-                                                            class="bi bi-eye"></i><span class="ms-2">Lihat</span></a>
-                                                    <a href="detail_ajax" class="btn btn-sm btn-warning text-white"><i
-                                                            class="bi bi-pencil-square"></i><span
-                                                            class="ms-2">Edit</span></a>
-                                                    <a href="detail_ajax" class="btn btn-sm btn-danger text-white"><i
-                                                            class="bi bi-trash"></i><span
-                                                            class="ms-2">Hapus</span></a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>2341720019</td>
-                                                <td>Tyara Kusuma Nevada</td>
-                                                <td>Mahasiswa</td>
-                                                <td>
-                                                    <a href="detail_ajax" class="btn btn-sm btn-info text-white"><i
-                                                            class="bi bi-eye"></i><span class="ms-2">Lihat</span></a>
-                                                    <a href="detail_ajax" class="btn btn-sm btn-warning text-white"><i
-                                                            class="bi bi-pencil-square"></i><span
-                                                            class="ms-2">Edit</span></a>
-                                                    <a href="detail_ajax" class="btn btn-sm btn-danger text-white"><i
-                                                            class="bi bi-trash"></i><span
-                                                            class="ms-2">Hapus</span></a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>4</td>
-                                                <td>0126038205</td>
-                                                <td>Vanessa Cristin Natalia, S.Tr.Kom., M.Kom</td>
-                                                <td>Dosen Pembimbing</td>
-                                                <td>
-                                                    <a href="detail_ajax" class="btn btn-sm btn-info text-white"><i
-                                                            class="bi bi-eye"></i><span class="ms-2">Lihat</span></a>
-                                                    <a href="detail_ajax" class="btn btn-sm btn-warning text-white"><i
-                                                            class="bi bi-pencil-square"></i><span
-                                                            class="ms-2">Edit</span></a>
-                                                    <a href="detail_ajax" class="btn btn-sm btn-danger text-white"><i
-                                                            class="bi bi-trash"></i><span
-                                                            class="ms-2">Hapus</span></a>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+
+                                    @if (session('success'))
+                                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                            {{ session('success') }}
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                aria-label="Close"></button>
+                                        </div>
+                                    @endif
+
+                                    @if (session('error'))
+                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                            {{ session('error') }}
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                aria-label="Close"></button>
+                                        </div>
+                                    @endif
+
+                                    <div class="w-100 mt-5">
+                                        <table class="table w-100 mt-5" id="table_user">
+                                            <thead>
+                                                <tr>
+                                                    <th>NO</th>
+                                                    <th>NOMOR INDUK</th>
+                                                    <th>NAMA</th>
+                                                    <th>ROLE USER</th>
+                                                    <th>AKSI</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -116,36 +51,103 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modal Container -->
+        <div id="myModal" class="modal fade" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content" id="modalContent">
+                    {{-- Konten AJAX akan dimuat di sini --}}
+                </div>
+            </div>
+        </div>
     </div>
-    <div id="myModal" class="modal fade" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
-        data-width="75%" aria-hidden="true"></div>
 @endsection
 
 @push('css')
+    <style>
+        /* Tambah margin atas pada bagian kontrol DataTable */
+        div.dataTables_wrapper div.dataTables_length,
+        div.dataTables_wrapper div.dataTables_filter {
+            margin-top: 1rem; /* ubah sesuai kebutuhan */
+        }
+    </style>
 @endpush
 
 @push('js')
-  <script>
-      function modalAction(url = '') {
-          $('#myModal').load(url, function() {
-              const modalElement = document.getElementById('myModal');
-              if (modalElement) {
-                  const modalInstance = new bootstrap.Modal(modalElement);
-                  modalInstance.show();
-              } else {
-                  console.error('Modal element not found!');
-              }
-          });
-      }
+    <script>
+        // CSRF untuk semua request AJAX
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        });
 
-      $(document).ready(function() {
-          $('#userTable').DataTable({
-              language: {
-                  search: "Search:",
-                  lengthMenu: "Show _MENU_ entries",
-                  info: "Showing _START_ to _END_ of _TOTAL_ entries",
-              }
-          });
-      });
-  </script>
+        // Menampilkan modal AJAX
+        function modalAction(url = '') {
+            $('#modalContent').load(url, function() {
+                const modal = new bootstrap.Modal(document.getElementById('myModal'), {
+                    backdrop: 'static',
+                    keyboard: false
+                });
+                modal.show();
+            });
+        }
+
+        // Inisialisasi DataTable
+        var dataUser;
+        $(document).ready(function() {
+            dataUser = $('#table_user').DataTable({
+                serverSide: true,
+                processing: true,
+                ajax: {
+                    url: "{{ url('user/list') }}",
+                    type: "POST",
+                    dataType: "json"
+                },
+                columns: [{
+                        data: "DT_RowIndex", 
+                        className: "text-center", 
+                        orderable: false, 
+                        searchable: false 
+                    },
+                    {
+                        data: "nomor_induk", 
+                        className: "", 
+                        orderable: true, 
+                        searchable: true 
+                    },
+                    {
+                        data: "nama", 
+                        className: "", 
+                        orderable: true, 
+                        searchable: true 
+                    },   
+                    {
+                        data: "role_user", 
+                        className: "", 
+                        orderable: true, 
+                        searchable: true 
+                    },  
+                    {
+                        data: "aksi", 
+                        className: "", 
+                        orderable: false, 
+                        searchable: false 
+                    }  
+                ],
+                language: {
+                    search: "Cari:",
+                    lengthMenu: "Tampilkan _MENU_ entri",
+                    info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+                    paginate: {
+                        first: "Pertama",
+                        last: "Terakhir",
+                        next: "Berikutnya",
+                        previous: "Sebelumnya"
+                    },
+                    processing: "Memuat..."
+                }
+            });
+        });
+    </script>
 @endpush
