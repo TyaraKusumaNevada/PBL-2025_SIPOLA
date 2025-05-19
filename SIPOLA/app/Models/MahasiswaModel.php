@@ -4,6 +4,7 @@ namespace App\Models;
 use App\Models\PrestasiModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class MahasiswaModel extends Model
 {
@@ -22,6 +23,10 @@ class MahasiswaModel extends Model
         'id_angkatan', 
         'id_role', // Menambahkan id_role di sini
     ];
+
+    public function role(): BelongsTo {         //1 mahasiswa memiliki 1 role
+        return $this->belongsTo(RoleModel::class, 'id_role', 'id_role');
+    }
 
     public function angkatan() {
         return $this->belongsTo(AngkatanModel::class, 'id_angkatan');
