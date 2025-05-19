@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('angkatan', function (Blueprint $table) {
-            $table->id('id_angkatan');
-            $table->string('semester');
-            $table->string('tahun_ajaran');
+        Schema::create('info_lomba', function (Blueprint $table) {
+            $table->id('id_info');
+
+            $table->unsignedBigInteger('id_lomba');
+            $table->foreign('id_lomba')->references('id_tambahLomba')->on('tambah_lomba')->onDelete('cascade');
+            
+
             $table->timestamps();
         });
-        
     }
 
     /**
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('info_lomba');
     }
 };
