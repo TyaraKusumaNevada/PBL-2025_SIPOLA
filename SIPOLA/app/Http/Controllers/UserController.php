@@ -185,25 +185,6 @@ class UserController extends Controller
         return redirect('/');
     }
 
-    // public function edit_ajax(string $id) {
-    //     $roles = RoleModel::all();
-    //     $prodis = ProgramStudiModel::all();
-
-    //     // Temukan user dari masing-masing model
-    //     $user = MahasiswaModel::find($id)
-    //         ?? DospemModel::find($id)
-    //         ?? AdminModel::find($id);
-
-    //     if (!$user) {
-    //         return response()->json([
-    //             'status' => false,
-    //             'message' => 'User tidak ditemukan.'
-    //         ]);
-    //     }
-
-    //     return view('user.edit_ajax', compact('user', 'roles', 'prodis'));
-    // }
-
     public function edit_ajax(string $id, string $role) {
         $roles = RoleModel::all();
         $prodis = ProgramStudiModel::all();
@@ -233,82 +214,6 @@ class UserController extends Controller
     }
 
 
-    // public function update_ajax(Request $request, string $id) {
-    //     if ($request->ajax() || $request->wantsJson()) {
-
-    //         // Validasi dinamis untuk email berdasarkan role
-    //         $emailRule = match ((int)$request->id_role) {
-    //             3 => 'unique:mahasiswa,email,' . $id,
-    //             2 => 'unique:dospem,email,' . $id,
-    //             1 => 'unique:admin,email,' . $id,
-    //             default => '',
-    //         };
-
-    //         $rules = [
-    //             'id_role'    => 'required|exists:role,id_role',
-    //             'nama'       => 'required|string|max:255',
-    //             'email'      => ['required', 'email', $emailRule],
-    //             'nim_nidn'   => 'required_if:id_role,2|required_if:id_role,3',
-    //             'id_prodi'   => 'required_if:id_role,3',
-    //         ];
-
-    //         $validator = Validator::make($request->all(), $rules);
-
-    //         if ($validator->fails()) {
-    //             return response()->json([
-    //                 'status' => false,
-    //                 'message' => 'Validasi gagal.',
-    //                 'msgField' => $validator->errors()
-    //             ]);
-    //         }
-
-    //         try {
-    //             $role = RoleModel::findOrFail($request->id_role);
-    //             $data = [
-    //                 'id_role' => $request->id_role,
-    //                 'nama'    => $request->nama,
-    //                 'email'   => $request->email,
-    //             ];
-
-    //             switch ($role->role_kode) {
-    //                 case 'MHS':
-    //                     $data['nim'] = $request->nim_nidn;
-    //                     $data['id_prodi'] = $request->id_prodi;
-    //                     $user = MahasiswaModel::findOrFail($id);
-    //                     $user->update($data);
-    //                     break;
-    //                 case 'DSN':
-    //                     $data['nidn'] = $request->nim_nidn;
-    //                     $user = DospemModel::findOrFail($id);
-    //                     $user->update($data);
-    //                     break;
-    //                 case 'ADM':
-    //                     $user = AdminModel::findOrFail($id);
-    //                     $user->update($data);
-    //                     break;
-    //                 default:
-    //                     return response()->json([
-    //                         'status' => false,
-    //                         'message' => 'Role tidak valid.'
-    //                     ]);
-    //             }
-
-    //             return response()->json([
-    //                 'status' => true,
-    //                 'message' => 'User berhasil diupdate.'
-    //             ]);
-    //         } catch (\Exception $e) {
-    //             return response()->json([
-    //                 'status' => false,
-    //                 'message' => 'Terjadi kesalahan saat mengupdate data.',
-    //                 'error'   => $e->getMessage(),
-    //             ]);
-    //         }
-    //     }
-
-    //     return redirect('/');
-    // }
-
     public function update_ajax(Request $request, string $id, string $role) {
         // Validasi
         $validator = Validator::make($request->all(), [
@@ -320,7 +225,7 @@ class UserController extends Controller
                 Rule::unique($role === 'mahasiswa' ? 'mahasiswa' : ($role === 'dosen' ? 'dospem' : 'admin'), 'email')->ignore($id, $role === 'mahasiswa' ? 'id_mahasiswa' : ($role === 'dosen' ? 'id_dosen' : 'id_admin')),
             ],
             'nim_nidn' => $role !== 'admin' ? ['required', 'string', 'max:50'] : ['nullable'],
-            'id_prodi' => $role === 'mahasiswa' ? ['required', 'exists:prodi,id_prodi'] : ['nullable'],
+            'id_prodi' => $role === 'mahasiswa' ? ['required', 'exists:program_studi,id_prodi'] : ['nullable'],
         ]);
 
         if ($validator->fails()) {
