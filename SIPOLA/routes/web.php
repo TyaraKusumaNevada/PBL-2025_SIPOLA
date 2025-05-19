@@ -4,6 +4,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\siginController;
+use App\Http\Controllers\ProfilController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -60,4 +61,17 @@ Route::get('/auth/login', function () {
 
 Route::get('/signin', [siginController::class, 'showRegistrationForm'])->name('signin');
 Route::post('/signin', [siginController::class, 'register']);
+
+
+
+// Route profil user
+Route::get('/profil', [ProfilController::class, 'index'])->name('profil.index');
+Route::post('/profil/update-profile', [ProfilController::class, 'updateProfile'])->name('profil.update.profile');
+Route::post('/profil/update-username', [ProfilController::class, 'updateUsername'])->name('profil.update.username');
+ Route::post('/profil/update-username', [ProfilController::class, 'updateUsername'])->name('profil.update.username');
+    Route::post('/profil/update-academic', [ProfilController::class, 'updateAcademicProfile'])->name('profil.update.academic');
+    Route::post('/profil/update-profile', [ProfilController::class, 'updateProfile'])->name('profil.update.profile')->middleware('auth');
+
+
+
 

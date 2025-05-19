@@ -5,7 +5,33 @@
 
 <ul class="menu-inner py-1">
 
-   <!-- Dashboard Admin -->
+ {{-- User Profile --}}
+@php
+    $userId = Auth::id();
+    $userImagePath = 'storage/foto_profil/user_' . $userId . '.jpg';
+    $defaultImage = 'storage/foto_profil/user_.jpg';
+    $imagePath = file_exists(public_path($userImagePath)) ? asset($userImagePath) : asset($defaultImage);
+
+    $fullName = Auth::user()->name ?? 'Guest';
+
+    $nameParts = explode(' ', trim($fullName));
+    $shortName = $nameParts[0];
+    if (count($nameParts) > 1) {
+        $shortName .= ' ' . strtoupper(substr($nameParts[1], 0, 1)) . '.';
+    }
+@endphp
+
+<div class="user-panel d-flex align-items-center mb-3 px-3">
+    <a href="{{ route('profil.index') }}" class="d-flex align-items-center text-white text-decoration-none">
+        <img src="{{ $imagePath }}" class="rounded-circle" alt="User Image"
+             style="width:40px; height:40px; object-fit:cover;">
+        <span class="ms-2 text-dark" id="display-nama" title="{{ $fullName }}">{{ $shortName }}</span>
+    </a>
+</div>
+
+
+
+  <!-- Dashboard Admin -->
   <li class="menu-item {{ Request::is('admin/dashboard') ? 'active open' : '' }}">
     <a href="{{ url('/admin/dashboard') }}" class="menu-link">
       <i class="menu-icon tf-icons bx bx-home"></i>
@@ -52,20 +78,20 @@
       <div class="text-truncate" data-i18n="MahasiswaProfil">Profil</div>
     </a>
   </li>
-@if (Auth::user()->id_rolee == 1)
-<!-- Manajemen User -->
-<li class="menu-item {{ Request::is('user*') ? 'active open' : '' }}">
-  <a href="{{ url('/user') }}" class="menu-link">
-    <i class="bi bi-people menu-icon"></i>
-    <div class="text-truncate" data-i18n="ManajemenUser">Manajemen User</div>
-  </a>
-</li>
-@endif
 
-<!-- Manajemen Lomba -->
-<li class="menu-item {{ Request::is('lomba*') ? 'active open' : '' }}">
-  <a href="{{ url('/lomba') }}" class="menu-link">
-    <i class="bi bi-trophy menu-icon"></i>
+  <!-- Manajemen User -->
+  <li class="menu-item {{ Request::is('user*') ? 'active open' : '' }}">
+    <a href="{{ url('/user') }}" class="menu-link">
+      <i class="bi bi-people menu-icon"></i>
+      <div class="text-truncate" data-i18n="ManajemenUser">Manajemen User</div>
+    </a>
+  </li>
+
+
+  <!-- Manajemen Lomba -->
+  <li class="menu-item {{ Request::is('lomba*') ? 'active open' : '' }}">
+    <a href="{{ url('/lomba') }}" class="menu-link">
+      <i class="bi bi-trophy menu-icon"></i>
       <div class="text-truncate" data-i18n="ManajemenLomba">Manajemen Lomba</div>
     </a>
   </li>
@@ -85,19 +111,19 @@
       <div class="text-truncate" data-i18n="VerifikasiLomba">Verifikasi Info Lomba</div>
     </a>
   </li>
-  
+
   <!-- Memberikan jarak, agar logout di bawah -->
   <div style="flex-grow: 1;"></div>
 
   <li class="menu-item">
-  <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
-    @csrf
-    <button type="submit" class="menu-link" style="border: none; background: none; width: 100%; text-align: left;">
-      <i class="menu-icon tf-icons bx bx-log-out"></i>
-      <div class="text-truncate" data-i18n="Misc">Logout</div>
-    </button>
-  </form>
-</li>
+    <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
+      @csrf
+      <button type="submit" class="menu-link" style="border: none; background: none; width: 100%; text-align: left;">
+        <i class="menu-icon tf-icons bx bx-log-out"></i>
+        <div class="text-truncate" data-i18n="Misc">Logout</div>
+      </button>
+    </form>
+  </li>
 
 </ul>
 <!-- / Menu -->
