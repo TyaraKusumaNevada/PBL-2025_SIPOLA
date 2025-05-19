@@ -32,8 +32,9 @@
                     <div class="mb-3">
                         <label for="id_role" class="form-label">Role</label>
                         <select name="id_role" id="id_role" class="form-select" readonly>
-                            @foreach($roles as $r)
-                                <option value="{{ $r->id_role }}" {{ $r->id_role == $user->id_role ? 'selected' : '' }}>{{ $r->role_nama }}</option>
+                            @foreach ($roles as $r)
+                                <option value="{{ $r->id_role }}" {{ $r->id_role == $user->id_role ? 'selected' : '' }}>
+                                    {{ $r->role_nama }}</option>
                             @endforeach
                         </select>
                         <div id="error-id_role" class="form-text text-danger"></div>
@@ -41,28 +42,33 @@
 
                     <div class="mb-3">
                         <label for="nama" class="form-label">Nama</label>
-                        <input type="text" name="nama" id="nama" value="{{ $user->nama }}" class="form-control" required>
+                        <input type="text" name="nama" id="nama" value="{{ $user->nama }}" class="form-control"
+                            required>
                         <div id="error-nama" class="form-text text-danger"></div>
                     </div>
 
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
-                        <input type="email" name="email" id="email" value="{{ $user->email }}" class="form-control" required>
+                        <input type="email" name="email" id="email" value="{{ $user->email }}" class="form-control"
+                            required>
                         <div id="error-email" class="form-text text-danger"></div>
                     </div>
 
-                    @if($user->id_role == 3)
+                    @if ($user->id_role == 3)
                         <div class="mb-3">
                             <label for="nim_nidn" class="form-label">NIM</label>
-                            <input type="text" name="nim_nidn" id="nim_nidn" value="{{ $user->nim }}" class="form-control" required>
+                            <input type="text" name="nim_nidn" id="nim_nidn" value="{{ $user->nim }}"
+                                class="form-control" required>
                             <div id="error-nim_nidn" class="form-text text-danger"></div>
                         </div>
 
                         <div class="mb-3">
                             <label for="id_prodi" class="form-label">Program Studi</label>
                             <select name="id_prodi" id="id_prodi" class="form-select" required>
-                                @foreach($prodis as $prodi)
-                                    <option value="{{ $prodi->id_prodi }}" {{ $prodi->id_prodi == $user->id_prodi ? 'selected' : '' }}>{{ $prodi->nama_prodi }}</option>
+                                @foreach ($prodis as $prodi)
+                                    <option value="{{ $prodi->id_prodi }}"
+                                        {{ $prodi->id_prodi == $user->id_prodi ? 'selected' : '' }}>
+                                        {{ $prodi->nama_prodi }}</option>
                                 @endforeach
                             </select>
                             <div id="error-id_prodi" class="form-text text-danger"></div>
@@ -70,7 +76,8 @@
                     @elseif($user->id_role == 2)
                         <div class="mb-3">
                             <label for="nim_nidn" class="form-label">NIDN</label>
-                            <input type="text" name="nim_nidn" id="nim_nidn" value="{{ $user->nidn }}" class="form-control" required>
+                            <input type="text" name="nim_nidn" id="nim_nidn" value="{{ $user->nidn }}"
+                                class="form-control" required>
                             <div id="error-nim_nidn" class="form-text text-danger"></div>
                         </div>
                     @endif
@@ -85,7 +92,7 @@
     </form>
 
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             $("#form-edit").validate({
                 rules: {
                     nama: {
@@ -97,22 +104,22 @@
                         email: true
                     },
                     nim_nidn: {
-                        required: function () {
+                        required: function() {
                             return $('#id_role').val() == 2 || $('#id_role').val() == 3;
                         }
                     },
                     id_prodi: {
-                        required: function () {
+                        required: function() {
                             return $('#id_role').val() == 3;
                         }
                     }
                 },
-                submitHandler: function (form) {
+                submitHandler: function(form) {
                     $.ajax({
                         url: form.action,
                         type: form.method,
                         data: $(form).serialize(),
-                        success: function (response) {
+                        success: function(response) {
                             if (response.status) {
                                 const modalElement = document.getElementById('modal-master')
                                     .closest('.modal');
@@ -128,7 +135,7 @@
                                 dataUser.ajax.reload();
                             } else {
                                 $('.form-text.text-danger').text('');
-                                $.each(response.msgField, function (prefix, val) {
+                                $.each(response.msgField, function(prefix, val) {
                                     $('#error-' + prefix).text(val[0]);
                                 });
 
@@ -139,7 +146,7 @@
                                 });
                             }
                         },
-                        error: function (xhr) {
+                        error: function(xhr) {
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Server Error',
@@ -150,14 +157,14 @@
                     return false;
                 },
                 errorElement: 'span',
-                errorPlacement: function (error, element) {
+                errorPlacement: function(error, element) {
                     error.addClass('invalid-feedback');
                     element.closest('.mb-3').append(error);
                 },
-                highlight: function (element) {
+                highlight: function(element) {
                     $(element).addClass('is-invalid');
                 },
-                unhighlight: function (element) {
+                unhighlight: function(element) {
                     $(element).removeClass('is-invalid');
                 }
             });
