@@ -8,6 +8,7 @@ use App\Http\Controllers\siginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProgramStudiController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProfilController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,6 +47,9 @@ Route::prefix('mahasiswa')->group(function () {
     });
 });
 
+    Route::get('/prestasi', function () {       //ini masih belum pakai controller yaa, tapi aman kok ^-^
+        return view('prestasi.index');
+    });
 
 // ----------------------------------------------------------------------------------------
 // ROUTE ADMIN (Manajemen Program Studi)
