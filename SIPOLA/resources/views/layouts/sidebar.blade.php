@@ -53,19 +53,28 @@
     </a>
   </li>
 
-  <!-- Manajemen User -->
-  <li class="menu-item {{ Request::is('user*') ? 'active open' : '' }}">
-    <a href="{{ url('/user') }}" class="menu-link">
-      <i class="bi bi-people menu-icon"></i>
-      <div class="text-truncate" data-i18n="ManajemenUser">Manajemen User</div>
+
+<!-- Manajemen Lomba -->
+<li class="menu-item {{ Request::is('lomba*') ? 'active open' : '' }}">
+  <a href="{{ url('/lomba') }}" class="menu-link">
+    <i class="bi bi-trophy menu-icon"></i>
+      <div class="text-truncate" data-i18n="ManajemenLomba">Manajemen Lomba</div>
     </a>
   </li>
 
-  <!-- Manajemen Lomba -->
-  <li class="menu-item {{ Request::is('lomba*') ? 'active open' : '' }}">
-    <a href="{{ url('/lomba') }}" class="menu-link">
-      <i class="bi bi-trophy menu-icon"></i>
-      <div class="text-truncate" data-i18n="ManajemenLomba">Manajemen Lomba</div>
+  <!-- Manajemen Periode/Angkatan -->
+  <li class="menu-item {{ Request::is('periode*') ? 'active open' : '' }}">
+    <a href="{{ url('/periode') }}" class="menu-link d-flex align-items-center">
+      <i class="bi bi-calendar2-week menu-icon fs-5"></i>
+      <span class="text-truncate" data-i18n="ManajemenProdi">Manajemen Periode</span>
+    </a>
+  </li>
+
+  <!-- Manajemen Prodi -->
+  <li class="menu-item {{ Request::is('admin*') ? 'active open' : '' }}">
+    <a href="{{ url('/admin/ManajemenProdi') }}" class="menu-link">
+      <i class="bi bi-diagram-3 menu-icon"></i>
+      <div class="text-truncate" data-i18n="ManajemenProdi">Manajemen Prodi</div>
     </a>
   </li>
 
@@ -89,10 +98,14 @@
   <div style="flex-grow: 1;"></div>
 
   <li class="menu-item">
-    <a href="akses/login" class="menu-link">
+  <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
+    @csrf
+    <button type="submit" class="menu-link" style="border: none; background: none; width: 100%; text-align: left;">
       <i class="menu-icon tf-icons bx bx-log-out"></i>
       <div class="text-truncate" data-i18n="Misc">Logout</div>
-    </a>
-  </li>
+    </button>
+  </form>
+</li>
+
 </ul>
 <!-- / Menu -->

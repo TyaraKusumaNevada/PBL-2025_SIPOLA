@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('prestasi', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('id_mahasiswa'); // Perbaiki nama kolom dari id_mahasiwa menjadi id_mahasiswa
+            $table->id('id_prestasi');
+            $table->unsignedBigInteger('id_mahasiswa'); 
             $table->foreign('id_mahasiswa')->references('id_mahasiswa')->on('mahasiswa')->onDelete('cascade');
             $table->string('nama_prestasi');
             $table->enum('kategori_prestasi', ['akademik', 'non-akademik']);
