@@ -4,6 +4,41 @@
 <div class="menu-inner-shadow"></div>
 
 <ul class="menu-inner py-1">
+{{-- User Profile --}}
+<div class="user-panel d-flex align-items-center mb-3 px-3">
+    <a href="{{ route('profil.index') }}" class="d-flex align-items-center text-white text-decoration-none">
+        @php
+            $userId = Auth::id();
+            $userImagePath = 'storage/foto_profil/user_' . $userId . '.jpg';
+            $defaultImage = 'storage/foto_profil/user_.jpg';
+            $imagePath = file_exists(public_path($userImagePath)) ? asset($userImagePath) : asset($defaultImage);
+            
+            // Fungsi untuk menyingkat nama - cek berbagai kemungkinan field nama
+            $user = Auth::user();
+            $fullName = $user->name ?? $user->nama ?? $user->full_name ?? $user->username ?? 'Guest';
+            
+            // Debug - hapus setelah selesai
+            // dd($user->toArray()); // Uncomment ini untuk melihat semua field user
+            
+            $nameParts = explode(' ', trim($fullName));
+            
+            if (count($nameParts) <= 2) {
+                $displayName = $fullName;
+            } else {
+                // Ambil nama depan dan inisial nama belakang
+                $firstName = $nameParts[0];
+                $lastInitial = strtoupper(substr(end($nameParts), 0, 1));
+                $displayName = $firstName . ' ' . $lastInitial . '.';
+            }
+        @endphp
+        <img id="sidebar-foto-profil" src="{{ $imagePath }}"
+             class="rounded-circle" alt="User Image"
+             style="width:40px; height:40px; object-fit:cover;">
+     <span id="sidebar-nama-user" class="ms-2 text-dark fw-semibold" title="{{ $fullName }}">
+            {{ $displayName }}
+        </span>
+    </a>
+</div>
 
   <!-- Dashboard Admin -->
   <li class="menu-item {{ Request::is('admin/dashboard') ? 'active open' : '' }}">
@@ -53,7 +88,6 @@
     </a>
   </li>
 
-
 <!-- Manajemen Lomba -->
 <li class="menu-item {{ Request::is('lomba*') ? 'active open' : '' }}">
   <a href="{{ url('/lomba') }}" class="menu-link d-flex align-items-center">
@@ -62,7 +96,6 @@
     </a>
   </li>
 
-  
   <!-- Manajemen Pengguna -->
   <li class="menu-item {{ Request::is('user*') ? 'active open' : '' }}">
     <a href="{{ url('/user') }}" class="menu-link d-flex align-items-center">
@@ -115,6 +148,53 @@
     </button>
   </form>
 </li>
+
+<script>
+// Fungsi untuk menyingkat nama - cek berbagai kemungkinan field
+function formatDisplayName(userData) {
+    const fullName = userData.name || userData.nama || userData.full_name || userData.username || 'Guest';
+    const nameParts = fullName.trim().split(' ');
+    
+    if (nameParts.length <= 2) {
+        return fullName;
+    } else {
+        // Ambil nama depan dan inisial nama belakang
+        const firstName = nameParts[0];
+        const lastInitial = nameParts[nameParts.length - 1].charAt(0).toUpperCase();
+        return firstName + ' ' + lastInitial + '.';
+    }
+}
+
+$.ajax({
+    type: "POST",
+    url: "/profil/update",
+    data: formData,
+    contentType: false,
+    processData: false,
+    success: function(response) {
+        if (response.success) {
+            // Format nama untuk display
+            const displayName = formatDisplayName(response.user);
+            const fullName = response.user.name || response.user.nama || response.user.full_name || response.user.username || 'Guest';
+            
+            // Update nama di sidebar dengan nama yang disingkat
+            $('#sidebar-nama-user').text(displayName);
+            
+            // Update tooltip dengan nama lengkap
+            $('#sidebar-nama-user').attr('title', fullName);
+
+            // Update foto profil di sidebar
+            $('#sidebar-foto-profil').attr('src', response.fotoPath + '?' + new Date().getTime());
+
+            // Tampilkan notifikasi sukses (opsional)
+            alert('Profil berhasil diperbarui');
+        }
+    },
+    error: function(xhr) {
+        alert('Gagal memperbarui profil');
+    }
+});
+</script>
 
 </ul>
 <!-- / Menu -->
