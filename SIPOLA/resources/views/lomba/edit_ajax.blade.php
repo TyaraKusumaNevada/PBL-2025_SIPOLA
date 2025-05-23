@@ -72,6 +72,17 @@
                     </div>
 
                     <div class="mb-3">
+                        <label class="form-label">Status Verifikasi</label>
+                        <select name="status_verifikasi" class="form-select" required>
+                            <option value="">-- Pilih Status --</option>
+                            <option value="Pending" {{ $lomba->status_verifikasi == 'Pending' ? 'selected' : '' }}>Pending</option>
+                            <option value="Disetujui" {{ $lomba->status_verifikasi == 'Disetujui' ? 'selected' : '' }}>Disetujui</option>
+                            <option value="Ditolak" {{ $lomba->status_verifikasi == 'Ditolak' ? 'selected' : '' }}>Ditolak</option>
+                        </select>
+                        <div id="error-status_verifikasi" class="form-text text-danger"></div>
+                    </div>
+
+                    <div class="mb-3">
                         <label class="form-label">Pamflet Saat Ini</label><br>
                         <img src="{{ asset('storage/pamflet_lomba/' . $lomba->pamflet_lomba) }}" alt="Pamflet" class="img-thumbnail" width="250">
                     </div>
@@ -118,7 +129,7 @@
                                     text: response.message
                                 });
 
-                                $('#lombaTable').DataTable().ajax.reload();
+                                $('#table_lomba').DataTable().ajax.reload(null, false);
                             } else {
                                 $('.form-text.text-danger').text('');
                                 $.each(response.msgField, function (prefix, val) {
