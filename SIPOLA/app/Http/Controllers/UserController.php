@@ -2,226 +2,333 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\RoleModel;
 use App\Models\AdminModel;
 use App\Models\DospemModel;
 use App\Models\MahasiswaModel;
 use App\Models\ProgramStudiModel;
-use App\Models\RoleModel;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
-    public function index()
-    {
-        $mahasiswa = MahasiswaModel::all();
-        $dospem = DospemModel::all();
-        $admin = AdminModel::all();
+    public function index() {
+        $breadcrumb = (object) [
+            'title' => 'Kelola Pengguna',
+            'list'  => ['Home', 'Pengguna']
+        ]; 
 
-        return view('user.index', compact('mahasiswa', 'dospem', 'admin'));
+        $mahasiswas = MahasiswaModel::all();
+        $dospems    = DospemModel::all();
+        $admins     = AdminModel::all();
+
+        return view('user.index', compact('breadcrumb', 'mahasiswas', 'dospems', 'admins'));
     }
 
+    public function list(Request $request) {
+        $mahasiswas = MahasiswaModel::with('role')->get()->map(function ($item) {
+            return [
+                'id_user' => $item->id_mahasiswa,
+                'nomor_induk' => $item->nim,
+                'nama' => $item->nama,
+                'role_user' => 'mahasiswa', // lowercase agar konsisten
+            ];
+        });
 
-    public function list()
-    {
-        $mahasiswa = MahasiswaModel::with('role')
-            ->get()
-            ->map(function ($mhs, $index) {
-                return [
-                    'no' => $index + 1,
-                    'id' => $mhs->id_mahasiswa,
-                    'nim_nidn' => $mhs->nim,
-                    'nama' => $mhs->nama,
-                    'role_user' => $mhs->role->role_nama ?? 'Mahasiswa',
-                    'kategori' => 'mahasiswa',
-                ];
-            });
+        $dospems = DospemModel::with('role')->get()->map(function ($item) {
+            return [
+                'id_user' => $item->id_dosen,
+                'nomor_induk' => $item->nidn,
+                'nama' => $item->nama,
+                'role_user' => 'dosen',
+            ];
+        });
 
-        $dosen = DospemModel::with('role')
-            ->get()
-            ->map(function ($dsn, $index) use ($mahasiswa) {
-                return [
-                    'no' => $mahasiswa->count() + $index + 1,
-                    'id' => $dsn->id_dosen,
-                    'nim_nidn' => $dsn->nidn,
-                    'nama' => $dsn->nama,
-                    'role_user' => $dsn->role->role_nama ?? 'Dosen',
-                    'kategori' => 'dosen',
-                ];
-            });
+        $admins = AdminModel::with('role')->get()->map(function ($item) {
+            return [
+                'id_user' => $item->id_admin,
+                'nomor_induk' => '-',
+                'nama' => $item->nama,
+                'role_user' => 'admin',
+            ];
+        });
 
-        $admin = AdminModel::with('role')
-            ->get()
-            ->map(function ($adm, $index) use ($mahasiswa, $dosen) {
-                return [
-                    'no' => $mahasiswa->count() + $dosen->count() + $index + 1,
-                    'id' => $adm->id_admin,
-                    'nim_nidn' => '-', // Admin tidak punya NIM/NIDN
-                    'nama' => $adm->nama,
-                    'role_user' => $adm->role->role_nama ?? 'Admin',
-                    'kategori' => 'admin',
-                ];
-            });
+        // Gabungkan semua ke dalam satu collection
+        $users = $mahasiswas->concat($dospems)->concat($admins);
 
-        $data = $mahasiswa->concat($dosen)->concat($admin)->values();
+        // Lanjutkan dengan DataTables
+        return DataTables::of($users)
+            ->addIndexColumn()
+            ->addColumn('aksi', function ($user) {
+                $id = $user['id_user'] ?? 0;
+                $role = $user['role_user'] ?? 'unknown';
+                return '
+                    <button onclick="modalAction(\''.url("/user/$id/$role/show_ajax").'\')" class="btn btn-info btn-sm">
+                        <i class="bi bi-eye"></i><span class="ms-2">Detail</span>
+                    </button>
+                    <button onclick="modalAction(\''.url("/user/$id/$role/edit_ajax").'\')" class="btn btn-warning btn-sm">
+                        <i class="bi bi-pencil-square"></i><span class="ms-2">Edit</span>
+                    </button>
+                    <button onclick="modalAction(\''.url("/user/$id/$role/delete_ajax").'\')" class="btn btn-danger btn-sm">
+                        <i class="bi bi-trash"></i><span class="ms-2">Hapus</span>
+                    </button>
+                ';
+            })
+            ->rawColumns(['aksi'])
+            ->make(true);
+    }   
 
-        return response()->json(['data' => $data]);
-    }
+    public function show_ajax(string $id, string $role) {
+        $user = null;
 
-    public function show_ajax($id, $kategori)
-    {
-
-        if ($kategori === 'mahasiswa') {
+        if ($role === 'mahasiswa') {
             $user = MahasiswaModel::findOrFail($id);
-            return response()->json([
-                'id' => $user->id_mahasiswa,
-                'nama' => $user->nama,
-                'email' => $user->email,
-                'nim_nidn' => $user->nim
-            ]);
-        } elseif ($kategori === 'dosen') {
+        } elseif ($role === 'dosen') {
             $user = DospemModel::findOrFail($id);
-            return response()->json([
-                'id' => $user->id_dosen,
-                'nama' => $user->nama,
-                'email' => $user->email,
-                'nim_nidn' => $user->nidn
-            ]);
-        } elseif ($kategori === 'admin') {
+        } elseif ($role === 'admin') {
             $user = AdminModel::findOrFail($id);
-            return response()->json([
-                'id' => $user->id_admin,
-                'nama' => $user->nama,
-                'email' => $user->email,
-                'nim_nidn' => '-'
-            ]);
+        } else {
+            abort(404, 'Role tidak ditemukan');
         }
+
+        // Kirim data user dan role ke view
+        return view('user.show_ajax', compact('user', 'role'));
     }
 
-    public function create_ajax()
-    {
+    public function create_ajax() {
         $roles = RoleModel::all();
-        $prodis = ProgramStudiModel::all(); // ambil semua prodi
-
+        $prodis = ProgramStudiModel::all();
         return view('user.create_ajax', compact('roles', 'prodis'));
     }
 
+    public function store_ajax(Request $request) {
+        if ($request->ajax() || $request->wantsJson()) {
 
-    public function store_ajax(Request $request)
-    {
-        $emailRule = match ($request->id_role) {
-            3 => 'unique:mahasiswa,email', // id_role 3 = Mahasiswa
-            2 => 'unique:dospem,email',    // id_role 2 = Dosen
-            1 => 'unique:admin,email',     // id_role 1 = Admin
-            default => '',
-        };
+            // Tentukan aturan validasi dinamis tergantung role
+            $emailRule = match ((int)$request->id_role) {
+                3 => 'unique:mahasiswa,email',
+                2 => 'unique:dospem,email',
+                1 => 'unique:admin,email',
+                default => '',
+            };
 
-        $request->validate([
+            $rules = [
+                'id_role'    => 'required|exists:role,id_role',
+                'nama'       => 'required|string|max:255',
+                'email'      => ['required', 'email', $emailRule],
+                'password'   => 'required|string|min:6',
+                'nim_nidn'   => 'required_if:id_role,2|required_if:id_role,3',
+                'id_prodi'   => 'required_if:id_role,3',
+            ];
+
+            $validator = Validator::make($request->all(), $rules);
+
+            // Jika validasi gagal
+            if ($validator->fails()) {
+                return response()->json([
+                    'status'    => false,
+                    'message'   => 'Validasi gagal',
+                    'msgField'  => $validator->errors(),
+                ]);
+            }
+
+            // Proses insert berdasarkan role
+            try {
+                $role = RoleModel::findOrFail($request->id_role);
+
+                $data = [
+                    'id_role'  => $request->id_role,
+                    'nama'     => $request->nama,
+                    'email'    => $request->email,
+                    'password' => Hash::make($request->password),
+                ];
+
+                switch ($role->role_kode) {
+                    case 'MHS':
+                        $data['nim'] = $request->nim_nidn;
+                        $data['id_prodi'] = $request->id_prodi;
+                        $user = MahasiswaModel::create($data);
+                        break;
+                    case 'DSN':
+                        $data['nidn'] = $request->nim_nidn;
+                        $user = DospemModel::create($data);
+                        break;
+                    case 'ADM':
+                        $user = AdminModel::create($data);
+                        break;
+                    default:
+                        return response()->json([
+                            'status' => false,
+                            'message' => 'Role tidak valid'
+                        ]);
+                }
+
+                return response()->json([
+                    'status'  => true,
+                    'message' => 'User berhasil ditambahkan',
+                    'user'    => $user,
+                ]);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'status'  => false,
+                    'message' => 'Terjadi kesalahan saat menyimpan data.',
+                    'error'   => $e->getMessage(),
+                ]);
+            }
+        }
+
+        // fallback jika bukan ajax
+        return redirect('/');
+    }
+
+    public function edit_ajax(string $id, string $role) {
+        $roles = RoleModel::all();
+        $prodis = ProgramStudiModel::all();
+        $user = null;
+
+        if ($role === 'mahasiswa') {
+            $user = MahasiswaModel::find($id);
+        } elseif ($role === 'dosen') {
+            $user = DospemModel::find($id);
+        } elseif ($role === 'admin') {
+            $user = AdminModel::find($id);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'Role tidak valid.'
+            ]);
+        }
+
+        if (!$user) {
+            return response()->json([
+                'status' => false,
+                'message' => 'User tidak ditemukan.'
+            ]);
+        }
+
+        return view('user.edit_ajax', compact('user', 'roles', 'prodis', 'role'));
+    }
+
+
+    public function update_ajax(Request $request, string $id, string $role) {
+        // Validasi
+        $validator = Validator::make($request->all(), [
             'id_role' => 'required|exists:role,id_role',
             'nama' => 'required|string|max:255',
-            'email' => ['required', 'email', $emailRule],
-            'password' => 'required|string|min:6',
-            'nim_nidn' => 'nullable|string',
-            'id_prodi' => 'required_if:id_role,3',
+            'email' => [
+                'required',
+                'email',
+                Rule::unique($role === 'mahasiswa' ? 'mahasiswa' : ($role === 'dosen' ? 'dospem' : 'admin'), 'email')->ignore($id, $role === 'mahasiswa' ? 'id_mahasiswa' : ($role === 'dosen' ? 'id_dosen' : 'id_admin')),
+            ],
+            'nim_nidn' => $role !== 'admin' ? ['required', 'string', 'max:50'] : ['nullable'],
+            'id_prodi' => $role === 'mahasiswa' ? ['required', 'exists:program_studi,id_prodi'] : ['nullable'],
         ]);
 
-        $role = RoleModel::find($request->id_role);
-        if (!$role) return response()->json(['error' => 'Role tidak ditemukan'], 404);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validasi gagal.',
+                'msgField' => $validator->errors()
+            ]);
+        }
 
+        // Persiapan data update
         $data = [
             'id_role' => $request->id_role,
             'nama' => $request->nama,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'id_prodi' => $request->id_prodi,
         ];
 
-
-        switch ($role->role_kode) {
-            case 'MHS':
-                $data['nim'] = $request->nim_nidn;
-                $data['id_prodi'] = $request->id_prodi;
-                $user = MahasiswaModel::create($data);
-                break;
-            case 'DSN':
-                $data['nidn'] = $request->nim_nidn;
-                $user = DospemModel::create($data);
-                break;
-            case 'ADM':
-                $user = AdminModel::create($data);
-                break;
-            default:
-                return response()->json(['error' => 'Role tidak valid'], 400);
+        if ($role === 'mahasiswa') {
+            $data['nim'] = $request->nim_nidn;
+            $data['id_prodi'] = $request->id_prodi;
+            $user = MahasiswaModel::find($id);
+        } elseif ($role === 'dosen') {
+            $data['nidn'] = $request->nim_nidn;
+            $user = DospemModel::find($id);
+        } elseif ($role === 'admin') {
+            $user = AdminModel::find($id);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'Role tidak valid.'
+            ]);
         }
 
-        return response()->json(['success' => 'User berhasil ditambahkan', 'user' => $user]);
+        // Proses update
+        if ($user) {
+            try {
+                $user->update($data);
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Data berhasil diupdate.'
+                ]);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Terjadi kesalahan saat mengupdate data.',
+                    'error' => $e->getMessage()
+                ]);
+            }
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'Data tidak ditemukan.'
+            ]);
+        }
     }
 
-    public function edit($id, $role)
-    {
-        switch ($role) {
-            case 'mahasiswa':
+    public function confirm_ajax(string $id, string $role) {
+        $user = null;
+
+        if ($role === 'mahasiswa') {
+            $user = MahasiswaModel::find($id);
+        } elseif ($role === 'dosen') {
+            $user = DospemModel::find($id);
+        } elseif ($role === 'admin') {
+            $user = AdminModel::find($id);
+        } else {
+            abort(404, 'Role tidak ditemukan');
+        }
+
+        return view('user.confirm_ajax', compact('user', 'role'));
+    }
+
+    public function delete_ajax(Request $request, string $id, string $role) {
+        if ($request->ajax() || $request->wantsJson()) {
+            $user = null;
+
+            if ($role === 'mahasiswa') {
                 $user = MahasiswaModel::find($id);
-                break;
-            case 'dosen':
+            } elseif ($role === 'dosen') {
                 $user = DospemModel::find($id);
-                break;
-            case 'admin':
+            } elseif ($role === 'admin') {
                 $user = AdminModel::find($id);
-                break;
-            default:
-                return response()->json(['error' => 'Role tidak valid'], 400);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Role tidak valid',
+                ]);
+            }
+
+            if ($user) {
+                $user->delete();
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Data berhasil dihapus',
+                ]);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Data tidak ditemukan',
+                ]);
+            }
         }
 
-        if (!$user) return response()->json(['error' => 'User tidak ditemukan'], 404);
-
-        return response()->json($user);
-    }
-
-    public function update(Request $request)
-    {
-        $request->validate([
-            'id' => 'required',
-            'kategori' => 'required|in:mahasiswa,dosen,admin',
-            'nama' => 'required|string|max:255',
-            'email' => 'required|email',
-            'nim_nidn' => 'nullable|string'
-        ]);
-
-        $kategori = $request->kategori;
-
-        if ($kategori === 'mahasiswa') {
-            $user = MahasiswaModel::findOrFail($request->id);
-            $user->nama = $request->nama;
-            $user->email = $request->email;
-            $user->nim = $request->nim_nidn;
-            $user->save();
-        } elseif ($kategori === 'dosen') {
-            $user = DospemModel::findOrFail($request->id);
-            $user->nama = $request->nama;
-            $user->email = $request->email;
-            $user->nidn = $request->nim_nidn;
-            $user->save();
-        } elseif ($kategori === 'admin') {
-            $user = AdminModel::findOrFail($request->id);
-            $user->nama = $request->nama;
-            $user->email = $request->email;
-            $user->save();
-        }
-
-        return response()->json(['message' => 'Berhasil diupdate']);
-    }
-
-    public function destroy($id, $kategori)
-    {
-        if ($kategori === 'mahasiswa') {
-            MahasiswaModel::destroy($id);
-        } elseif ($kategori === 'dosen') {
-            DospemModel::destroy($id);
-        } elseif ($kategori === 'admin') {
-            AdminModel::destroy($id);
-        }
-
-        return response()->json(['message' => 'Berhasil dihapus']);
+        return redirect('/');
     }
 }

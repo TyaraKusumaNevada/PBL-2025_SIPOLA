@@ -7,6 +7,9 @@ use App\Http\Controllers\PeriodeController;
 use App\Http\Controllers\siginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProgramStudiController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProfilController;
+use App\Http\Controllers\TambahLombaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,20 +37,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Tampilan Auth
-Route::get('/auth/login', function () {
-    return view('auth.login');
-});
-
-Route::get('/auth/register', function () {
-    return view('auth.register');
-});
-
-// Tampilan Akses
-Route::get('/akses/login', function () {
-    return view('akses.login');
-});
-
 // ROUTE MAHASISWA
 Route::prefix('mahasiswa')->group(function () {
     Route::get('/profil', function () {
@@ -59,27 +48,9 @@ Route::prefix('mahasiswa')->group(function () {
     });
 });
 
-// ROUTE USER
-Route::prefix('user')->group(function () {
-    Route::get('/', function () {
-        return view('user.index');
-    })->name('user.index');
-
-    Route::get('/create_ajax', function () {
-        return view('user.create_ajax');
-    })->name('user.create_ajax');
-
-    Route::post('/ajax', function () {
-        return response()->json([
-            'status' => true,
-            'message' => 'Data berhasil disimpan (dummy testing)'
-        ]);
-    })->name('user.ajax.store');
-
-    Route::get('/confirm_ajax', function () {
-        return view('user.confirm_ajax');
+    Route::get('/prestasi', function () {       //ini masih belum pakai controller yaa, tapi aman kok ^-^
+        return view('prestasi.index');
     });
-});
 
 // ----------------------------------------------------------------------------------------
 // ROUTE ADMIN (Manajemen Program Studi)
@@ -93,9 +64,8 @@ Route::prefix('admin/ManajemenProdi')->group(function () {
   Route::put('{id}/update_ajax',[ProgramStudiController::class, 'update_ajax']);
   Route::get('{id}/confirm_ajax', [ProgramStudiController::class, 'confirm_ajax']);
   Route::delete('{id}/delete_ajax',[ProgramStudiController::class, 'delete_ajax']);
-   
 });
-
+// ----------------------------------------------------------------------------------------
 
 
 // ----------------------------------------------------------------------------------------
@@ -113,9 +83,23 @@ Route::prefix('periode')->group(function () {
 }); 
 // ----------------------------------------------------------------------------------------
 
-// ROUTE LOMBA
-use App\Http\Controllers\TambahLombaController;
 
+// ----------------------------------------------------------------------------------------
+// ROUTE ADMIN (Manajemen Pengguna)
+Route::prefix('user')->group(function () {
+    Route::get('/', [UserController::class, 'index']);
+    Route::post('list', [UserController::class, 'list']);
+    Route::get('create_ajax', [UserController::class, 'create_ajax']);
+    Route::post('/ajax', [UserController::class, 'store_ajax']);
+    Route::get('{id}/{role}/show_ajax', [UserController::class, 'show_ajax']);
+    Route::get('{id}/{role}/edit_ajax', [UserController::class, 'edit_ajax']);
+    Route::put('{id}/{role}/update_ajax', [UserController::class, 'update_ajax']);
+    Route::get('{id}/{role}/delete_ajax', [UserController::class, 'confirm_ajax']);     
+    Route::delete('{id}/{role}/delete_ajax', [UserController::class, 'delete_ajax']);    
+}); 
+// ----------------------------------------------------------------------------------------
+
+// ROUTE LOMBA
 Route::prefix('lomba')->group(function () {
     Route::get('/', [TambahLombaController::class, 'index']);
     Route::get('/list', [TambahLombaController::class, 'list']);
@@ -127,3 +111,17 @@ Route::prefix('lomba')->group(function () {
     Route::get('/{id}/delete_ajax', [TambahLombaController::class, 'confirm_ajax']);
     Route::delete('/{id}/delete_ajax', [TambahLombaController::class, 'delete_ajax']);
 });
+
+// ----------------------------------------------------------------------------------------
+// ROUTE LOGIN dan REGISTER
+Route::get('/', function () {       // Redirect root to login
+    return redirect()->route('login');
+});
+
+Route::get('/auth/login', function () {
+    return view('auth.login');
+});
+
+Route::get('/signin', [siginController::class, 'showRegistrationForm'])->name('signin');
+Route::post('/signin', [siginController::class, 'register']);
+// ----------------------------------------------------------------------------------------
