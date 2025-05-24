@@ -57,6 +57,14 @@ class TambahLombaController extends Controller
                 $btn .= '</div>';
                 return $btn;
             })
+            ->addColumn('pamflet_lomba', function ($row) {
+                if ($row->pamflet_lomba) {
+                    $url = asset('storage/pamflet_lomba/' . $row->pamflet_lomba);
+                    return '<img src="' . $url . '" width="60" style="cursor:pointer;" onclick="showPamfletModal(\'' . $url . '\')">';
+                }
+                return '<span class="text-muted">Tidak ada</span>';
+            })
+
 
             ->rawColumns(['aksi', 'pamflet_lomba']) // ⬅️ tambahkan pamflet_lomba
             ->make(true);
@@ -72,7 +80,7 @@ class TambahLombaController extends Controller
             $rules = [
                 'nama_lomba'         => 'required|string',
                 'kategori_lomba'     => 'required|string',
-                'tingkat_lomba'      => 'required|in:lokal,nasional,internasional',
+                'tingkat_lomba'      => 'required|in:provinsi,nasional,internasional',
                 'penyelenggara_lomba'=> 'required|string',
                 'deskripsi'          => 'required|string',
                 'tanggal_mulai'      => 'required|date',
@@ -125,7 +133,7 @@ class TambahLombaController extends Controller
             $rules = [
                 'nama_lomba'         => 'required|string',
                 'kategori_lomba'     => 'required|string',
-                'tingkat_lomba'      => 'required|in:lokal,nasional,internasional',
+                'tingkat_lomba'      => 'required|in:provinsi,nasional,internasional',
                 'penyelenggara_lomba'=> 'required|string',
                 'deskripsi'          => 'required|string',
                 'tanggal_mulai'      => 'required|date',

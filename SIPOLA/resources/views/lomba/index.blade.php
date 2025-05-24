@@ -59,6 +59,16 @@
             </div>
         </div>
     </div>
+
+        <!-- Modal untuk Pamflet -->
+        <div class="modal fade" id="pamfletModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content p-3">
+                    <img id="pamfletImage" src="" class="img-fluid rounded" alt="Pamflet Lomba">
+                </div>
+            </div>
+        </div>
+
 @endsection
 
 @push('css')
@@ -66,10 +76,22 @@
         /* Tambah margin atas pada bagian kontrol DataTable */
         div.dataTables_wrapper div.dataTables_length,
         div.dataTables_wrapper div.dataTables_filter {
-            margin-top: 1rem; /* ubah sesuai kebutuhan */
+            margin-top: 1rem;
+        }
+
+        /* Efek hover pada gambar pamflet */
+        img[onclick^="showPamfletModal"] {
+            transition: 0.3s ease;
+            cursor: pointer;
+        }
+
+        img[onclick^="showPamfletModal"]:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 8px rgba(0,0,0,0.2);
         }
     </style>
 @endpush
+
 
 @push('js')
     <script>
@@ -89,6 +111,12 @@
                 });
                 modal.show();
             });
+        }
+
+        function showPamfletModal(imageUrl) {
+            $('#pamfletImage').attr('src', imageUrl);
+                const modal = new bootstrap.Modal(document.getElementById('pamfletModal'));
+                    modal.show();
         }
 
 var dataLomba;
