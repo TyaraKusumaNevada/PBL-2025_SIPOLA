@@ -5,6 +5,7 @@ use App\Models\PrestasiModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class MahasiswaModel extends Model
 {
@@ -28,16 +29,16 @@ class MahasiswaModel extends Model
         return $this->belongsTo(RoleModel::class, 'id_role', 'id_role');
     }
 
+    public function prestasi(): HasMany {       //mahasiswa memiliki banyak prestasi
+        return $this->hasMany(PrestasiModel::class, 'id_mahasiswa', 'id_mahasiswa');
+    }
+
     public function angkatan() {
         return $this->belongsTo(AngkatanModel::class, 'id_angkatan');
     }
 
     public function prodi() {
         return $this->belongsTo(ProgramStudiModel::class, 'id_prodi');
-    }
-
-    public function prestasi() {
-        return $this->hasMany(PrestasiModel::class, 'id_mahasiswa');
     }
 
     public function rekomendasi() {
