@@ -19,49 +19,7 @@
         </div>
 
 
-        <!-- User -->
-        <li class="nav-item navbar-dropdown dropdown-user dropdown">
-            <a class="nav-link dropdown-toggle hide-arrow p-0" href="javascript:void(0);" data-bs-toggle="dropdown">
-                <div class="avatar avatar-online">
-                    <img src="{{ asset('template/assets/img/avatars/1.png') }}" alt
-                        class="w-px-40 h-auto rounded-circle" />
-                </div>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end">
-                <li>
-                    <a class="dropdown-item" href="#">
-                        <div class="d-flex">
-                            <div class="flex-shrink-0 me-3">
-                                <div class="avatar avatar-online">
-                                    <img src="{{ asset('template/assets/img/avatars/1.png') }}" alt
-                                        class="w-px-40 h-auto rounded-circle" />
-                                </div>
-                            </div>
-                            <div class="flex-grow-1">
-                                <h6 class="mb-0">Tyara Kusuma Nevada</h6>
-                                <small class="text-body-secondary">Admin</small>
-                            </div>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <div class="dropdown-divider my-1"></div>
-                </li>
-                <li>
-                    <a class="dropdown-item" href="#">
-                        <i class="icon-base bx bx-user icon-md me-3"></i><span>My Profile</span>
-                    </a>
-                </li>
-                <li>
-                    <div class="dropdown-divider my-1"></div>
-                </li>
-                <li>
-                    <a class="dropdown-item" href="javascript:void(0);">
-                        <i class="icon-base bx bx-power-off icon-md me-3"></i><span>Log Out</span>
-                    </a>
-                </li>
-            </ul>
-        </li>
+     
         <!--/ User -->
         </ul>
     </div>

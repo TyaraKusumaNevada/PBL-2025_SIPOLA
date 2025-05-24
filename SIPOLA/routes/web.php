@@ -6,10 +6,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PeriodeController;
 use App\Http\Controllers\PrestasiMahasiswaController;
 use App\Http\Controllers\siginController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProgramStudiController;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfilController;
+use Illuminate\Support\Facades\Route;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -36,16 +36,9 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->n
 //     return redirect()->route('login');
 // });
 
-// Tampilan Welcome
 Route::get('/', function () {
     return view('welcome');
 });
-
-// ROUTE MAHASISWA
-Route::prefix('mahasiswa')->group(function () {
-    Route::get('/profil', function () {
-        return view('mahasiswa.profil');
-    });
 
     Route::get('/prestasi', function () {
         return view('mahasiswa.prestasi');
@@ -134,3 +127,11 @@ Route::prefix('prestasi')->group(function () {
     Route::post('/list', [PrestasiMahasiswaController::class, 'list']);
 }); 
 // ----------------------------------------------------------------------------------------
+
+// Route profil user
+Route::get('/profilmahasiswa', [ProfilController::class, 'index'])->name('profil.index');
+Route::post('/profil/update-profile', [ProfilController::class, 'updateProfile'])->name('profil.update.profile');
+Route::post('/profil/update-username', [ProfilController::class, 'updateUsername'])->name('profil.update.username');
+ Route::post('/profil/update-username', [ProfilController::class, 'updateUsername'])->name('profil.update.username');
+    Route::post('/profil/update-academic', [ProfilController::class, 'updateAcademicProfile'])->name('profil.update.academic');
+    Route::post('/profil/update-profile', [ProfilController::class, 'updateProfile'])->name('profil.update.profile')->middleware('auth');
