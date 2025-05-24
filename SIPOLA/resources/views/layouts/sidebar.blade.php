@@ -58,9 +58,8 @@
   <a href="{{ url('/prestasi') }}" class="menu-link d-flex align-items-center">
     <i class="bi bi-file-earmark-text menu-icon fs-5"></i>
       <div class="text-truncate" data-i18n="ManajemenLomba">Unggah Prestasi</div>
-    </a>
-  </li>
-
+  </a>
+</li>
 
 <!-- Manajemen Lomba -->
 <li class="menu-item {{ Request::is('lomba*') ? 'active open' : '' }}">

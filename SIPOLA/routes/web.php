@@ -4,6 +4,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PeriodeController;
+use App\Http\Controllers\PrestasiMahasiswaController;
 use App\Http\Controllers\siginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProgramStudiController;
@@ -21,15 +22,19 @@ use App\Http\Controllers\ProfilController;
 |
 */
 
-// Authentication Routes
+// // Authentication Routes
+// Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+// Route::post('/loginPost', [AuthController::class, 'login'])->middleware('guest');
+// Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
+
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [AuthController::class, 'login'])->middleware('guest');
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
+Route::post('/loginPost', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
 // Redirect root to login
-Route::get('/', function () {
-    return redirect()->route('login');
-});
+// Route::get('/', function () {
+//     return redirect()->route('login');
+// });
 
 // Tampilan Welcome
 Route::get('/', function () {
@@ -105,14 +110,27 @@ Route::get('/lomba', function () {
 
 // ----------------------------------------------------------------------------------------
 // ROUTE LOGIN dan REGISTER
-Route::get('/', function () {       // Redirect root to login
-    return redirect()->route('login');
-});
+// Route::get('/', function () {       // Redirect root to login
+//     return redirect()->route('login');
+// });
 
-Route::get('/auth/login', function () {
-    return view('auth.login');
-});
+// Route::get('/auth/login', function () {
+//     return view('auth.login');
+// });
 
 Route::get('/signin', [siginController::class, 'showRegistrationForm'])->name('signin');
 Route::post('/signin', [siginController::class, 'register']);
+// ----------------------------------------------------------------------------------------
+
+// Route::prefix('prestasi')->group(function () {
+//     Route::get('/histori', [PrestasiMahasiswaController::class, 'index'])->name('prestasi.histori');
+//     Route::get('/unggah', [PrestasiMahasiswaController::class, 'create'])->name('prestasi.unggah');
+//     Route::post('/ajax', [PrestasiMahasiswaController::class, 'store_ajax'])->name('prestasi.store_ajax');
+// });
+
+// ROUTE MAHASISWA (Unggah Prestasi)
+Route::prefix('prestasi')->group(function () {
+    Route::get('/', [PrestasiMahasiswaController::class, 'index']);
+    Route::post('/list', [PrestasiMahasiswaController::class, 'list']);
+}); 
 // ----------------------------------------------------------------------------------------
