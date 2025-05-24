@@ -7,6 +7,8 @@ use App\Http\Controllers\siginController;
 use App\Http\Controllers\ProfilController;
 use Illuminate\Support\Facades\Route;
 
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -46,14 +48,18 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middl
 // });
 
 // Redirect root to login
-Route::get('/', function () {
-    return redirect()->route('login');
-});
+// Route::get('/', function () {
+//     return redirect()->route('login');
+// });
 
 Route::get('/', function () {
     return view('welcome');
 });
 
+
+Route::get('/', function () {       // Redirect root to login
+    return redirect()->route('login');
+});
 Route::get('/auth/login', function () {
     return view('auth.login');
 });
