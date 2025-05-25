@@ -33,8 +33,10 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'password' => 'required',
+        try {
+            
+            $validator = Validator::make($request->all(), [
+                'password' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -54,7 +56,7 @@ class AuthController extends Controller
         
         if ($mahasiswa) {
             $userFound = true;
-            $userType = 'student';
+            $userType = 'mahasiswa';
             $userData = $mahasiswa;
         } else {
             // Check in dosen table for NIP/NIDN
@@ -66,7 +68,7 @@ class AuthController extends Controller
                 $userData = $dosen;
             } else {
                 // Check in admin table
-                $admin = AdminModel::where('nama_admin', $request->username)->first();
+                $admin = AdminModel::where('nama', $request->username)->first();
                 
                 if ($admin) {
                     $userFound = true;
@@ -87,7 +89,7 @@ class AuthController extends Controller
 
             if (!$user) {
                 // User doesn't exist in users table yet, create based on corresponding specialized table
-                $name = $userType === 'student' ? $userData->nama : ($userType === 'dosen' ? $userData->nama_dosen : $userData->nama_admin);
+                $name = $userType === 'student' ? $userData->nama : ($userType === 'dosen' ? $userData->nama : $userData->nama);
                 
                 $user = User::create([
                     'name' => $name,
@@ -106,7 +108,7 @@ class AuthController extends Controller
                 
                 // Redirect based on user role
                 
-              $redirectTo = '/';
+                $redirectTo = url('/');
                 
                 // Send response for the client-side alert (successful login)
                 return response()->json([
@@ -126,6 +128,12 @@ class AuthController extends Controller
                 'password' => ['NIM/NIP/NIDN atau password tidak valid!']
             ],
         ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => false,
+            'message' => 'Error di '.$e
+        ]);
+    }
     }
 
     /**

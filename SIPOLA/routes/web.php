@@ -27,9 +27,12 @@ use App\Http\Controllers\ProfilController;
 // Route::post('/loginPost', [AuthController::class, 'login'])->middleware('guest');
 // Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
+//-------------------------------------------------------------------------
+//ROUTE LOGIN
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/loginPost', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
+//-------------------------------------------------------------------------
 
 // Redirect root to login
 // Route::get('/', function () {
@@ -132,5 +135,12 @@ Route::post('/signin', [siginController::class, 'register']);
 Route::prefix('prestasi')->group(function () {
     Route::get('/', [PrestasiMahasiswaController::class, 'index']);
     Route::post('/list', [PrestasiMahasiswaController::class, 'list']);
+    Route::get('create_ajax', [PrestasiMahasiswaController::class, 'create_ajax']);
+    Route::post('/ajax', [PrestasiMahasiswaController::class, 'store_ajax']);
+    Route::get('{id}/show_ajax', [PrestasiMahasiswaController::class, 'show_ajax']);
+    Route::get('{id}/edit_ajax', [PrestasiMahasiswaController::class, 'edit_ajax']);
+    Route::put('{id}/update_ajax', [PrestasiMahasiswaController::class, 'update_ajax']);
+    Route::get('/{id}/delete_ajax', [PrestasiMahasiswaController::class, 'confirm_ajax']);     
+    Route::delete('/{id}/delete_ajax', [PrestasiMahasiswaController::class, 'delete_ajax']);    
 }); 
 // ----------------------------------------------------------------------------------------
