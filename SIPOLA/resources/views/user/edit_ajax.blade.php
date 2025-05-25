@@ -54,6 +54,13 @@
                         <div id="error-email" class="form-text text-danger"></div>
                     </div>
 
+                    <div class="mb-3">
+                        <label for="nomor_telepon" class="form-label">Nomor Telepon</label>
+                        <input type="text" name="nomor_telepon" id="nomor_telepon" value="{{ $user->nomor_telepon }}" class="form-control"
+                            required>
+                        <div id="error-nomor_telepon" class="form-text text-danger"></div>
+                    </div>
+
                     @if ($user->id_role == 3)
                         <div class="mb-3">
                             <label for="nim_nidn" class="form-label">NIM</label>

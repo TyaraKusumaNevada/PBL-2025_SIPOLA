@@ -19,6 +19,7 @@ class MahasiswaModel extends Model
         'nim', 
         'password', 
         'email', 
+        'nomor_telepon',
         'bidang_keahlian', 
         'minat', 
         'id_angkatan', 
