@@ -2,6 +2,8 @@
 // File: routes/web.php
 // Route definitions for web interface
 
+use App\Http\Controllers\InfoLombaController;
+use App\Http\Controllers\LandingController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\siginController;
 use App\Http\Controllers\ProfilController;
@@ -71,3 +73,10 @@ Route::post('/profil/update-username', [ProfilController::class, 'updateUsername
  Route::post('/profil/update-username', [ProfilController::class, 'updateUsername'])->name('profil.update.username');
     Route::post('/profil/update-academic', [ProfilController::class, 'updateAcademicProfile'])->name('profil.update.academic');
     Route::post('/profil/update-profile', [ProfilController::class, 'updateProfile'])->name('profil.update.profile')->middleware('auth');
+    
+
+
+Route::get('/landing', [LandingController::class, 'index']);
+
+Route::get('/infolomba', [InfoLombaController::class, 'index'])->name('infolomba');
+

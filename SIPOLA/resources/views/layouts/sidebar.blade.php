@@ -1,200 +1,126 @@
-<!-- Menu -->
-<div class="menu-divider mt-0"></div>
+<!-- Sidebar -->
+<div class="user-panel d-flex align-items-center px-3 py-3" style="border-bottom: 1px solid #d1d5db;">
+  <a href="{{ route('profil.index') }}" class="d-flex align-items-center text-dark text-decoration-none">
+    @php
+      $userId = Auth::id();
+      $userImagePath = 'storage/foto_profil/user_' . $userId . '.jpg';
+      $defaultImage = 'storage/foto_profil/user_.jpg';
+      $imagePath = file_exists(public_path($userImagePath)) ? asset($userImagePath) : asset($defaultImage);
 
-<div class="menu-inner-shadow"></div>
+      $user = Auth::user();
+      $fullName = $user->name ?? $user->nama ?? $user->full_name ?? $user->username ?? 'Guest';
+      $nameParts = explode(' ', trim($fullName));
 
-<ul class="menu-inner py-1">
-{{-- User Profile --}}
-<div class="user-panel d-flex align-items-center mb-3 px-3">
-    <a href="{{ route('profil.index') }}" class="d-flex align-items-center text-white text-decoration-none">
-        @php
-            $userId = Auth::id();
-            $userImagePath = 'storage/foto_profil/user_' . $userId . '.jpg';
-            $defaultImage = 'storage/foto_profil/user_.jpg';
-            $imagePath = file_exists(public_path($userImagePath)) ? asset($userImagePath) : asset($defaultImage);
-            
-            // Fungsi untuk menyingkat nama - cek berbagai kemungkinan field nama
-            $user = Auth::user();
-            $fullName = $user->name ?? $user->nama ?? $user->full_name ?? $user->username ?? 'Guest';
-            
-            // Debug - hapus setelah selesai
-            // dd($user->toArray()); // Uncomment ini untuk melihat semua field user
-            
-            $nameParts = explode(' ', trim($fullName));
-            
-            if (count($nameParts) <= 2) {
-                $displayName = $fullName;
-            } else {
-                // Ambil nama depan dan inisial nama belakang
-                $firstName = $nameParts[0];
-                $lastInitial = strtoupper(substr(end($nameParts), 0, 1));
-                $displayName = $firstName . ' ' . $lastInitial . '.';
-            }
-        @endphp
-        <img id="sidebar-foto-profil" src="{{ $imagePath }}"
-             class="rounded-circle" alt="User Image"
-             style="width:40px; height:40px; object-fit:cover;">
-     <span id="sidebar-nama-user" class="ms-2 text-dark fw-semibold" title="{{ $fullName }}">
-            {{ $displayName }}
-        </span>
-    </a>
+      if (count($nameParts) <= 2) {
+        $displayName = $fullName;
+      } else {
+        $firstName = $nameParts[0];
+        $lastInitial = strtoupper(substr(end($nameParts), 0, 1));
+        $displayName = $firstName . ' ' . $lastInitial . '.';
+      }
+    @endphp
+    <img id="sidebar-foto-profil" src="{{ $imagePath }}" class="rounded-circle" alt="User Image"
+      style="width: 40px; height: 40px; object-fit: cover; border: 2px solid #d1d5db;">
+    <span id="sidebar-nama-user" class="ms-2 fw-semibold text-dark" title="{{ $fullName }}">
+      {{ $displayName }}
+    </span>
+  </a>
 </div>
 
-  <!-- Dashboard Admin -->
-  <li class="menu-item {{ Request::is('admin/dashboard') ? 'active open' : '' }}">
-    <a href="{{ url('/admin/dashboard') }}" class="menu-link d-flex align-items-center">
-      <i class="bi bi-house-door menu-icon fs-5"></i>
-      <div class="text-truncate" data-i18n="Dashboard">Dashboard</div>
-    </a>
-  </li>
+<!-- Menu -->
+<ul class="menu-inner" style="background-color: #ffffff; color: #1f2937; border-right: 1px solid #d1d5db;">
 
-  <!-- Dashboard Dospem -->
-  <li class="menu-item {{ Request::is('dospem/dashboard') ? 'active open' : '' }}">
-    <a href="{{ url('/dospem/dashboard') }}" class="menu-link d-flex align-items-center">
-      <i class="bi bi-house-door menu-icon fs-5"></i>
-      <div class="text-truncate" data-i18n="Dashboard">Dashboard</div>
-    </a>
-  </li>
+  {{-- Menu Items --}}
+  @php
+    $menus = [
+      ['label' => 'Dashboard', 'icon' => 'bi-house-door', 'url' => '/admin/dashboard', 'check' => 'admin/dashboard'],
+      ['label' => 'Dashboard', 'icon' => 'bi-house-door', 'url' => '/dospem/dashboard', 'check' => 'dospem/dashboard'],
+      ['label' => 'Dashboard', 'icon' => 'bi-house-door', 'url' => '/mahasiswa/dashboard', 'check' => 'mahasiswa/dashboard'],
+      ['label' => 'Profil', 'icon' => 'bi-person-circle', 'url' => '/admin/profil', 'check' => 'admin/profil'],
+      ['label' => 'Profil', 'icon' => 'bi-person-circle', 'url' => '/dospem/profil', 'check' => 'dospem/profil'],
+      ['label' => 'Profil', 'icon' => 'bi-person-circle', 'url' => '/mahasiswa/profil', 'check' => 'mahasiswa/profil'],
+      ['label' => 'Manajemen Lomba', 'icon' => 'bi-trophy', 'url' => '/lomba', 'check' => 'lomba*'],
+      ['label' => 'Manajemen Pengguna', 'icon' => 'bi-person-gear', 'url' => '/user', 'check' => 'user*'],
+      ['label' => 'Manajemen Periode', 'icon' => 'bi-calendar2-week', 'url' => '/periode', 'check' => 'periode*'],
+      ['label' => 'Manajemen Prodi', 'icon' => 'bi-diagram-3', 'url' => '/admin/ManajemenProdi', 'check' => 'admin*'],
+      ['label' => 'Verifikasi Prestasi', 'icon' => 'bi-patch-check', 'url' => '/admin/verifikasi', 'check' => 'admin/verifikasiprestasi*'],
+      ['label' => 'Verifikasi Info Lomba', 'icon' => 'bi-file-earmark-check', 'url' => '/admin/verifikasilomba', 'check' => 'admin/verifikasilomba*'],
+    ];
+  @endphp
 
-  <!-- Dashboard Mahasiswa -->
-  <li class="menu-item {{ Request::is('mahasiswa/dashboard') ? 'active open' : '' }}">
-    <a href="{{ url('/mahasiswa/dashboard') }}" class="menu-link d-flex align-items-center">
-      <i class="bi bi-house-door menu-icon fs-5"></i>
-      <div class="text-truncate" data-i18n="Dashboard">Dashboard</div>
-    </a>
-  </li>
+  @foreach ($menus as $menu)
+    <li class="menu-item {{ Request::is($menu['check']) ? 'active open' : '' }}">
+      <a href="{{ url($menu['url']) }}" class="menu-link d-flex align-items-center text-dark">
+        <i class="bi {{ $menu['icon'] }} menu-icon fs-5 me-2"></i>
+        <div class="text-truncate">{{ $menu['label'] }}</div>
+      </a>
+    </li>
+  @endforeach
 
-  <!-- Profil Admin -->
-  <li class="menu-item {{ Request::is('admin/profil') ? 'active open' : '' }}">
-    <a href="{{ url('/admin/profil') }}" class="menu-link d-flex align-items-center">
-      <i class="bi bi-person-circle menu-icon fs-5"></i>
-      <div class="text-truncate" data-i18n="AdminProfil">Profil</div>
-    </a>
-  </li>
-
-  <!-- Profil Dospem -->
-  <li class="menu-item {{ Request::is('dospem/profil') ? 'active open' : '' }}">
-    <a href="{{ url('/dospem/profil') }}" class="menu-link d-flex align-items-center">
-      <i class="bi bi-person-circle menu-icon fs-5"></i>
-      <div class="text-truncate" data-i18n="DospemProfil">Profil</div>
-    </a>
-  </li>
-
-  <!-- Profil Mahasiswa -->
-  <li class="menu-item {{ Request::is('mahasiswa/profil') ? 'active open' : '' }}">
-    <a href="{{ url('/mahasiswa/profil') }}" class="menu-link d-flex align-items-center">
-      <i class="bi bi-person-circle menu-icon fs-5"></i>
-      <div class="text-truncate" data-i18n="MahasiswaProfil">Profil</div>
-    </a>
-  </li>
-
-<!-- Manajemen Lomba -->
-<li class="menu-item {{ Request::is('lomba*') ? 'active open' : '' }}">
-  <a href="{{ url('/lomba') }}" class="menu-link d-flex align-items-center">
-    <i class="bi bi-trophy menu-icon fs-5"></i>
-      <div class="text-truncate" data-i18n="ManajemenLomba">Manajemen Lomba</div>
-    </a>
-  </li>
-
-  <!-- Manajemen Pengguna -->
-  <li class="menu-item {{ Request::is('user*') ? 'active open' : '' }}">
-    <a href="{{ url('/user') }}" class="menu-link d-flex align-items-center">
-      <i class="bi bi-person-gear menu-icon fs-5"></i>
-      <span class="text-truncate" data-i18n="ManajemenPengguna">Manajemen Pengguna</span>
-    </a>
-  </li>
-
-  <!-- Manajemen Periode/Angkatan -->
-  <li class="menu-item {{ Request::is('periode*') ? 'active open' : '' }}">
-    <a href="{{ url('/periode') }}" class="menu-link d-flex align-items-center">
-      <i class="bi bi-calendar2-week menu-icon fs-5"></i>
-      <span class="text-truncate" data-i18n="ManajemenProdi">Manajemen Periode</span>
-    </a>
-  </li>
-
-  <!-- Manajemen Prodi -->
-  <li class="menu-item {{ Request::is('admin*') ? 'active open' : '' }}">
-    <a href="{{ url('/admin/ManajemenProdi') }}" class="menu-link d-flex align-items-center">
-      <i class="bi bi-diagram-3 menu-icon fs-5"></i>
-      <div class="text-truncate" data-i18n="ManajemenProdi">Manajemen Prodi</div>
-    </a>
-  </li>
-
-  <!-- Verifikasi Prestasi -->
-  <li class="menu-item {{ Request::is('admin/verifikasiprestasi*') ? 'active open' : '' }}">
-    <a href="{{ url('admin/verifikasi') }}" class="menu-link d-flex align-items-center">
-      <i class="bi bi-patch-check menu-icon fs-5"></i>
-      <div class="text-truncate" data-i18n="VerifikasiPrestasi">Verifikasi Prestasi</div>
-    </a>
-  </li>
-
-  <!-- Verifikasi Info Lomba -->
-  <li class="menu-item {{ Request::is('admin/verifikasilomba*') ? 'active open' : '' }}">
-    <a href="{{ url('admin/verifikasilomba') }}" class="menu-link d-flex align-items-center">
-      <i class="bi bi-file-earmark-check menu-icon fs-5"></i>
-      <div class="text-truncate" data-i18n="VerifikasiLomba">Verifikasi Info Lomba</div>
-    </a>
-  </li>
-  
-  <!-- Memberikan jarak, agar logout di bawah -->
   <div style="flex-grow: 1;"></div>
 
+  {{-- Logout --}}
   <li class="menu-item">
-  <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
-    @csrf
-    <button type="submit" class="menu-link" style="border: none; background: none; width: 100%; text-align: left;">
-      <i class="bi bi-box-arrow-right menu-icon fs-5"></i>
-      <div class="text-truncate" data-i18n="Misc">Logout</div>
-    </button>
-  </form>
-</li>
-
-<script>
-// Fungsi untuk menyingkat nama - cek berbagai kemungkinan field
-function formatDisplayName(userData) {
-    const fullName = userData.name || userData.nama || userData.full_name || userData.username || 'Guest';
-    const nameParts = fullName.trim().split(' ');
-    
-    if (nameParts.length <= 2) {
-        return fullName;
-    } else {
-        // Ambil nama depan dan inisial nama belakang
-        const firstName = nameParts[0];
-        const lastInitial = nameParts[nameParts.length - 1].charAt(0).toUpperCase();
-        return firstName + ' ' + lastInitial + '.';
-    }
-}
-
-$.ajax({
-    type: "POST",
-    url: "/profil/update",
-    data: formData,
-    contentType: false,
-    processData: false,
-    success: function(response) {
-        if (response.success) {
-            // Format nama untuk display
-            const displayName = formatDisplayName(response.user);
-            const fullName = response.user.name || response.user.nama || response.user.full_name || response.user.username || 'Guest';
-            
-            // Update nama di sidebar dengan nama yang disingkat
-            $('#sidebar-nama-user').text(displayName);
-            
-            // Update tooltip dengan nama lengkap
-            $('#sidebar-nama-user').attr('title', fullName);
-
-            // Update foto profil di sidebar
-            $('#sidebar-foto-profil').attr('src', response.fotoPath + '?' + new Date().getTime());
-
-            // Tampilkan notifikasi sukses (opsional)
-            alert('Profil berhasil diperbarui');
-        }
-    },
-    error: function(xhr) {
-        alert('Gagal memperbarui profil');
-    }
-});
-</script>
-
+    <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
+      @csrf
+      <button type="submit" class="menu-link text-dark logout-btn"
+        style="border: none; background: none; width: 100%; text-align: left; padding: 10px 16px; border-radius: 8px; cursor: pointer;">
+        <i class="bi bi-box-arrow-right menu-icon fs-5 me-2"></i>
+        <div class="text-truncate">Logout</div>
+      </button>
+    </form>
+  </li>
 </ul>
-<!-- / Menu -->
+
+<!-- Custom Sidebar Style -->
+<style>
+  .menu-inner {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 68px); /* disesuaikan agar penuh setelah profil */
+    padding-top: 0.25rem;
+    margin: 0;
+  }
+
+  .menu-inner a.menu-link,
+  .menu-inner button.menu-link {
+    padding: 10px 16px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    color: #1f2937;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+  }
+
+  .menu-inner a.menu-link:hover,
+  .menu-inner button.menu-link:hover {
+    background-color: #2b3ea0 !important;
+    color: #ffffff !important;
+  }
+
+  .menu-item.active > a.menu-link {
+    background-color: #2b3ea0 !important;
+    color: #ffffff !important;
+    font-weight: 600;
+  }
+
+  .menu-icon {
+    color: inherit;
+  }
+
+  .menu-inner li {
+    list-style: none;
+  }
+
+  .user-panel {
+    margin: 0;
+    padding: 12px 16px;
+    background-color: #fff;
+  }
+
+  .menu-item form button.logout-btn:hover {
+    background-color: #dc2626 !important; /* merah */
+    color: #ffffff !important;
+  }
+</style>
