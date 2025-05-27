@@ -27,36 +27,103 @@
   </a>
 </div>
 
-<!-- Menu -->
-<ul class="menu-inner" style="background-color: #ffffff; color: #1f2937; border-right: 1px solid #d1d5db;">
+  <!-- Dashboard Admin -->
+  <li class="menu-item {{ Request::is('admin/dashboard') ? 'active open' : '' }}">
+    <a href="{{ url('/admin/dashboard') }}" class="menu-link d-flex align-items-center">
+      <i class="bi bi-house-door menu-icon fs-5"></i>
+      <div class="text-truncate" data-i18n="Dashboard">Dashboard</div>
+    </a>
+  </li>
 
-  {{-- Menu Items --}}
-  @php
-    $menus = [
-      ['label' => 'Dashboard', 'icon' => 'bi-house-door', 'url' => '/admin/dashboard', 'check' => 'admin/dashboard'],
-      ['label' => 'Dashboard', 'icon' => 'bi-house-door', 'url' => '/dospem/dashboard', 'check' => 'dospem/dashboard'],
-      ['label' => 'Dashboard', 'icon' => 'bi-house-door', 'url' => '/mahasiswa/dashboard', 'check' => 'mahasiswa/dashboard'],
-      ['label' => 'Profil', 'icon' => 'bi-person-circle', 'url' => '/admin/profil', 'check' => 'admin/profil'],
-      ['label' => 'Profil', 'icon' => 'bi-person-circle', 'url' => '/dospem/profil', 'check' => 'dospem/profil'],
-      ['label' => 'Profil', 'icon' => 'bi-person-circle', 'url' => '/mahasiswa/profil', 'check' => 'mahasiswa/profil'],
-      ['label' => 'Manajemen Lomba', 'icon' => 'bi-trophy', 'url' => '/lomba', 'check' => 'lomba*'],
-      ['label' => 'Manajemen Pengguna', 'icon' => 'bi-person-gear', 'url' => '/user', 'check' => 'user*'],
-      ['label' => 'Manajemen Periode', 'icon' => 'bi-calendar2-week', 'url' => '/periode', 'check' => 'periode*'],
-      ['label' => 'Manajemen Prodi', 'icon' => 'bi-diagram-3', 'url' => '/admin/ManajemenProdi', 'check' => 'admin*'],
-      ['label' => 'Verifikasi Prestasi', 'icon' => 'bi-patch-check', 'url' => '/admin/verifikasi', 'check' => 'admin/verifikasiprestasi*'],
-      ['label' => 'Verifikasi Info Lomba', 'icon' => 'bi-file-earmark-check', 'url' => '/admin/verifikasilomba', 'check' => 'admin/verifikasilomba*'],
-    ];
-  @endphp
+  <!-- Dashboard Dospem -->
+  <li class="menu-item {{ Request::is('dospem/dashboard') ? 'active open' : '' }}">
+    <a href="{{ url('/dospem/dashboard') }}" class="menu-link d-flex align-items-center">
+      <i class="bi bi-house-door menu-icon fs-5"></i>
+      <div class="text-truncate" data-i18n="Dashboard">Dashboard</div>
+    </a>
+  </li>
 
-  @foreach ($menus as $menu)
-    <li class="menu-item {{ Request::is($menu['check']) ? 'active open' : '' }}">
-      <a href="{{ url($menu['url']) }}" class="menu-link d-flex align-items-center text-dark">
-        <i class="bi {{ $menu['icon'] }} menu-icon fs-5 me-2"></i>
-        <div class="text-truncate">{{ $menu['label'] }}</div>
-      </a>
-    </li>
-  @endforeach
+  <!-- Dashboard Mahasiswa -->
+  <li class="menu-item {{ Request::is('mahasiswa/dashboard') ? 'active open' : '' }}">
+    <a href="{{ url('/mahasiswa/dashboard') }}" class="menu-link d-flex align-items-center">
+      <i class="bi bi-house-door menu-icon fs-5"></i>
+      <div class="text-truncate" data-i18n="Dashboard">Dashboard</div>
+    </a>
+  </li>
 
+  <!-- Profil Admin -->
+  <li class="menu-item {{ Request::is('admin/profil') ? 'active open' : '' }}">
+    <a href="{{ url('/admin/profil') }}" class="menu-link d-flex align-items-center">
+      <i class="bi bi-person-circle menu-icon fs-5"></i>
+      <div class="text-truncate" data-i18n="AdminProfil">Profil</div>
+    </a>
+  </li>
+
+  <!-- Profil Dospem -->
+  <li class="menu-item {{ Request::is('dospem/profil') ? 'active open' : '' }}">
+    <a href="{{ url('/dospem/profil') }}" class="menu-link d-flex align-items-center">
+      <i class="bi bi-person-circle menu-icon fs-5"></i>
+      <div class="text-truncate" data-i18n="DospemProfil">Profil</div>
+    </a>
+  </li>
+
+  <!-- Profil Mahasiswa -->
+  <li class="menu-item {{ Request::is('mahasiswa/profil') ? 'active open' : '' }}">
+    <a href="{{ url('/mahasiswa/profil') }}" class="menu-link d-flex align-items-center">
+      <i class="bi bi-person-circle menu-icon fs-5"></i>
+      <div class="text-truncate" data-i18n="MahasiswaProfil">Profil</div>
+    </a>
+  </li>
+
+<!-- Manajemen Lomba -->
+<li class="menu-item {{ Request::is('lomba*') ? 'active open' : '' }}">
+  <a href="{{ url('/lomba') }}" class="menu-link d-flex align-items-center">
+    <i class="bi bi-trophy menu-icon fs-5"></i>
+      <div class="text-truncate" data-i18n="ManajemenLomba">Manajemen Lomba</div>
+    </a>
+  </li>
+
+  <!-- Manajemen Pengguna -->
+  <li class="menu-item {{ Request::is('user*') ? 'active open' : '' }}">
+    <a href="{{ url('/user') }}" class="menu-link d-flex align-items-center">
+      <i class="bi bi-person-gear menu-icon fs-5"></i>
+      <span class="text-truncate" data-i18n="ManajemenPengguna">Manajemen Pengguna</span>
+    </a>
+  </li>
+
+  <!-- Manajemen Periode/Angkatan -->
+  <li class="menu-item {{ Request::is('periode*') ? 'active open' : '' }}">
+    <a href="{{ url('/periode') }}" class="menu-link d-flex align-items-center">
+      <i class="bi bi-calendar2-week menu-icon fs-5"></i>
+      <span class="text-truncate" data-i18n="ManajemenProdi">Manajemen Periode</span>
+    </a>
+  </li>
+
+  <!-- Manajemen Prodi -->
+  <li class="menu-item {{ Request::is('admin*') ? 'active open' : '' }}">
+    <a href="{{ url('/admin/ManajemenProdi') }}" class="menu-link d-flex align-items-center">
+      <i class="bi bi-diagram-3 menu-icon fs-5"></i>
+      <div class="text-truncate" data-i18n="ManajemenProdi">Manajemen Prodi</div>
+    </a>
+  </li>
+
+  <!-- Verifikasi Prestasi -->
+  <li class="menu-item {{ Request::is('admin/verifikasiprestasi*') ? 'active open' : '' }}">
+    <a href="{{ url('admin/verifikasi') }}" class="menu-link d-flex align-items-center">
+      <i class="bi bi-patch-check menu-icon fs-5"></i>
+      <div class="text-truncate" data-i18n="VerifikasiPrestasi">Verifikasi Prestasi</div>
+    </a>
+  </li>
+
+  <!-- Verifikasi Info Lomba -->
+  <li class="menu-item {{ Request::is('admin/verifikasilomba*') ? 'active open' : '' }}">
+    <a href="{{ url('admin/verifikasilomba') }}" class="menu-link d-flex align-items-center">
+      <i class="bi bi-file-earmark-check menu-icon fs-5"></i>
+      <div class="text-truncate" data-i18n="VerifikasiLomba">Verifikasi Info Lomba</div>
+    </a>
+  </li>
+  
+  <!-- Memberikan jarak, agar logout di bawah -->
   <div style="flex-grow: 1;"></div>
 
   {{-- Logout --}}

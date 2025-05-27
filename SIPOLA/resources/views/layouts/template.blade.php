@@ -10,6 +10,9 @@
     <title>SI POLA</title>
 
     <meta name="description" content="" />
+    <!-- Animate.css untuk animasi elemen (seperti fadeIn, slideIn, dll.) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -109,9 +112,6 @@
     <script src="{{ asset('template/assets/js/main.js') }}"></script>
     <script src="{{ asset('template/assets/js/dashboards-analytics.js') }}"></script>
     <script async defer src="https://buttons.github.io/buttons.js"></script>
-
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <!-- DataTables JS -->
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
