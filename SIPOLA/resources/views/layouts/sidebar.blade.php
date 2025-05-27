@@ -27,6 +27,8 @@
   </a>
 </div>
 
+<!-- Menu Items -->
+<ul class="menu-inner">
   <!-- Dashboard Admin -->
   <li class="menu-item {{ Request::is('admin/dashboard') ? 'active open' : '' }}">
     <a href="{{ url('/admin/dashboard') }}" class="menu-link d-flex align-items-center">
@@ -75,10 +77,18 @@
     </a>
   </li>
 
-<!-- Manajemen Lomba -->
-<li class="menu-item {{ Request::is('lomba*') ? 'active open' : '' }}">
-  <a href="{{ url('/lomba') }}" class="menu-link d-flex align-items-center">
-    <i class="bi bi-trophy menu-icon fs-5"></i>
+  <!-- Unggah Prestasi -->
+  <li class="menu-item {{ Request::is('prestasi') ? 'active open' : '' }}">
+    <a href="{{ url('/prestasi') }}" class="menu-link d-flex align-items-center">
+      <i class="bi bi-file-earmark-text menu-icon fs-5"></i>
+      <div class="text-truncate" data-i18n="ManajemenLomba">Unggah Prestasi</div>
+    </a>
+  </li>
+
+  <!-- Manajemen Lomba -->
+  <li class="menu-item {{ Request::is('lomba*') ? 'active open' : '' }}">
+    <a href="{{ url('/lomba') }}" class="menu-link d-flex align-items-center">
+      <i class="bi bi-trophy menu-icon fs-5"></i>
       <div class="text-truncate" data-i18n="ManajemenLomba">Manajemen Lomba</div>
     </a>
   </li>
@@ -122,11 +132,11 @@
       <div class="text-truncate" data-i18n="VerifikasiLomba">Verifikasi Info Lomba</div>
     </a>
   </li>
-  
-  <!-- Memberikan jarak, agar logout di bawah -->
-  <div style="flex-grow: 1;"></div>
 
-  {{-- Logout --}}
+  <!-- Spacer supaya tombol logout di bawah -->
+  <li style="flex-grow: 1;"></li>
+
+  <!-- Logout -->
   <li class="menu-item">
     <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
       @csrf
@@ -144,7 +154,7 @@
   .menu-inner {
     display: flex;
     flex-direction: column;
-    height: calc(100vh - 68px); /* disesuaikan agar penuh setelah profil */
+    height: calc(100vh - 68px); /* Sesuaikan tinggi agar penuh setelah profil */
     padding-top: 0.25rem;
     margin: 0;
   }

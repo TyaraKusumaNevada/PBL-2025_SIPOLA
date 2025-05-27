@@ -31,6 +31,12 @@
                 </div>
 
                 <div class="mb-3">
+                    <label for="nomor_telepon" class="form-label">Nomor Telepon</label>
+                    <input type="nomor_telepon" name="nomor_telepon" id="nomor_telepon" class="form-control" required>
+                    <div id="error-nomor_telepon" class="form-text text-danger"></div>
+                </div>
+
+                <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
                     <div class="input-group">
                         <input type="password" name="password" id="password" class="form-control" required>
