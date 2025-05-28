@@ -19,11 +19,5 @@ class DospemModel extends Model
     public function rekomendasi() {
         return $this->hasMany(RekomendasiModel::class, 'id_dosen');
     }
-
-    // app/Models/DospemModel.php
-    public function role()
-        {
-            return $this->belongsTo(RoleModel::class, 'id_role');
-        }
-
+    
 }
