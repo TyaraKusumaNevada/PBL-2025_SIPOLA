@@ -29,20 +29,22 @@
                 </div>
                 <table class="table table-sm table-bordered">
                     @if ($role === 'mahasiswa')
-                        <tr><th>ID</th><td>{{ $user->id_mahasiswa }}</td></tr>
+                        
                         <tr><th>Nama</th><td>{{ $user->nama }}</td></tr>
                         <tr><th>Email</th><td>{{ $user->email }}</td></tr>
-                        <tr><th>Nomor Induk</th><td>{{ $user->nim }}</td></tr>
+                        <tr><th>NIM</th><td>{{ $user->nim }}</td></tr>
+                        <tr><th>Nomor Telepon</th><td>{{ $user->nomor_telepon }}</td></tr>
                     @elseif ($role === 'dosen')
-                        <tr><th>ID</th><td>{{ $user->id_dosen }}</td></tr>
+                        
                         <tr><th>Nama</th><td>{{ $user->nama }}</td></tr>
                         <tr><th>Email</th><td>{{ $user->email }}</td></tr>
-                        <tr><th>Nomor Induk</th><td>{{ $user->nidn }}</td></tr>
+                        <tr><th>NIDN</th><td>{{ $user->nidn }}</td></tr>
+                        <tr><th>Nomor Telepon</th><td>{{ $user->nomor_telepon }}</td></tr>
                     @elseif ($role === 'admin')
-                        <tr><th>ID</th><td>{{ $user->id_admin }}</td></tr>
+                        
                         <tr><th>Nama</th><td>{{ $user->nama }}</td></tr>
                         <tr><th>Email</th><td>{{ $user->email }}</td></tr>
-                        <tr><th>Nomor Induk</th><td>-</td></tr>
+                        <tr><th>Nomor Telepon</th><td>{{ $user->nomor_telepon }}</td></tr>
                     @endif
                 </table>
             </div>

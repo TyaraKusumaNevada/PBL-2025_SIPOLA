@@ -10,7 +10,7 @@ class DospemModel extends Model
 {
     protected $table = 'dospem';
     protected $primaryKey = 'id_dosen';
-    protected $fillable = ['id_role', 'nama', 'nidn', 'email', 'password', 'bidang_minat'];
+    protected $fillable = ['id_role', 'nama', 'nidn', 'email', 'nomor_telepon', 'password', 'bidang_minat'];
 
     public function role(): BelongsTo {         //1 dospem memiliki 1 role
         return $this->belongsTo(RoleModel::class, 'id_role', 'id_role');
@@ -19,5 +19,4 @@ class DospemModel extends Model
     public function rekomendasi() {
         return $this->hasMany(RekomendasiModel::class, 'id_dosen');
     }
-    
 }

@@ -35,6 +35,7 @@ class UserController extends Controller
                 'id_user' => $item->id_mahasiswa,
                 'nomor_induk' => $item->nim,
                 'nama' => $item->nama,
+                'nomor_telepon' => $item->nomor_telepon,
                 'role_user' => 'mahasiswa', // lowercase agar konsisten
             ];
         });
@@ -44,6 +45,7 @@ class UserController extends Controller
                 'id_user' => $item->id_dosen,
                 'nomor_induk' => $item->nidn,
                 'nama' => $item->nama,
+                'nomor_telepon' => $item->nomor_telepon,
                 'role_user' => 'dosen',
             ];
         });
@@ -53,6 +55,7 @@ class UserController extends Controller
                 'id_user' => $item->id_admin,
                 'nomor_induk' => '-',
                 'nama' => $item->nama,
+                'nomor_telepon' => $item->nomor_telepon,
                 'role_user' => 'admin',
             ];
         });
@@ -120,6 +123,7 @@ class UserController extends Controller
                 'id_role'    => 'required|exists:role,id_role',
                 'nama'       => 'required|string|max:255',
                 'email'      => ['required', 'email', $emailRule],
+                'nomor_telepon'  => 'required|string|max:20',
                 'password'   => 'required|string|min:6',
                 'nim_nidn'   => 'required_if:id_role,2|required_if:id_role,3',
                 'id_prodi'   => 'required_if:id_role,3',
@@ -144,6 +148,7 @@ class UserController extends Controller
                     'id_role'  => $request->id_role,
                     'nama'     => $request->nama,
                     'email'    => $request->email,
+                    'nomor_telepon'    => $request->nomor_telepon,
                     'password' => Hash::make($request->password),
                 ];
 
@@ -215,72 +220,75 @@ class UserController extends Controller
 
 
     public function update_ajax(Request $request, string $id, string $role) {
-        // Validasi
-        $validator = Validator::make($request->all(), [
-            'id_role' => 'required|exists:role,id_role',
-            'nama' => 'required|string|max:255',
-            'email' => [
-                'required',
-                'email',
-                Rule::unique($role === 'mahasiswa' ? 'mahasiswa' : ($role === 'dosen' ? 'dospem' : 'admin'), 'email')->ignore($id, $role === 'mahasiswa' ? 'id_mahasiswa' : ($role === 'dosen' ? 'id_dosen' : 'id_admin')),
-            ],
-            'nim_nidn' => $role !== 'admin' ? ['required', 'string', 'max:50'] : ['nullable'],
-            'id_prodi' => $role === 'mahasiswa' ? ['required', 'exists:program_studi,id_prodi'] : ['nullable'],
+    // Validasi
+    $validator = Validator::make($request->all(), [
+        'id_role' => 'required|exists:role,id_role',
+        'nama' => 'required|string|max:255',
+        'email' => [
+            'required',
+            'email',
+            Rule::unique($role === 'mahasiswa' ? 'mahasiswa' : ($role === 'dosen' ? 'dospem' : 'admin'), 'email')->ignore($id, $role === 'mahasiswa' ? 'id_mahasiswa' : ($role === 'dosen' ? 'id_dosen' : 'id_admin')),
+        ],
+        'nim_nidn' => $role !== 'admin' ? ['required', 'string', 'max:50'] : ['nullable'],
+        'id_prodi' => $role === 'mahasiswa' ? ['required', 'exists:program_studi,id_prodi'] : ['nullable'],
+        'nomor_telepon' => ['nullable', 'string', 'max:20'], // ✅ Validasi nomor telepon
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'status' => false,
+            'message' => 'Validasi gagal.',
+            'msgField' => $validator->errors()
         ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Validasi gagal.',
-                'msgField' => $validator->errors()
-            ]);
-        }
-
-        // Persiapan data update
-        $data = [
-            'id_role' => $request->id_role,
-            'nama' => $request->nama,
-            'email' => $request->email,
-        ];
-
-        if ($role === 'mahasiswa') {
-            $data['nim'] = $request->nim_nidn;
-            $data['id_prodi'] = $request->id_prodi;
-            $user = MahasiswaModel::find($id);
-        } elseif ($role === 'dosen') {
-            $data['nidn'] = $request->nim_nidn;
-            $user = DospemModel::find($id);
-        } elseif ($role === 'admin') {
-            $user = AdminModel::find($id);
-        } else {
-            return response()->json([
-                'status' => false,
-                'message' => 'Role tidak valid.'
-            ]);
-        }
-
-        // Proses update
-        if ($user) {
-            try {
-                $user->update($data);
-                return response()->json([
-                    'status' => true,
-                    'message' => 'Data berhasil diupdate.'
-                ]);
-            } catch (\Exception $e) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Terjadi kesalahan saat mengupdate data.',
-                    'error' => $e->getMessage()
-                ]);
-            }
-        } else {
-            return response()->json([
-                'status' => false,
-                'message' => 'Data tidak ditemukan.'
-            ]);
-        }
     }
+
+    // Persiapan data update
+    $data = [
+        'id_role' => $request->id_role,
+        'nama' => $request->nama,
+        'email' => $request->email,
+        'nomor_telepon' => $request->nomor_telepon, // ✅ Tambahkan nomor telepon
+    ];
+
+    if ($role === 'mahasiswa') {
+        $data['nim'] = $request->nim_nidn;
+        $data['id_prodi'] = $request->id_prodi;
+        $user = MahasiswaModel::find($id);
+    } elseif ($role === 'dosen') {
+        $data['nidn'] = $request->nim_nidn;
+        $user = DospemModel::find($id);
+    } elseif ($role === 'admin') {
+        $user = AdminModel::find($id);
+    } else {
+        return response()->json([
+            'status' => false,
+            'message' => 'Role tidak valid.'
+        ]);
+    }
+
+    // Proses update
+    if ($user) {
+        try {
+            $user->update($data);
+            return response()->json([
+                'status' => true,
+                'message' => 'Data berhasil diupdate.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Terjadi kesalahan saat mengupdate data.',
+                'error' => $e->getMessage()
+            ]);
+        }
+    } else {
+        return response()->json([
+            'status' => false,
+            'message' => 'Data tidak ditemukan.'
+        ]);
+    }
+}
+
 
     public function confirm_ajax(string $id, string $role) {
         $user = null;
