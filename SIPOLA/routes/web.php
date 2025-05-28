@@ -4,9 +4,12 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PeriodeController;
+use App\Http\Controllers\ProgramStudiController;
 use App\Http\Controllers\PrestasiMahasiswaController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\siginController;
 use App\Http\Controllers\ProfilController;
+use App\Http\Controllers\VerifikasiPrestasiController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -39,14 +42,13 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->n
 //     return redirect()->route('login');
 // });
 
-Route::get('/', function () {
-    return view('welcome');
-});
+    Route::get('/', function () {
+        return view('welcome');
+    });
 
     Route::get('/prestasi', function () {
         return view('mahasiswa.prestasi');
     });
-});
 
     Route::get('/prestasi', function () {       //ini masih belum pakai controller yaa, tapi aman kok ^-^
         return view('prestasi.index');
@@ -118,12 +120,6 @@ Route::get('/signin', [siginController::class, 'showRegistrationForm'])->name('s
 Route::post('/signin', [siginController::class, 'register']);
 // ----------------------------------------------------------------------------------------
 
-// Route::prefix('prestasi')->group(function () {
-//     Route::get('/histori', [PrestasiMahasiswaController::class, 'index'])->name('prestasi.histori');
-//     Route::get('/unggah', [PrestasiMahasiswaController::class, 'create'])->name('prestasi.unggah');
-//     Route::post('/ajax', [PrestasiMahasiswaController::class, 'store_ajax'])->name('prestasi.store_ajax');
-// });
-
 // ROUTE MAHASISWA (Unggah Prestasi)
 Route::prefix('prestasi')->group(function () {
     Route::get('/', [PrestasiMahasiswaController::class, 'index']);
@@ -142,6 +138,16 @@ Route::prefix('prestasi')->group(function () {
 Route::get('/profilmahasiswa', [ProfilController::class, 'index'])->name('profil.index');
 Route::post('/profil/update-profile', [ProfilController::class, 'updateProfile'])->name('profil.update.profile');
 Route::post('/profil/update-username', [ProfilController::class, 'updateUsername'])->name('profil.update.username');
- Route::post('/profil/update-username', [ProfilController::class, 'updateUsername'])->name('profil.update.username');
-    Route::post('/profil/update-academic', [ProfilController::class, 'updateAcademicProfile'])->name('profil.update.academic');
-    Route::post('/profil/update-profile', [ProfilController::class, 'updateProfile'])->name('profil.update.profile')->middleware('auth');
+Route::post('/profil/update-username', [ProfilController::class, 'updateUsername'])->name('profil.update.username');
+Route::post('/profil/update-academic', [ProfilController::class, 'updateAcademicProfile'])->name('profil.update.academic');
+Route::post('/profil/update-profile', [ProfilController::class, 'updateProfile'])->name('profil.update.profile')->middleware('auth');
+
+// ----------------------------------------------------------------------------------------
+// ROUTE ADMIN (Verifikasi Prestasi)
+Route::prefix('/prestasiAdmin')->group(function () {
+    Route::get('/', [VerifikasiPrestasiController::class, 'index']);
+    Route::post('/list', [VerifikasiPrestasiController::class, 'list']);
+    Route::get('{id}/ubahStatus', [VerifikasiPrestasiController::class, 'ubahStatus']);
+    Route::post('{id}/ubahStatus', [VerifikasiPrestasiController::class, 'simpanStatus']);  
+}); 
+// ----------------------------------------------------------------------------------------
