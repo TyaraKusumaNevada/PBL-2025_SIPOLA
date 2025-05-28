@@ -50,12 +50,28 @@ class VerifikasiPrestasiController extends Controller
             })
             ->addColumn('aksi', function ($verifikasi) {
 
-                $btn  = '<button onclick="modalAction(\''.url('/prestasiAdmin/' . $verifikasi->id_prestasi . '/show_ajax').'\')" class="btn btn-info btn-sm">
-                            <i class="bi bi-eye"></i><span class="ms-2">Detail</span>
+                $btn  = '<button onclick="modalAction(\''.url('/prestasiAdmin/' . $verifikasi->id_prestasi . '/show_ajax').'\')" class="btn btn-outline-info btn-sm mb-2">
+                            <i class="bi bi-eye"></i><span class="ms-2">Lihat Prestasi</span>
                         </button> ';
-                $btn .= '<button onclick="modalAction(\''.url('/prestasiAdmin/' . $verifikasi->id_prestasi . '/ubahStatus').'\')" class="btn btn-warning btn-sm">
-                            <i class="bi bi-pencil-square"></i><span class="ms-2">Ubah Status</span>
-                        </button> ';
+                switch (strtolower($verifikasi->status)) {
+                    case 'divalidasi':
+                        $btn .= '<button onclick="modalAction(\''.url('/prestasiAdmin/' . $verifikasi->id_prestasi . '/ubahStatus').'\')" class="btn btn-outline-warning btn-sm">
+                                    <i class="bi bi-pencil-square"></i><span class="ms-2">Lihat Status</span>
+                                </button>';
+                        break;
+
+                    case 'ditolak':
+                        $btn .= '<button onclick="modalAction(\''.url('/prestasiAdmin/' . $verifikasi->id_prestasi . '/ubahStatus').'\')" class="btn btn-outline-warning btn-sm">
+                                    <i class="bi bi-pencil-square"></i><span class="ms-2">Ubah Status</span>
+                                </button>';
+                        break;
+
+                    default: // misalnya 'pending' atau status lain
+                        $btn .= '<button onclick="modalAction(\''.url('/prestasiAdmin/' . $verifikasi->id_prestasi . '/ubahStatus').'\')" class="btn btn-outline-warning btn-sm">
+                                    <i class="bi bi-pencil-square"></i><span class="ms-2">Verifikasi</span>
+                                </button>';
+                        break;
+                }
                 return $btn;
             })
             ->rawColumns(['aksi', 'status']) // hanya status yang mengandung HTML
