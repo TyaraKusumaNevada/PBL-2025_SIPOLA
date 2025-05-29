@@ -1,7 +1,6 @@
 {{-- File: resources/views/auth/login.blade.php --}}
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,6 +9,7 @@
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
   <style>
     .input-group-text {
       border-right: none;
@@ -25,8 +25,8 @@
     .form-control:focus {
       border-left: none;
       box-shadow: 0.25rem 0 0 0 #3B82F6,
-        0 0.15rem 0 0 #3B82F6,
-        0 -2px 0 0 #3B82F6;
+                  0 0.15rem 0 0 #3B82F6,
+                  0 -2px 0 0 #3B82F6;
     }
 
     .form-control {
@@ -63,10 +63,29 @@
     .custom {
       color: #1E3A8A;
     }
+
+    .back-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 1000;
+      font-size: 1.2rem;
+      color: white;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .back-button:hover {
+      color: #93C5FD;
+    }
   </style>
 </head>
 
 <body>
+  <!-- Tombol kembali -->
+  <a href="{{ url('/landing') }}" class="back-button">
+    <i class="bi bi-arrow-left"></i>
+  </a>
 
   <div class="container-fluid">
     <div class="row full-height">
@@ -83,8 +102,9 @@
       <div class="col-md-4 d-flex align-items-center justify-content-center">
         <form id="form-login" action="/login" method="POST" class="w-75">
           @csrf
-          <img src="{{ asset('image/logo_sipola.png') }}" alt="Gambar Logo"
-            class="logo-image h-50 w-50 d-block mx-auto">
+          <img src="{{ asset('image/logo_sipola.png') }}" alt="Gambar Logo" class="logo-image h-50 w-50 d-block mx-auto">
+          
+          <!-- Username -->
           <div class="mb-3">
             <div class="input-group">
               <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
@@ -92,21 +112,24 @@
             </div>
             <span id="error-username" class="text-danger error-text"></span>
           </div>
+
+          <!-- Password -->
           <div class="mb-5">
             <div class="input-group">
               <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
               <input type="password" name="password" class="form-control" id="password" placeholder="Password" />
             </div>
             <span id="error-password" class="text-danger error-text"></span>
-
           </div>
 
+          <!-- Tombol Login -->
           <button type="submit" class="btn custom-primary w-100">Masuk</button>
-          <div class="text-center mt-4">
-            <small id="passwordHelp" class="form-text text-muted">
-              Sudah punya akun? <a href="{{ url('/signin') }}" class="custom">Signin</a>
-            </small>
 
+          <!-- Link ke Signin -->
+          <div class="text-center mt-4">
+            <small class="form-text text-muted">
+              Belum punya akun? <a href="{{ url('/signin') }}" class="custom">Signin</a>
+            </small>
           </div>
         </form>
       </div>
@@ -119,12 +142,9 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <script>
-    // AJAX form submission
     $(document).ready(function () {
       $('#form-login').on('submit', function (e) {
         e.preventDefault();
-
-        // Reset error messages
         $('.error-text').text('');
 
         $.ajax({
@@ -137,10 +157,8 @@
           },
           success: function (response) {
             if (response.status) {
-              // Redirect on successful login
               window.location.href = response.redirect;
             } else {
-              // Display validation errors
               $.each(response.messages, function (field, messages) {
                 $('#error-' + field).text(messages[0]);
               });
@@ -153,7 +171,7 @@
                 $('#error-' + field).text(messages[0]);
               });
             } else {
-              alert('Teradi kesalahan. Silakan coba lagi nanti.');
+              alert('Terjadi kesalahan. Silakan coba lagi nanti.');
             }
           }
         });
@@ -161,5 +179,4 @@
     });
   </script>
 </body>
-
 </html>
