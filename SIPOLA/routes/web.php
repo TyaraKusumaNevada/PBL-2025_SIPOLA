@@ -3,11 +3,12 @@ use App\Http\Controllers\InfoLombaController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PeriodeController;
+use App\Http\Controllers\ProgramStudiController;
 use App\Http\Controllers\PrestasiMahasiswaController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\siginController;
 use App\Http\Controllers\ProfilController;
-use App\Http\Controllers\ProgramStudiController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\VerifikasiPrestasiController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,21 +17,24 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
+//-------------------------------------------------------------------------
+//ROUTE LOGIN
 // Authentication Routes
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/loginPost', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
+//-------------------------------------------------------------------------
+    Route::get('/', function () {
+        return view('welcome');
+    });
+
+    Route::get('/prestasi', function () {
+        return view('mahasiswa.prestasi');
+    });
 
 // Root view
 Route::get('/', function () {
     return view('welcome');
-});
-
-// --- PRESTASI ---
-// Gunakan controller, jangan duplicate route closure
-Route::prefix('prestasi')->group(function () {
-    Route::get('/', [PrestasiMahasiswaController::class, 'index']);
-    Route::post('/list', [PrestasiMahasiswaController::class, 'list']);
 });
 
 // --- ADMIN Manajemen Program Studi ---
@@ -81,8 +85,34 @@ Route::get('/lomba', function () {
 Route::get('/signin', [siginController::class, 'showRegistrationForm'])->name('signin');
 Route::post('/signin', [siginController::class, 'register']);
 
+// ----------------------------------------------------------------------------------------
+// ROUTE MAHASISWA (Unggah Prestasi)
+Route::prefix('prestasi')->group(function () {
+    Route::get('/', [PrestasiMahasiswaController::class, 'index']);
+    Route::post('/list', [PrestasiMahasiswaController::class, 'list']);
+    Route::get('create_ajax', [PrestasiMahasiswaController::class, 'create_ajax']);
+    Route::post('/ajax', [PrestasiMahasiswaController::class, 'store_ajax']);
+    Route::get('{id}/show_ajax', [PrestasiMahasiswaController::class, 'show_ajax']);
+    Route::get('{id}/edit_ajax', [PrestasiMahasiswaController::class, 'edit_ajax']);
+    Route::put('{id}/update_ajax', [PrestasiMahasiswaController::class, 'update_ajax']);
+    Route::get('/{id}/delete_ajax', [PrestasiMahasiswaController::class, 'confirm_ajax']);     
+    Route::delete('/{id}/delete_ajax', [PrestasiMahasiswaController::class, 'delete_ajax']);    
+}); 
+// ----------------------------------------------------------------------------------------
+
 // --- PROFIL ---
 Route::get('/profilmahasiswa', [ProfilController::class, 'index'])->name('profil.index');
+
+// ----------------------------------------------------------------------------------------
+// ROUTE ADMIN (Verifikasi Prestasi)
+Route::prefix('/prestasiAdmin')->group(function () {
+    Route::get('/', [VerifikasiPrestasiController::class, 'index']);
+    Route::post('/list', [VerifikasiPrestasiController::class, 'list']);
+    Route::get('{id}/ubahStatus', [VerifikasiPrestasiController::class, 'ubahStatus']);
+    Route::post('{id}/ubahStatus', [VerifikasiPrestasiController::class, 'simpanStatus']);  
+}); 
+// ----------------------------------------------------------------------------------------
+
 Route::post('/profil/update-profile', [ProfilController::class, 'updateProfile'])->name('profil.update.profile')->middleware('auth');
 Route::post('/profil/update-username', [ProfilController::class, 'updateUsername'])->name('profil.update.username')->middleware('auth');
 Route::post('/profil/update-academic', [ProfilController::class, 'updateAcademicProfile'])->name('profil.update.academic')->middleware('auth');

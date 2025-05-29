@@ -118,8 +118,8 @@
   </li>
 
   <!-- Verifikasi Prestasi -->
-  <li class="menu-item {{ Request::is('admin/verifikasiprestasi*') ? 'active open' : '' }}">
-    <a href="{{ url('admin/verifikasi') }}" class="menu-link d-flex align-items-center">
+  <li class="menu-item {{ Request::is('prestasiAdmin*') ? 'active open' : '' }}">
+    <a href="{{ url('/prestasiAdmin') }}" class="menu-link d-flex align-items-center">
       <i class="bi bi-patch-check menu-icon fs-5"></i>
       <div class="text-truncate" data-i18n="VerifikasiPrestasi">Verifikasi Prestasi</div>
     </a>
