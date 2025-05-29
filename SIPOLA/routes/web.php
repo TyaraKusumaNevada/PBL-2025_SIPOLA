@@ -1,72 +1,52 @@
 <?php
-// File: routes/web.php
-// Route definitions for web interface
-
+use App\Http\Controllers\InfoLombaController;
+use App\Http\Controllers\LandingController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PeriodeController;
 use App\Http\Controllers\PrestasiMahasiswaController;
 use App\Http\Controllers\siginController;
 use App\Http\Controllers\ProfilController;
+use App\Http\Controllers\ProgramStudiController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-
-
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group.
-|
 */
 
-// // Authentication Routes
-// Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-// Route::post('/loginPost', [AuthController::class, 'login'])->middleware('guest');
-// Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
-
+// Authentication Routes
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/loginPost', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
-// Redirect root to login
-// Route::get('/', function () {
-//     return redirect()->route('login');
-// });
-
+// Root view
 Route::get('/', function () {
     return view('welcome');
 });
 
-    Route::get('/prestasi', function () {
-        return view('mahasiswa.prestasi');
-    });
+// --- PRESTASI ---
+// Gunakan controller, jangan duplicate route closure
+Route::prefix('prestasi')->group(function () {
+    Route::get('/', [PrestasiMahasiswaController::class, 'index']);
+    Route::post('/list', [PrestasiMahasiswaController::class, 'list']);
 });
 
-    Route::get('/prestasi', function () {       //ini masih belum pakai controller yaa, tapi aman kok ^-^
-        return view('prestasi.index');
-    });
-
-// ----------------------------------------------------------------------------------------
-// ROUTE ADMIN (Manajemen Program Studi)
+// --- ADMIN Manajemen Program Studi ---
 Route::prefix('admin/ManajemenProdi')->group(function () {
-  Route::get('/', [ProgramStudiController::class, 'index']);
-  Route::get('list', [ProgramStudiController::class, 'list']);
-  Route::get('create_ajax', [ProgramStudiController::class, 'create_ajax']);
-  Route::post('store_ajax', [ProgramStudiController::class, 'store_ajax']);
-  Route::get('{id}/show_ajax',[ProgramStudiController::class, 'show_ajax']);
-  Route::get('{id}/edit_ajax',[ProgramStudiController::class, 'edit_ajax']);
-  Route::put('{id}/update_ajax',[ProgramStudiController::class, 'update_ajax']);
-  Route::get('{id}/confirm_ajax', [ProgramStudiController::class, 'confirm_ajax']);
-  Route::delete('{id}/delete_ajax',[ProgramStudiController::class, 'delete_ajax']);
+    Route::get('/', [ProgramStudiController::class, 'index']);
+    Route::get('list', [ProgramStudiController::class, 'list']);
+    Route::get('create_ajax', [ProgramStudiController::class, 'create_ajax']);
+    Route::post('store_ajax', [ProgramStudiController::class, 'store_ajax']);
+    Route::get('{id}/show_ajax',[ProgramStudiController::class, 'show_ajax']);
+    Route::get('{id}/edit_ajax',[ProgramStudiController::class, 'edit_ajax']);
+    Route::put('{id}/update_ajax',[ProgramStudiController::class, 'update_ajax']);
+    Route::get('{id}/confirm_ajax', [ProgramStudiController::class, 'confirm_ajax']);
+    Route::delete('{id}/delete_ajax',[ProgramStudiController::class, 'delete_ajax']);
 });
-// ----------------------------------------------------------------------------------------
 
-
-// ----------------------------------------------------------------------------------------
-// ROUTE ADMIN (Manajemen Periode Semester)
+// --- ADMIN Manajemen Periode ---
 Route::prefix('periode')->group(function () {
     Route::get('/', [PeriodeController::class, 'index']);
     Route::post('list', [PeriodeController::class, 'list']);
@@ -78,11 +58,8 @@ Route::prefix('periode')->group(function () {
     Route::get('/{id}/delete_ajax', [PeriodeController::class, 'confirm_ajax']);     
     Route::delete('/{id}/delete_ajax', [PeriodeController::class, 'delete_ajax']);    
 }); 
-// ----------------------------------------------------------------------------------------
 
-
-// ----------------------------------------------------------------------------------------
-// ROUTE ADMIN (Manajemen Pengguna)
+// --- ADMIN Manajemen Pengguna ---
 Route::prefix('user')->group(function () {
     Route::get('/', [UserController::class, 'index']);
     Route::post('list', [UserController::class, 'list']);
@@ -94,44 +71,22 @@ Route::prefix('user')->group(function () {
     Route::get('{id}/{role}/delete_ajax', [UserController::class, 'confirm_ajax']);     
     Route::delete('{id}/{role}/delete_ajax', [UserController::class, 'delete_ajax']);    
 }); 
-// ----------------------------------------------------------------------------------------
 
-// ROUTE LOMBA
+// --- LOMBA ---
 Route::get('/lomba', function () {
     return view('lomba.index');
 })->name('lomba.index');
 
-// ----------------------------------------------------------------------------------------
-// ROUTE LOGIN dan REGISTER
-// Route::get('/', function () {       // Redirect root to login
-//     return redirect()->route('login');
-// });
-
-// Route::get('/auth/login', function () {
-//     return view('auth.login');
-// });
-
+// --- REGISTER/SIGNIN ---
 Route::get('/signin', [siginController::class, 'showRegistrationForm'])->name('signin');
 Route::post('/signin', [siginController::class, 'register']);
-// ----------------------------------------------------------------------------------------
 
-// Route::prefix('prestasi')->group(function () {
-//     Route::get('/histori', [PrestasiMahasiswaController::class, 'index'])->name('prestasi.histori');
-//     Route::get('/unggah', [PrestasiMahasiswaController::class, 'create'])->name('prestasi.unggah');
-//     Route::post('/ajax', [PrestasiMahasiswaController::class, 'store_ajax'])->name('prestasi.store_ajax');
-// });
-
-// ROUTE MAHASISWA (Unggah Prestasi)
-Route::prefix('prestasi')->group(function () {
-    Route::get('/', [PrestasiMahasiswaController::class, 'index']);
-    Route::post('/list', [PrestasiMahasiswaController::class, 'list']);
-}); 
-// ----------------------------------------------------------------------------------------
-
-// Route profil user
+// --- PROFIL ---
 Route::get('/profilmahasiswa', [ProfilController::class, 'index'])->name('profil.index');
-Route::post('/profil/update-profile', [ProfilController::class, 'updateProfile'])->name('profil.update.profile');
-Route::post('/profil/update-username', [ProfilController::class, 'updateUsername'])->name('profil.update.username');
- Route::post('/profil/update-username', [ProfilController::class, 'updateUsername'])->name('profil.update.username');
-    Route::post('/profil/update-academic', [ProfilController::class, 'updateAcademicProfile'])->name('profil.update.academic');
-    Route::post('/profil/update-profile', [ProfilController::class, 'updateProfile'])->name('profil.update.profile')->middleware('auth');
+Route::post('/profil/update-profile', [ProfilController::class, 'updateProfile'])->name('profil.update.profile')->middleware('auth');
+Route::post('/profil/update-username', [ProfilController::class, 'updateUsername'])->name('profil.update.username')->middleware('auth');
+Route::post('/profil/update-academic', [ProfilController::class, 'updateAcademicProfile'])->name('profil.update.academic')->middleware('auth');
+
+// --- LANDING & INFO LOMBA ---
+Route::get('/landing', [LandingController::class, 'index']);
+Route::get('/infolomba', [InfoLombaController::class, 'index'])->name('infolomba');

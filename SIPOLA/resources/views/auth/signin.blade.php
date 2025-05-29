@@ -15,24 +15,29 @@
       background-color: transparent;
       color: grey;
     }
+
     .form-control:focus {
       border-left: none;
       box-shadow: 0.25rem 0 0 0 #3B82F6,
         0 0.15rem 0 0 #3B82F6,
         0 -2px 0 0 #3B82F6;
     }
+
     .form-control {
       border-left: none;
       color: grey;
     }
+
     .login-image {
       width: 100%;
       height: auto;
       object-fit: cover;
     }
+
     .full-height {
       min-height: 100vh;
     }
+
     .custom-primary {
       background-color: #1E3A8A;
       color: white;
@@ -43,16 +48,37 @@
         0 -2px 0 0 #93C5FD;
       backdrop-filter: blur(20px);
     }
+
     .custom-primary:hover {
       background-color: #3B82F6;
       color: white;
     }
+
     .custom {
       color: #1E3A8A;
+    }
+
+    .back-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 1000;
+      font-size: 1.2rem;
+      color: #1E3A8A;
+      text-decoration: none;
+    }
+
+    .back-button:hover {
+      color: #3B82F6;
     }
   </style>
 </head>
 <body>
+
+<!-- Tombol kembali -->
+<a href="{{ url('/login') }}" class="back-button" style="color: white">
+  <i class="bi bi-arrow-left"></i> 
+</a>
 
 <div class="container-fluid">
   <div class="row full-height">
@@ -97,7 +123,6 @@
           </div>
           <span id="error-email" class="text-danger error-text"></span>
         </div>
-
 
         <!-- Password -->
         <div class="mb-3">
