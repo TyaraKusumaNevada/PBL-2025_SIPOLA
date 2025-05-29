@@ -1,9 +1,6 @@
 <!-- Menu -->
 <div class="menu-divider mt-0"></div>
-
-
 <div class="menu-inner-shadow"></div>
-
 
 <ul class="menu-inner py-1">
 {{-- User Profile --}}
@@ -173,7 +170,6 @@
   </form>
 </li>
 
-
 <script>
 // Fungsi untuk menyingkat nama - cek berbagai kemungkinan field
 function formatDisplayName(userData) {
@@ -224,7 +220,58 @@ $.ajax({
 });
 </script>
 
-
 </ul>
 <!-- / Menu -->
 
+<!-- Custom Sidebar Style -->
+<style>
+  .menu-inner {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 68px); /* Sesuaikan tinggi agar penuh setelah profil */
+    padding-top: 0.25rem;
+    margin: 0;
+  }
+
+  .menu-inner a.menu-link,
+  .menu-inner button.menu-link {
+    padding: 10px 16px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    color: #1f2937;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+  }
+
+  .menu-inner a.menu-link:hover,
+  .menu-inner button.menu-link:hover {
+    background-color: #2b3ea0 !important;
+    color: #ffffff !important;
+  }
+
+  .menu-item.active > a.menu-link {
+    background-color: #2b3ea0 !important;
+    color: #ffffff !important;
+    font-weight: 600;
+  }
+
+  .menu-icon {
+    color: inherit;
+  }
+
+  .menu-inner li {
+    list-style: none;
+  }
+
+  .user-panel {
+    margin: 0;
+    padding: 12px 16px;
+    background-color: #fff;
+  }
+
+  .menu-item form button.logout-btn:hover {
+    background-color: #dc2626 !important; /* merah */
+    color: #ffffff !important;
+  }
+</style>

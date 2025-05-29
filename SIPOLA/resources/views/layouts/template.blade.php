@@ -140,22 +140,13 @@
         <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
         <!-- DataTables Bootstrap 5 JS -->
         <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-
-
         <!-- SweetAlert2 JS (dari CDN) -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-
         <!-- jQuery Validation -->
         <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/additional-methods.min.js"></script>
 
-
         @stack('js') <!-- Digunakan untuk memanggil custom js dari perintah push('js') pada masing-masing view -->
-
 
     </body>
 </html>
-
-
-
