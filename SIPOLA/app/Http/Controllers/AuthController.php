@@ -89,7 +89,7 @@ class AuthController extends Controller
 
             if (!$user) {
                 // User doesn't exist in users table yet, create based on corresponding specialized table
-                $name = $userType === 'student' ? $userData->nama : ($userType === 'dosen' ? $userData->nama : $userData->nama);
+                $name = $userType === 'mahasiswa' ? $userData->nama : ($userType === 'dosen' ? $userData->nama : $userData->nama);
                 
                 $user = User::create([
                     'name' => $name,

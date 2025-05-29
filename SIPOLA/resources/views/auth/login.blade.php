@@ -81,7 +81,7 @@
 
       <!-- Kolom Form Login -->
       <div class="col-md-4 d-flex align-items-center justify-content-center">
-        <form id="form-login" action="/login" method="POST" class="w-75">
+        <form id="form-login" action="{{ url('/loginPost') }}" method="POST" class="w-75">
           @csrf
           <img src="{{ asset('image/logo_sipola.png') }}" alt="Gambar Logo"
             class="logo-image h-50 w-50 d-block mx-auto">
@@ -99,7 +99,10 @@
             </div>
             <span id="error-password" class="text-danger error-text"></span>
 
+            <input type="checkbox" onclick="myFunction()" class="text-primary mx-3">Show Password
           </div>
+
+          
 
           <button type="submit" class="btn custom-primary w-100">Masuk</button>
           <div class="text-center mt-4">
@@ -114,12 +117,22 @@
   </div>
 
   <!-- jQuery & Bootstrap JS -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
 
+  <!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- jQuery Validation -->
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/additional-methods.min.js"></script>
+
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{{-- 
   <script>
-    // AJAX form submission
+    AJAX form submission
     $(document).ready(function () {
       $('#form-login').on('submit', function (e) {
         e.preventDefault();
@@ -138,27 +151,101 @@
           success: function (response) {
             if (response.status) {
               // Redirect on successful login
-              window.location.href = response.redirect;
+             alert('hore', response.message)
             } else {
               // Display validation errors
               $.each(response.messages, function (field, messages) {
                 $('#error-' + field).text(messages[0]);
               });
+              alert('Teradi kesalahan. Silakan coba lagi nanti.', response.message)
             }
           },
-          error: function (xhr) {
-            if (xhr.status === 422) {
-              var errors = xhr.responseJSON.errors;
-              $.each(errors, function (field, messages) {
-                $('#error-' + field).text(messages[0]);
-              });
-            } else {
-              alert('Teradi kesalahan. Silakan coba lagi nanti.');
-            }
-          }
+          // error: function (xhr) {
+          //   if (xhr.status === 422) {
+          //     var errors = xhr.responseJSON.errors;
+          //     $.each(errors, function (field, messages) {
+          //       $('#error-' + field).text(messages[0]);
+          //     });
+          //   } else {
+          //     console.log('Teradi kesalahan. Silakan coba lagi nanti.', xhr.message);
+          //   }
+          // }
         });
       });
     });
+  </script> --}}
+
+  <script>
+    function myFunction() {
+      var x = document.getElementById("password");
+      if (x.type === "password") {
+        x.type = "text";
+      } else {
+        x.type = "password";
+      }
+    }
+    $.ajaxSetup({
+      headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+      });
+  
+      $(document).ready(function() {
+      $("#form-login").validate({
+          rules: {
+          userame: { 
+              required: true, 
+              minlength: 3, 
+              maxlength: 20 
+          },
+          password: { 
+              required: true, 
+              minlength: 5, 
+              maxlength: 20
+          }
+          },
+          submitHandler: function(form) { // ketika valid, maka bagian yg akan dijalankan
+          $.ajax({
+              url: form.action,
+              type: form.method,
+              data: $(form).serialize(),
+              success: function(response) {
+              if(response.status) { // jika sukses
+                  Swal.fire({
+                  icon: 'success',
+                  title: 'Berhasil',
+                  text: response.message,
+                  }).then(function() {
+                  window.location = response.redirect;
+                  });
+              } else { // jika error
+                  $('.error-text').text('');
+                  $.each(response.msgField, function(prefix, val) {
+                  $('#error-'+prefix).text(val[0]);
+                  });
+                  Swal.fire({
+                  icon: 'error',
+                  title: 'Terjadi Kesalahan',
+                  text: response.message
+                  });
+              }
+              }
+          });
+          return false;
+          },
+          errorElement: 'span',
+          errorPlacement: function (error, element) {
+          error.addClass('invalid-feedback');
+          element.closest('.input-group').append(error);
+          },
+          highlight: function (element, errorClass, validClass) {
+          $(element).addClass('is-invalid');
+          },
+          unhighlight: function (element, errorClass, validClass) {
+          $(element).removeClass('is-invalid');
+          }
+      });
+      });
   </script>
 </body>
 
