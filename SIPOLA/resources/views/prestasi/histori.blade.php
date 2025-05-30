@@ -39,6 +39,7 @@
                                                 <th>PENYELENGGARA</th>
                                                 <th>TANGGAL</th>
                                                 <th>STATUS</th>
+                                                <th>AKSI</th>
                                             </tr>
                                         </thead>
                                     </table>
@@ -95,6 +96,7 @@
                 columns: [
                     {
                         data: "DT_RowIndex",
+                        name: "DT_RowIndex", // ini penting untuk server-side
                         className: "text-center",
                         orderable: false,
                         searchable: false
@@ -104,7 +106,8 @@
                     { data: "tingkat_prestasi", className: "", orderable: true, searchable: true },
                     { data: "penyelenggara", className: "", orderable: true, searchable: true },
                     { data: "tanggal", className: "", orderable: true, searchable: true },
-                    { data: "status", className: "", orderable: true, searchable: true }
+                    { data: "status", className: "", orderable: true, searchable: true },
+                    { data: "aksi", className: "", orderable: false, searchable: false },
                 ],
                 language: {
                     search: "Cari:",
