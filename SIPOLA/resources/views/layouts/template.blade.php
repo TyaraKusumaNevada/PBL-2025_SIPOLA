@@ -1,7 +1,7 @@
 <!DOCTYPE html>
+
 <html lang="en" class="layout-menu-fixed layout-compact" data-assets-path="../assets/"
     data-template="vertical-menu-template-free">
-
     <head>
         <meta charset="utf-8" />
         <meta name="viewport"
@@ -58,7 +58,6 @@
         <!-- Layout wrapper -->
         <div class="layout-wrapper layout-content-navbar">
             <div class="layout-container">
-
                 <!-- Menu -->
                 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
                     <div class="app-brand demo mt-5 mb-5">
@@ -70,14 +69,11 @@
                     <!-- /.sidebar -->
                 </aside>
                 <!-- / Menu -->
-
                 <!-- Layout container -->
                 <div class="layout-page">
                     <!-- Navbar -->
                     @include('layouts.header')
                     <!-- / Navbar -->
-
-                    <!-- Content wrapper -->
                     <div class="content-wrapper">
                         <!-- Content -->
                         {{-- @include('layouts.content') --}}
