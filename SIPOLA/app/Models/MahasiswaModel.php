@@ -34,6 +34,10 @@ class MahasiswaModel extends Model
         return $this->hasMany(PrestasiModel::class, 'id_mahasiswa', 'id_mahasiswa');
     }
 
+    public function user(): BelongsTo {         //1 mahasiswa dimiliki 1 user
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
     public function angkatan() {
         return $this->belongsTo(AngkatanModel::class, 'id_angkatan');
     }
