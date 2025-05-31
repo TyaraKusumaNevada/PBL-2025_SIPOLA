@@ -10,6 +10,7 @@ use App\Http\Controllers\siginController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\VerifikasiPrestasiController;
 use App\Http\Controllers\TambahLombaController;
+use App\Http\Controllers\DashboardMahasiswaController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -137,3 +138,8 @@ Route::post('/profil/update-academic', [ProfilController::class, 'updateAcademic
 // --- LANDING & INFO LOMBA ---
 Route::get('/landing', [LandingController::class, 'index']);
 Route::get('/infolomba', [InfoLombaController::class, 'index'])->name('infolomba');
+
+// -- Dashboard (Mahasiswa) --
+Route::prefix('mahasiswa')->group(function () {
+    Route::get('/dashboard', [DashboardMahasiswaController::class, 'index'])->name('mahasiswa.dashboard.data');
+});
