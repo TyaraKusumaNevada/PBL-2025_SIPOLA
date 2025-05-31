@@ -127,4 +127,81 @@ class PrestasiMahasiswaController extends Controller
 
         return redirect('/');
     }
+
+    public function edit_ajax(string $id) {
+        $prestasi = PrestasiModel::find($id);
+
+        return view('prestasi.edit_ajax', ['prestasi' => $prestasi]);
+    }
+
+    public function update_ajax(Request $request, $id) {
+        if ($request->ajax() || $request->wantsJson()) {
+            $rules = [
+                'nama_prestasi'     => 'required|string|max:255',
+                'kategori_prestasi' => 'required|in:akademik,non-akademik',
+                'tingkat_prestasi'  => 'required|in:politeknik,kota,nasional,internasional',
+                'juara'             => 'required|string|max:100',
+                'penyelenggara'     => 'required|string|max:255',
+                'tanggal'           => 'required|date',
+                'bukti_file'        => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            ];
+
+            $validator = Validator::make($request->all(), $rules);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validasi gagal.',
+                    'msgField' => $validator->errors()
+                ]);
+            }
+
+            $prestasi = PrestasiModel::find($id);
+            if (!$prestasi) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Data tidak ditemukan'
+                ]);
+            }
+
+            // Update data
+            $data = $request->only([
+                'nama_prestasi',
+                'kategori_prestasi',
+                'tingkat_prestasi',
+                'juara',
+                'penyelenggara',
+                'tanggal',
+            ]);
+
+            if ($request->hasFile('bukti_file')) {
+                // Hapus file lama jika ada
+                if ($prestasi->bukti_file && Storage::disk('public')->exists($prestasi->bukti_file)) {
+                    Storage::disk('public')->delete($prestasi->bukti_file);
+                }
+
+                $file = $request->file('bukti_file');
+                $extension = $file->getClientOriginalExtension();
+                $randomName = Str::uuid()->toString() . '.' . $extension;
+                $filePath = $file->storeAs('buktiPrestasi', $randomName, 'public');
+                $data['bukti_file'] = $filePath;
+            }
+            Log::info('Data yang akan diupdate:', $data);
+            Log::info('Menghapus file lama: ' . $prestasi->bukti_file);
+            $prestasi->update($data);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Data prestasi berhasil diupdate'
+            ]);
+        }
+
+        return redirect('/');
+    }
+
+    public function show_ajax(string $id) {
+        $prestasi = PrestasiModel::find($id);
+
+        return view('prestasi.show_ajax', ['prestasi' => $prestasi]);
+    }
 }

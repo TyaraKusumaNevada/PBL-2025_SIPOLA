@@ -7,24 +7,26 @@
                 <div class="card">
                     <div class="d-flex align-items-start row">
                         <div class="col-sm-12">
-                            <div class="card-body min-vh-50 mb-5">
-                                <div class="d-flex justify-content-between align-items-center mb-5">
-                                    <h5 class="card-title text-primary fs-3 m-0">{{ $breadcrumb->title }}</h5>
+                            <div class="card-body min-vh-50">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="card-title text-primary fs-3 mb-5">{{ $breadcrumb->title }}</h5>
                                     <a href="javascript:void(0);" onclick="modalAction('{{ url('/prestasi/create_ajax') }}')"
-                                       class="btn btn-sm btn-outline-primary fs-6">+ Tambah Prestasi</a>
+                                        class="btn btn-sm btn-outline-primary fs-6 mb-5">+ Tambah</a>
                                 </div>
 
                                 @if (session('success'))
                                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                                         {{ session('success') }}
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                            aria-label="Close"></button>
                                     </div>
                                 @endif
 
                                 @if (session('error'))
                                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                         {{ session('error') }}
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                            aria-label="Close"></button>
                                     </div>
                                 @endif
 
@@ -93,21 +95,88 @@
                     type: "POST",
                     dataType: "json"
                 },
-                columns: [
-                    {
+                columns: [{
                         data: "DT_RowIndex",
                         name: "DT_RowIndex", // ini penting untuk server-side
                         className: "text-center",
                         orderable: false,
                         searchable: false
                     },
-                    { data: "nama_prestasi", className: "", orderable: true, searchable: true },
-                    { data: "kategori_prestasi", className: "", orderable: true, searchable: true },
-                    { data: "tingkat_prestasi", className: "", orderable: true, searchable: true },
-                    { data: "penyelenggara", className: "", orderable: true, searchable: true },
-                    { data: "tanggal", className: "", orderable: true, searchable: true },
-                    { data: "status", className: "", orderable: true, searchable: true },
-                    { data: "aksi", className: "", orderable: false, searchable: false },
+                    {
+                        data: "nama_prestasi",
+                        className: "",
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: "kategori_prestasi",
+                        className: "",
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: "tingkat_prestasi",
+                        className: "",
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: "penyelenggara",
+                        className: "",
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: "tanggal",
+                        className: "",
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: "status",
+                        className: "",
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: "aksi",
+                        className: "",
+                        orderable: false,
+                        searchable: false
+                    },
+                ],
+                columnDefs: [{
+                        width: "5%",
+                        targets: 0
+                    }, // No
+                    {
+                        width: "16%",
+                        targets: 1
+                    }, // Nama Prestasi
+                    {
+                        width: "10%",
+                        targets: 2
+                    }, // Kategori
+                    {
+                        width: "10%",
+                        targets: 3
+                    }, // Tingkat
+                    {
+                        width: "17%",
+                        targets: 4
+                    }, // Penyelenggara
+                    {
+                        width: "12%",
+                        targets: 5
+                    }, // Tanggal
+                    {
+                        width: "10%",
+                        targets: 6
+                    }, // Status
+                    {
+                        width: "20%",
+                        targets: 7
+                    } // Aksi
                 ],
                 language: {
                     search: "Cari:",
