@@ -14,15 +14,20 @@ use Illuminate\Support\Str;
 class PrestasiMahasiswaController extends Controller
 {
     public function index() {
-        $breadcrumb = (object) [
-            'title' => 'Histori Prestasi Anda',
+        $user = auth()->user();
+        $idMahasiswa = $user->mahasiswa ? $user->mahasiswa->id_mahasiswa : null;
+
+        $jumlahPrestasi = PrestasiModel::where('id_mahasiswa', $idMahasiswa)->count();
+
+        $breadcrumb = (object)[
+            'title' => $jumlahPrestasi == 0 ? 'Belum Ada Prestasi' : 'Histori Prestasi Anda',
             'list'  => ['Home', 'Prestasi']
-        ]; 
+        ];
 
-        $prestasi = PrestasiModel::all();
+        $verifikasiStatus = PrestasiModel::where('id_mahasiswa', $idMahasiswa)
+            ->select('status')->distinct()->pluck('status');
 
-        return view('prestasi.histori', ['breadcrumb' => $breadcrumb, 'prestasi' => $prestasi]
-        );
+        return view('prestasi.main', compact('breadcrumb', 'jumlahPrestasi', 'verifikasiStatus'));
     }
 
     public function list(Request $request) {
@@ -32,6 +37,11 @@ class PrestasiMahasiswaController extends Controller
 
         $prestasis = PrestasiModel::where('id_mahasiswa', $idMahasiswa)
             ->select('id_prestasi', 'nama_prestasi', 'kategori_prestasi', 'tingkat_prestasi', 'juara', 'penyelenggara', 'tanggal', 'status');
+
+        //filter berdasarkan status
+        if ($request->status) {
+            $prestasis->where('status', $request->status);
+        }
 
         return DataTables::of($prestasis)
             ->addIndexColumn()
@@ -54,9 +64,15 @@ class PrestasiMahasiswaController extends Controller
                 $btn  = '<button onclick="modalAction(\''.url('/prestasi/' . $prestasi->id_prestasi . '/show_ajax').'\')" class="btn btn-outline-info btn-sm">
                             <i class="bi bi-eye"></i><span class="ms-2">Detail</span>
                         </button> ';
-                $btn .= '<button onclick="modalAction(\''.url('/prestasi/' . $prestasi->id_prestasi . '/edit_ajax').'\')" class="btn btn-outline-warning btn-sm">
-                            <i class="bi bi-pencil-square"></i><span class="ms-2">Edit</span>
-                        </button> ';
+                // $btn .= '<button onclick="modalAction(\''.url('/prestasi/' . $prestasi->id_prestasi . '/edit_ajax').'\')" class="btn btn-outline-warning btn-sm">
+                //             <i class="bi bi-pencil-square"></i><span class="ms-2">Edit</span>
+                //         </button> ';
+                // Tampilkan tombol edit hanya jika status pending atau ditolak
+                if (in_array($prestasi->status, ['pending', 'ditolak'])) {
+                    $btn .= '<button onclick="modalAction(\''.url('/prestasi/' . $prestasi->id_prestasi . '/edit_ajax').'\')" class="btn btn-outline-warning btn-sm">
+                                <i class="bi bi-pencil-square"></i><span class="ms-2">Edit</span>
+                            </button> ';
+                }
                         
                 return $btn;
             })
@@ -122,6 +138,7 @@ class PrestasiMahasiswaController extends Controller
                 'status' => true,
                 'message' => 'Data prestasi berhasil disimpan',
                 'data' => $prestasi,
+                'reloadHistori' => true
             ]);
         }
 
@@ -173,6 +190,9 @@ class PrestasiMahasiswaController extends Controller
                 'penyelenggara',
                 'tanggal',
             ]);
+
+            // Ubah status ke pending setiap kali ada perubahan
+            $data['status'] = 'pending';
 
             if ($request->hasFile('bukti_file')) {
                 // Hapus file lama jika ada

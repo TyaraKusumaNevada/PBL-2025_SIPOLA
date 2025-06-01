@@ -30,6 +30,19 @@
                                     </div>
                                 @endif
 
+                                <div class="row mb-4">
+                                    <label class="col-form-label col-1">Filter:</label>
+                                    <div class="col-3">
+                                        <select class="form-control" id="status" name="status">
+                                            <option value="">- Semua -</option>
+                                            @foreach($verifikasiStatus as $status)
+                                                <option value="{{ $status }}">{{ ucfirst($status) }}</option>
+                                            @endforeach
+                                        </select>
+                                        <small class="form-text text-muted">Status</small>
+                                    </div>
+                                </div>
+
                                 <div class="w-100 mt-5">
                                     <table class="table w-100 mt-5" id="table-prestasi">
                                         <thead>
@@ -93,7 +106,10 @@
                 ajax: {
                     url: "{{ url('prestasi/list') }}",
                     type: "POST",
-                    dataType: "json"
+                    dataType: "json",
+                    data: function (d) {
+                        d.status = $('#status').val();
+                    }
                 },
                 columns: [{
                         data: "DT_RowIndex",
@@ -190,6 +206,10 @@
                     },
                     processing: "Memuat..."
                 }
+            });
+
+            $('#status').on('change', function () {
+                dataPrestasi.ajax.reload();
             });
         });
     </script>

@@ -6,7 +6,6 @@
             <div class="col-12">
                 <div class="bg-white shadow rounded-4 p-10">
                     <div class="row align-items-center">
-                        
                         {{-- <!-- Gambar Ilustrasi -->
                         <div class="col-md-6 mb-4 mb-md-0 text-center">
                             <img src="{{ asset('image/ilustrasi_prestasi.jpg') }}" alt="Ilustrasi Prestasi" class="img-fluid" style="max-height: 300px;">
@@ -63,16 +62,14 @@
         });
 
         // Menampilkan modal AJAX
-        $('#modalContent').load(url, function(response, status, xhr) {
-            if (status === "error") {
-                alert("Gagal memuat form. Coba lagi nanti.");
-            } else {
+        function modalAction(url = '') {
+            $('#modalContent').load(url, function() {
                 const modal = new bootstrap.Modal(document.getElementById('myModal'), {
                     backdrop: 'static',
                     keyboard: false
                 });
                 modal.show();
-            }
-        });
+            });
+        }
     </script>
 @endpush
