@@ -12,6 +12,7 @@
                                     <h5 class="card-title text-primary fs-3 mb-5">{{ $breadcrumb->title }}</h5>
                                     <a href="javascript:void(0);" onclick="modalAction('{{ url('/prestasi/create_ajax') }}')"
                                         class="btn btn-sm btn-outline-primary fs-6 mb-5">+ Tambah</a>
+                                    {{-- <a href="{{ url('/prestasi/export_pdf') }}" class="btn btn-warning"><i class="fa fa-filepdf"></i> Unduh Prestasi</a> --}}
                                 </div>
 
                                 @if (session('success'))
@@ -29,6 +30,19 @@
                                             aria-label="Close"></button>
                                     </div>
                                 @endif
+
+                                <div class="row mb-4">
+                                    <label class="col-form-label col-1">Filter:</label>
+                                    <div class="col-3">
+                                        <select class="form-control" id="status" name="status">
+                                            <option value="">- Semua -</option>
+                                            @foreach($verifikasiStatus as $status)
+                                                <option value="{{ $status }}">{{ ucfirst($status) }}</option>
+                                            @endforeach
+                                        </select>
+                                        <small class="form-text text-muted">Status</small>
+                                    </div>
+                                </div>
 
                                 <div class="w-100 mt-5">
                                     <table class="table w-100 mt-5" id="table-prestasi">
@@ -93,7 +107,10 @@
                 ajax: {
                     url: "{{ url('prestasi/list') }}",
                     type: "POST",
-                    dataType: "json"
+                    dataType: "json",
+                    data: function (d) {
+                        d.status = $('#status').val();
+                    }
                 },
                 columns: [{
                         data: "DT_RowIndex",
@@ -190,6 +207,10 @@
                     },
                     processing: "Memuat..."
                 }
+            });
+
+            $('#status').on('change', function () {
+                dataPrestasi.ajax.reload();
             });
         });
     </script>
