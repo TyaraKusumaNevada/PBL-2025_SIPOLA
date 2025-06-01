@@ -95,7 +95,8 @@ Route::prefix('prestasi')->group(function () {
     Route::post('/ajax', [PrestasiMahasiswaController::class, 'store_ajax']);
     Route::get('{id}/show_ajax', [PrestasiMahasiswaController::class, 'show_ajax']);
     Route::get('{id}/edit_ajax', [PrestasiMahasiswaController::class, 'edit_ajax']);
-    Route::put('{id}/update_ajax', [PrestasiMahasiswaController::class, 'update_ajax']); 
+    Route::put('{id}/update_ajax', [PrestasiMahasiswaController::class, 'update_ajax']);
+    Route::get('/export_pdf', [PrestasiMahasiswaController::class, 'export_pdf']);      
     Route::get('/{id}/delete_ajax', [PrestasiMahasiswaController::class, 'confirm_ajax']);     
     Route::delete('/{id}/delete_ajax', [PrestasiMahasiswaController::class, 'delete_ajax']);    
 }); 

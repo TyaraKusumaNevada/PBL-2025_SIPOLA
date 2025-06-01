@@ -12,6 +12,7 @@
                                     <h5 class="card-title text-primary fs-3 mb-5">{{ $breadcrumb->title }}</h5>
                                     <a href="javascript:void(0);" onclick="modalAction('{{ url('/prestasi/create_ajax') }}')"
                                         class="btn btn-sm btn-outline-primary fs-6 mb-5">+ Tambah</a>
+                                    {{-- <a href="{{ url('/prestasi/export_pdf') }}" class="btn btn-warning"><i class="fa fa-filepdf"></i> Unduh Prestasi</a> --}}
                                 </div>
 
                                 @if (session('success'))

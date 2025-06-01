@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
+// use Barryvdh\DomPDF\Facade\Pdf;
 
 class PrestasiMahasiswaController extends Controller
 {
@@ -224,4 +225,23 @@ class PrestasiMahasiswaController extends Controller
 
         return view('prestasi.show_ajax', ['prestasi' => $prestasi]);
     }
+
+    // public function export_pdf() {
+    //     $user = auth()->user();
+    //     $idMahasiswa = $user->mahasiswa->id_mahasiswa ?? null;
+
+    //     // Ambil data prestasi mahasiswa yang sedang login
+    //     $prestasis = PrestasiModel::where('id_mahasiswa', $idMahasiswa)
+    //         ->select('nama_prestasi', 'kategori_prestasi', 'tingkat_prestasi', 'juara', 'penyelenggara', 'tanggal', 'status')
+    //         ->orderBy('tanggal', 'desc')
+    //         ->get();
+
+    //     // Load PDF dari view
+    //     $pdf = Pdf::loadView('prestasi.export_pdf', compact('prestasis'));
+
+    //     $pdf->setPaper('a4', 'portrait');
+    //     $pdf->setOption("isRemoteEnabled", true);
+
+    //     return $pdf->stream('Data_Prestasi_' . date('Y-m-d_H-i-s') . '.pdf');
+    // }
 }
