@@ -49,12 +49,18 @@ class TambahLombaController extends Controller
                 }
                 return '<span class="text-muted">Tidak ada</span>';
             })
-            ->addColumn('aksi', function ($row) {
-                $btn = '<div class="d-flex gap-1 justify-content-center">';
-                $btn .= '<button onclick="modalAction(\''.url('/lomba/' . $row->id_tambahLomba . '/show_ajax').'\')" class="btn btn-info btn-sm">Detail</button>';
-                $btn .= '<button onclick="modalAction(\''.url('/lomba/' . $row->id_tambahLomba . '/edit_ajax').'\')" class="btn btn-warning btn-sm">Edit</button>';
-                $btn .= '<button onclick="modalAction(\''.url('/lomba/' . $row->id_tambahLomba . '/delete_ajax').'\')" class="btn btn-danger btn-sm">Hapus</button>';
-                $btn .= '</div>';
+            ->addColumn('aksi', function ($lomba) {
+
+                $btn  = '<button onclick="modalAction(\''.url('/lomba/' . $lomba->id_tambahLomba . '/show_ajax').'\')" class="btn btn-info btn-sm">
+                            <i class="bi bi-eye"></i><span class="ms-2">Detail</span>
+                        </button> ';
+                $btn .= '<button onclick="modalAction(\''.url('/lomba/' . $lomba->id_tambahLomba . '/edit_ajax').'\')" class="btn btn-warning btn-sm">
+                            <i class="bi bi-pencil-square"></i><span class="ms-2">Edit</span>
+                        </button> ';
+                $btn .= '<button onclick="modalAction(\''.url('/lomba/' . $lomba->id_tambahLomba . '/delete_ajax').'\')" class="btn btn-danger btn-sm">
+                            <i class="bi bi-trash"></i><span class="ms-2">Hapus</span>
+                        </button>';
+                        
                 return $btn;
             })
             ->addColumn('pamflet_lomba', function ($row) {

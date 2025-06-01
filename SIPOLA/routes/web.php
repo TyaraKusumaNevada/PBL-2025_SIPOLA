@@ -10,6 +10,7 @@ use App\Http\Controllers\siginController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\VerifikasiPrestasiController;
 use App\Http\Controllers\TambahLombaController;
+use App\Http\Controllers\DashboardMahasiswaController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -96,6 +97,7 @@ Route::prefix('prestasi')->group(function () {
     Route::get('{id}/show_ajax', [PrestasiMahasiswaController::class, 'show_ajax']);
     Route::get('{id}/edit_ajax', [PrestasiMahasiswaController::class, 'edit_ajax']);
     Route::put('{id}/update_ajax', [PrestasiMahasiswaController::class, 'update_ajax']);
+    Route::get('/export_pdf', [PrestasiMahasiswaController::class, 'export_pdf']);      
     Route::get('/{id}/delete_ajax', [PrestasiMahasiswaController::class, 'confirm_ajax']);     
     Route::delete('/{id}/delete_ajax', [PrestasiMahasiswaController::class, 'delete_ajax']);    
 }); 
@@ -127,6 +129,7 @@ Route::prefix('/prestasiAdmin')->group(function () {
     Route::post('/list', [VerifikasiPrestasiController::class, 'list']);
     Route::get('{id}/ubahStatus', [VerifikasiPrestasiController::class, 'ubahStatus']);
     Route::post('{id}/ubahStatus', [VerifikasiPrestasiController::class, 'simpanStatus']);  
+    Route::get('/{id}/show_ajax', [VerifikasiPrestasiController::class, 'show_ajax']);
 }); 
 // ----------------------------------------------------------------------------------------
 
@@ -137,3 +140,8 @@ Route::post('/profil/update-academic', [ProfilController::class, 'updateAcademic
 // --- LANDING & INFO LOMBA ---
 Route::get('/landing', [LandingController::class, 'index']);
 Route::get('/infolomba', [InfoLombaController::class, 'index'])->name('infolomba');
+
+// -- Dashboard (Mahasiswa) --
+Route::prefix('mahasiswa')->group(function () {
+    Route::get('/dashboard', [DashboardMahasiswaController::class, 'index'])->name('mahasiswa.dashboard.data');
+});

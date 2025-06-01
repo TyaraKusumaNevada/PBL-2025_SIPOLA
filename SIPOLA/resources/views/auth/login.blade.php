@@ -124,12 +124,23 @@
                         </div>
                         <span id="error-password" class="text-danger error-text"></span>
                     </div>
+                    <!-- Tombol Login -->
+                    <button type="submit" class="btn custom-primary w-100">Masuk</button>
 
                     <!-- Tombol Login -->
                     <div class="mb-3">
                         <button type="submit" class="btn custom-primary w-100">Masuk</button>
                     </div>
 
+                    <!-- Link ke Signin -->
+                    <div class="text-center mt-2">
+                        <small class="form-text text-muted">
+                            Belum punya akun? <a href="{{ url('/signin') }}" class="custom">Signin</a>
+                        </small>
+                    </div>
+                </form>
+            </div>
+        </div>
                     <!-- Link ke Signin -->
                     <div class="text-center mt-4">
                         <small class="form-text text-muted">
@@ -142,6 +153,8 @@
     </div>
 
     <!-- jQuery & Bootstrap JS -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
