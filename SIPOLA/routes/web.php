@@ -128,6 +128,7 @@ Route::prefix('/prestasiAdmin')->group(function () {
     Route::post('/list', [VerifikasiPrestasiController::class, 'list']);
     Route::get('{id}/ubahStatus', [VerifikasiPrestasiController::class, 'ubahStatus']);
     Route::post('{id}/ubahStatus', [VerifikasiPrestasiController::class, 'simpanStatus']);  
+    Route::get('/{id}/show_ajax', [VerifikasiPrestasiController::class, 'show_ajax']);
 }); 
 // ----------------------------------------------------------------------------------------
 
