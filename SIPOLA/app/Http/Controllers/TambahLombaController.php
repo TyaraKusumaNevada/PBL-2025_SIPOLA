@@ -7,6 +7,7 @@ use App\Models\TambahLombaModel;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class TambahLombaController extends Controller
 {
@@ -31,8 +32,7 @@ class TambahLombaController extends Controller
         'deskripsi',
         'tanggal_mulai',
         'tanggal_selesai',
-        'pamflet_lomba',
-        'status_verifikasi'
+        'pamflet_lomba'
     );
 
         return DataTables::of($lombas)
@@ -82,17 +82,16 @@ class TambahLombaController extends Controller
     }
 
     public function store_ajax(Request $request) {
-        if ($request->ajax()) {
+        if ($request->ajax() || $request->wantsJson()) {
             $rules = [
                 'nama_lomba'         => 'required|string',
-                'kategori_lomba'     => 'required|string',
-                'tingkat_lomba'      => 'required|in:provinsi,nasional,internasional',
+                'kategori_lomba'     => 'required|in:akademik,non-akademik',
+                'tingkat_lomba'      => 'required|in:politeknik,kota,provinsi,nasional,internasional',
                 'penyelenggara_lomba'=> 'required|string',
                 'deskripsi'          => 'required|string',
                 'tanggal_mulai'      => 'required|date',
                 'tanggal_selesai'    => 'required|date|after_or_equal:tanggal_mulai',
-                'pamflet_lomba'      => 'nullable|image|max:2048',
-                'status_verifikasi'  => 'required|in:Pending,Disetujui,Ditolak'
+                'pamflet_lomba'      => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
             ];
 
             $validator = Validator::make($request->all(), $rules);
@@ -105,22 +104,33 @@ class TambahLombaController extends Controller
                 ]);
             }
 
-            $data = $request->except('pamflet_lomba');
+             // === Upload dengan nama acak ===
+            $file = $request->file('pamflet_lomba');
+            $extension = $file->getClientOriginalExtension();
+            $randomName = Str::uuid()->toString() . '.' . $extension;
+            $filePath = $file->storeAs('pamflet_lomba', $randomName, 'public');
 
-            if ($request->hasFile('pamflet_lomba')) {
-                $file = $request->file('pamflet_lomba');
-                $filename = time() . '_' . $file->getClientOriginalName();
-                $file->storeAs('public/pamflet_lomba', $filename);
-                $data['pamflet_lomba'] = $filename;
-            }
-
-            TambahLombaModel::create($data);
+            // Simpan ke database
+            $tambahLomba = TambahLombaModel::create([
+                'nama_lomba'          => $request->nama_lomba,
+                'kategori_lomba'      => $request->kategori_lomba,
+                'tingkat_lomba'       => $request->tingkat_lomba,
+                'penyelenggara_lomba' => $request->penyelenggara_lomba,
+                'deskripsi'           => $request->deskripsi,
+                'tanggal_mulai'       => $request->tanggal_mulai,
+                'tanggal_selesai'     => $request->tanggal_selesai,
+                'pamflet_lomba'       => $filePath,
+            ]);
 
             return response()->json([
                 'status' => true,
-                'message' => 'Data berhasil disimpan'
+                'message' => 'Data lomba berhasil disimpan',
+                'data' => $tambahLomba,
+                'reloadHistori' => true
             ]);
         }
+
+        return redirect('/');
     }
 
     public function show_ajax($id) {
@@ -138,8 +148,8 @@ class TambahLombaController extends Controller
         if ($request->ajax()) {
             $rules = [
                 'nama_lomba'         => 'required|string',
-                'kategori_lomba'     => 'required|string',
-                'tingkat_lomba'      => 'required|in:provinsi,nasional,internasional',
+                'kategori_lomba'     => 'required|in:akademik,non-akademik',
+                'tingkat_lomba'      => 'required|in:politeknik,kota,provinsi,nasional,internasional',
                 'penyelenggara_lomba'=> 'required|string',
                 'deskripsi'          => 'required|string',
                 'tanggal_mulai'      => 'required|date',
