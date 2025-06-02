@@ -56,6 +56,8 @@
                                     {{ $prestasi->tingkat_prestasi == 'politeknik' ? 'selected' : '' }}>Politeknik</option>
                                 <option value="kota" {{ $prestasi->tingkat_prestasi == 'kota' ? 'selected' : '' }}>Kota
                                 </option>
+                                <option value="provinsi" {{ $prestasi->tingkat_prestasi == 'provinsi' ? 'selected' : '' }}>
+                                    Provinsi</option>
                                 <option value="nasional" {{ $prestasi->tingkat_prestasi == 'nasional' ? 'selected' : '' }}>
                                     Nasional</option>
                                 <option value="internasional"

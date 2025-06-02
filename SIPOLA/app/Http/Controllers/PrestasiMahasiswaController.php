@@ -65,9 +65,6 @@ class PrestasiMahasiswaController extends Controller
                 $btn  = '<button onclick="modalAction(\''.url('/prestasi/' . $prestasi->id_prestasi . '/show_ajax').'\')" class="btn btn-outline-info btn-sm">
                             <i class="bi bi-eye"></i><span class="ms-2">Detail</span>
                         </button> ';
-                // $btn .= '<button onclick="modalAction(\''.url('/prestasi/' . $prestasi->id_prestasi . '/edit_ajax').'\')" class="btn btn-outline-warning btn-sm">
-                //             <i class="bi bi-pencil-square"></i><span class="ms-2">Edit</span>
-                //         </button> ';
                 // Tampilkan tombol edit hanya jika status pending atau ditolak
                 if (in_array($prestasi->status, ['pending', 'ditolak'])) {
                     $btn .= '<button onclick="modalAction(\''.url('/prestasi/' . $prestasi->id_prestasi . '/edit_ajax').'\')" class="btn btn-outline-warning btn-sm">
@@ -99,7 +96,7 @@ class PrestasiMahasiswaController extends Controller
             $rules = [
                 'nama_prestasi'     => 'required|string|max:255',
                 'kategori_prestasi' => 'required|in:akademik,non-akademik',
-                'tingkat_prestasi'  => 'required|in:politeknik,kota,nasional,internasional',
+                'tingkat_prestasi'  => 'required|in:politeknik,kota,provinsi,nasional,internasional',
                 'juara'             => 'required|string|max:100',
                 'penyelenggara'     => 'required|string|max:255',
                 'tanggal'           => 'required|date',
@@ -157,7 +154,7 @@ class PrestasiMahasiswaController extends Controller
             $rules = [
                 'nama_prestasi'     => 'required|string|max:255',
                 'kategori_prestasi' => 'required|in:akademik,non-akademik',
-                'tingkat_prestasi'  => 'required|in:politeknik,kota,nasional,internasional',
+                'tingkat_prestasi'  => 'required|in:politeknik,kota,provinsi,nasional,internasional',
                 'juara'             => 'required|string|max:100',
                 'penyelenggara'     => 'required|string|max:255',
                 'tanggal'           => 'required|date',
