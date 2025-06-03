@@ -43,24 +43,19 @@
                 </tr>
                 <tr>
                     <th>Tanggal Mulai</th>
-                    <td>{{ $lomba->tanggal_mulai }}</td>
+                    <td>{{ \Carbon\Carbon::parse($lomba->tanggal_mulai)->translatedFormat('d F Y, H:i') }}</td>
                 </tr>
                 <tr>
                     <th>Tanggal Selesai</th>
-                    <td>{{ $lomba->tanggal_selesai }}</td>
+                    <td>{{ \Carbon\Carbon::parse($lomba->tanggal_selesai)->translatedFormat('d F Y, H:i') }}</td>
                 </tr>
-                <tr>
-                    <th>Status Verifikasi</th>
-                    <td>{{ $lomba->status_verifikasi }}</td>
-                </tr>
-                <tr>
+                 <tr>
                     <th>Pamflet</th>
                     <td>
-                        @if ($lomba->pamflet_lomba)
-                            <img src="{{ asset('storage/pamflet_lomba/' . $lomba->pamflet_lomba) }}" alt="Pamflet" class="img-fluid" style="max-width: 300px;">
-                        @else
-                            <span class="text-muted">Tidak ada pamflet</span>
-                        @endif
+                        <a href="{{ asset('storage/' . $lomba->pamflet_lomba) }}" target="_blank"
+                            class="btn btn-sm btn-outline-primary">
+                            Lihat File
+                        </a>
                     </td>
                 </tr>
             </table>
