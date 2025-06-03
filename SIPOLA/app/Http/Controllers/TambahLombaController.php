@@ -7,6 +7,9 @@ use App\Models\TambahLombaModel;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class TambahLombaController extends Controller
 {
@@ -31,8 +34,7 @@ class TambahLombaController extends Controller
         'deskripsi',
         'tanggal_mulai',
         'tanggal_selesai',
-        'pamflet_lomba',
-        'status_verifikasi'
+        'pamflet_lomba'
     );
 
         return DataTables::of($lombas)
@@ -82,17 +84,16 @@ class TambahLombaController extends Controller
     }
 
     public function store_ajax(Request $request) {
-        if ($request->ajax()) {
+        if ($request->ajax() || $request->wantsJson()) {
             $rules = [
                 'nama_lomba'         => 'required|string',
-                'kategori_lomba'     => 'required|string',
-                'tingkat_lomba'      => 'required|in:provinsi,nasional,internasional',
+                'kategori_lomba'     => 'required|in:akademik,non-akademik',
+                'tingkat_lomba'      => 'required|in:politeknik,kota,provinsi,nasional,internasional',
                 'penyelenggara_lomba'=> 'required|string',
                 'deskripsi'          => 'required|string',
                 'tanggal_mulai'      => 'required|date',
                 'tanggal_selesai'    => 'required|date|after_or_equal:tanggal_mulai',
-                'pamflet_lomba'      => 'nullable|image|max:2048',
-                'status_verifikasi'  => 'required|in:Pending,Disetujui,Ditolak'
+                'pamflet_lomba'      => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
             ];
 
             $validator = Validator::make($request->all(), $rules);
@@ -105,47 +106,60 @@ class TambahLombaController extends Controller
                 ]);
             }
 
-            $data = $request->except('pamflet_lomba');
+             // === Upload dengan nama acak ===
+            $file = $request->file('pamflet_lomba');
+            $extension = $file->getClientOriginalExtension();
+            $randomName = Str::uuid()->toString() . '.' . $extension;
+            $filePath = $file->storeAs('pamflet_lomba', $randomName, 'public');
 
-            if ($request->hasFile('pamflet_lomba')) {
-                $file = $request->file('pamflet_lomba');
-                $filename = time() . '_' . $file->getClientOriginalName();
-                $file->storeAs('public/pamflet_lomba', $filename);
-                $data['pamflet_lomba'] = $filename;
-            }
-
-            TambahLombaModel::create($data);
+            // Simpan ke database
+            $tambahLomba = TambahLombaModel::create([
+                'nama_lomba'          => $request->nama_lomba,
+                'kategori_lomba'      => $request->kategori_lomba,
+                'tingkat_lomba'       => $request->tingkat_lomba,
+                'penyelenggara_lomba' => $request->penyelenggara_lomba,
+                'deskripsi'           => $request->deskripsi,
+                'tanggal_mulai'       => $request->tanggal_mulai,
+                'tanggal_selesai'     => $request->tanggal_selesai,
+                'pamflet_lomba'       => $filePath,
+            ]);
 
             return response()->json([
                 'status' => true,
-                'message' => 'Data berhasil disimpan'
+                'message' => 'Data lomba berhasil disimpan',
+                'data' => $tambahLomba,
+                'reloadHistori' => true
             ]);
         }
+
+        return redirect('/');
     }
 
     public function show_ajax($id) {
         $lomba = TambahLombaModel::find($id);
-        return view('lomba.show_ajax', compact('lomba'));
+
+        return view('lomba.show_ajax', ['lomba' => $lomba]);
     }
 
     public function edit_ajax($id) {
         $lomba = TambahLombaModel::find($id);
-        return view('lomba.edit_ajax', compact('lomba'));
+
+        return view('lomba.edit_ajax', ['lomba' => $lomba]);
     }
 
     public function update_ajax(Request $request, $id)
     {
-        if ($request->ajax()) {
+        if ($request->ajax() || $request->wantsJson()) {
             $rules = [
                 'nama_lomba'         => 'required|string',
-                'kategori_lomba'     => 'required|string',
-                'tingkat_lomba'      => 'required|in:provinsi,nasional,internasional',
+                'kategori_lomba'     => 'required|in:akademik,non-akademik',
+                'tingkat_lomba'      => 'required|in:politeknik,kota,provinsi,nasional,internasional',
                 'penyelenggara_lomba'=> 'required|string',
                 'deskripsi'          => 'required|string',
                 'tanggal_mulai'      => 'required|date',
                 'tanggal_selesai'    => 'required|date|after_or_equal:tanggal_mulai',
                 'pamflet_lomba'      => 'nullable|image|max:2048',
-                'status_verifikasi'  => 'required|in:Pending,Disetujui,Ditolak'
+                // 'status_verifikasi'  => 'required|in:Pending,Disetujui,Ditolak'
             ];
 
             $validator = Validator::make($request->all(), $rules);
@@ -158,78 +172,82 @@ class TambahLombaController extends Controller
                 ]);
             }
 
-            try {
-                $lomba = TambahLombaModel::find($id);
-
-                if (!$lomba) {
-                    return response()->json([
-                        'status' => false,
-                        'message' => 'Data lomba tidak ditemukan'
-                    ], 404);
-                }
-
-                $data = $request->except('pamflet_lomba');
-
-                if ($request->hasFile('pamflet_lomba')) {
-                    // Hapus file lama jika ada dan eksis
-                    if ($lomba->pamflet_lomba && Storage::exists('public/pamflet_lomba/' . $lomba->pamflet_lomba)) {
-                        Storage::delete('public/pamflet_lomba/' . $lomba->pamflet_lomba);
-                    }
-
-                    $file = $request->file('pamflet_lomba');
-                    $filename = time() . '_' . $file->getClientOriginalName();
-                    $file->storeAs('public/pamflet_lomba', $filename);
-                    $data['pamflet_lomba'] = $filename;
-                }
-
-                $lomba->update($data);
-
+            $lomba = TambahLombaModel::find($id);
+            if (!$lomba) {
                 return response()->json([
-                    'status' => true,
-                    'message' => 'Data berhasil diperbarui'
+                    'status' => false,
+                    'message' => 'Data lomba tidak ditemukan'
                 ]);
-            } catch (\Exception $e) {
-                        return response()->json([
-                'status' => false,
-                'message' => 'Akses tidak valid (bukan request AJAX)'
-            ], 400);
             }
+                
+            // Update data
+            $data = $request->only([
+                'nama_lomba',
+                'kategori_lomba',
+                'tingkat_lomba',
+                'penyelenggara_lomba',
+                'deskripsi',
+                'tanggal_mulai',
+                'tanggal_selesai',
+            ]);
+
+            if ($request->hasFile('pamflet_lomba')) {
+                // Hapus file lama jika ada
+                if ($lomba->pamflet_lomba && Storage::disk('public')->exists($lomba->pamflet_lomba)) {
+                    Storage::disk('public')->delete($lomba->pamflet_lomba);
+                }
+
+                $file = $request->file('pamflet_lomba');
+                $extension = $file->getClientOriginalExtension();
+                $randomName = Str::uuid()->toString() . '.' . $extension;
+                $filePath = $file->storeAs('pamflet_lomba', $randomName, 'public');
+                $data['pamflet_lomba'] = $filePath;
+            }
+
+            Log::info('Data yang akan diupdate:', $data);
+            Log::info('Menghapus file lama: ' . $lomba->pamflet_lomba);
+            $lomba->update($data);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Data berhasil diperbarui'
+            ]);
         }
+
+        return redirect('/');
     }
 
-
-    public function confirm_ajax($id) {
+    public function confirm_ajax(string $id) {
         $lomba = TambahLombaModel::find($id);
-        return view('lomba.confirm_ajax', compact('lomba'));
+
+        return view('lomba.confirm_ajax', ['lomba' => $lomba]);
     }
 
-    public function delete_ajax(Request $request, $id)
-    {
-        if ($request->ajax()) {
+    public function delete_ajax(Request $request, $id) {
+        // cek apakah request dari ajax
+        if ($request->ajax() || $request->wantsJson()) {
             $lomba = TambahLombaModel::find($id);
             if ($lomba) {
-                // Pastikan file ada sebelum hapus
-                if ($lomba->pamflet_lomba && Storage::exists('public/pamflet_lomba/' . $lomba->pamflet_lomba)) {
-                    Storage::delete('public/pamflet_lomba/' . $lomba->pamflet_lomba);
+                // hapus file pamflet jika ada
+                if ($lomba->pamflet_lomba && Storage::disk('public')->exists($lomba->pamflet_lomba)) {
+                    Storage::disk('public')->delete($lomba->pamflet_lomba);
                 }
 
+                // hapus data lomba
                 $lomba->delete();
 
                 return response()->json([
                     'status' => true,
                     'message' => 'Data berhasil dihapus'
                 ]);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Data tidak ditemukan'
+                ]);
             }
-
-            return response()->json([
-                'status' => false,
-                'message' => 'Data tidak ditemukan'
-            ]);
         }
 
-        return response()->json([
-            'status' => false,
-            'message' => 'Invalid request'
-        ]);
+        return redirect('/');
     }
 }
