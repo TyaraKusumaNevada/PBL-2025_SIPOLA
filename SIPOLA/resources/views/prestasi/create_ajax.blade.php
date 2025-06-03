@@ -33,6 +33,7 @@
                             <option value="">-- Pilih Tingkat --</option>
                             <option value="politeknik">Politeknik</option>
                             <option value="kota">Kota</option>
+                            <option value="provinsi">Provinsi</option>
                             <option value="nasional">Nasional</option>
                             <option value="internasional">Internasional</option>
                         </select>

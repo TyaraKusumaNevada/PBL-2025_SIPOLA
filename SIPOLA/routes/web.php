@@ -104,15 +104,15 @@ Route::prefix('prestasi')->group(function () {
 // ----------------------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------------------
-// ROUTE MAHASISWA (Unggah Prestasi)
+// ROUTE ADMIN (Manajemen Lomba)
 Route::prefix('lomba')->group(function () {
     Route::get('/', [TambahLombaController::class, 'index']);
-    Route::get('/list', [TambahLombaController::class, 'list']);
+    Route::post('/list', [TambahLombaController::class, 'list']);
     Route::get('/create_ajax', [TambahLombaController::class, 'create_ajax']);
-    Route::post('/store_ajax', [TambahLombaController::class, 'store_ajax']);
-    Route::get('/{id}/show_ajax', [TambahLombaController::class, 'show_ajax']);
-    Route::get('/{id}/edit_ajax', [TambahLombaController::class, 'edit_ajax']);
-    Route::put('/{id}/update_ajax', [TambahLombaController::class, 'update_ajax']);
+    Route::post('/ajax', [TambahLombaController::class, 'store_ajax']);
+    Route::get('{id}/show_ajax', [TambahLombaController::class, 'show_ajax']);
+    Route::get('{id}/edit_ajax', [TambahLombaController::class, 'edit_ajax']);
+    Route::put('{id}/update_ajax', [TambahLombaController::class, 'update_ajax']);
     Route::get('/{id}/delete_ajax', [TambahLombaController::class, 'confirm_ajax']);
     Route::delete('/{id}/delete_ajax', [TambahLombaController::class, 'delete_ajax']);
 });

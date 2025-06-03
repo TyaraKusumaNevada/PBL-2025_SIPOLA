@@ -25,4 +25,8 @@ class RoleModel extends Model
     public function admins(): HasMany {          //1 role memiliki banyak admin
         return $this->hasMany(AdminModel::class, 'id_role', 'id_role');
     }
+
+    public function users(): HasMany {          //1 role memiliki banyak admin
+        return $this->hasMany(User::class, 'id_role', 'id_role');
+    }
 }
