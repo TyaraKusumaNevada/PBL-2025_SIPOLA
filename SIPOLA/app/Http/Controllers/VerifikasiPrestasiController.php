@@ -126,4 +126,10 @@ class VerifikasiPrestasiController extends Controller
         // Redirect jika bukan AJAX
         return redirect('/');
     }
+
+    public function show_ajax(string $id) {
+        $prestasi = PrestasiModel::find($id);
+
+        return view('prestasiAdmin.show_ajax', ['prestasi' => $prestasi]);
+    }
 }
