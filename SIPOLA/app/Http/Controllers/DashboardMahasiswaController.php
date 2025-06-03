@@ -8,7 +8,6 @@ use App\Models\MahasiswaModel;
 use App\Models\PrestasiModel;
 use App\Models\TambahLombaModel;
 use App\Models\RekomendasiModel;
-use App\Models\VerifikasiPrestasiModel;
 
 class DashboardMahasiswaController extends Controller
 {
@@ -32,7 +31,7 @@ class DashboardMahasiswaController extends Controller
             'lomba_terbaru' => TambahLombaModel::where('status_verifikasi', 'Disetujui')
                                 ->whereDate('tanggal_selesai', '>=', now())
                                 ->orderBy('tanggal_mulai', 'asc')
-                                ->take(5)->get(),
+                                ->get(),
             'riwayat_prestasi' => PrestasiModel::where('id_mahasiswa', $id)->latest('tanggal')->take(5)->get(),
             'mahasiswa' => $mahasiswa,
         ]);

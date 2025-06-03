@@ -47,15 +47,6 @@
       <h5 class="mb-0"> Lomba Aktif Terbaru</h5>
     </div>
     <div class="card-body px-0 position-relative" style="overflow-x: hidden;">
-      <button class="scroll-btn scroll-left btn btn-outline-secondary"
-        style="position:absolute; top:50%; left:0; transform:translateY(-50%); z-index:10;">
-        <i class="bx bx-chevron-left"></i>
-      </button>
-      <button class="scroll-btn scroll-right btn btn-outline-secondary"
-        style="position:absolute; top:50%; right:0; transform:translateY(-50%); z-index:10;">
-        <i class="bx bx-chevron-right"></i>
-      </button>
-
       <div class="scroll-wrapper">
         <div class="scroll-container px-4">
           @foreach ($lomba_terbaru as $lomba)
