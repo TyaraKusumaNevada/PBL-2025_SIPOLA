@@ -128,6 +128,18 @@
                     //     extension: "jpg|jpeg|png|gif" // validasi tipe file gambar
                     // }
                 },
+                messages: {
+                    nama_lomba: "Nama lomba wajib diisi.",
+                    kategori_lomba: "Kategori lomba wajib dipilih.",
+                    tingkat_lomba: "Tingkat lomba wajib dipilih.",
+                    penyelenggara_lomba: "Penyelenggara wajib diisi.",
+                    deskripsi: "Deskripsi wajib diisi.",
+                    tanggal_mulai: "Tanggal mulai wajib diisi.",
+                    tanggal_selesai: "Tanggal selesai wajib diisi."
+                    // pamflet_lomba: {
+                    //     extension: "File harus berupa gambar (jpg, jpeg, png, gif)."
+                    // }
+                },
                 submitHandler: function (form) {
                     let formData = new FormData(form);
 
