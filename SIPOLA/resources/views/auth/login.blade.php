@@ -127,10 +127,6 @@
                     <!-- Tombol Login -->
                     <button type="submit" class="btn custom-primary w-100">Masuk</button>
 
-                    <!-- Tombol Login -->
-                    <div class="mb-3">
-                        <button type="submit" class="btn custom-primary w-100">Masuk</button>
-                    </div>
 
                     <!-- Link ke Signin -->
                     <div class="text-center mt-2">
@@ -141,16 +137,7 @@
                 </form>
             </div>
         </div>
-                    <!-- Link ke Signin -->
-                    <div class="text-center mt-4">
-                        <small class="form-text text-muted">
-                            Belum punya akun? <a href="{{ url('/signin') }}" class="custom">Signin</a>
-                        </small>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+                    
 
     <!-- jQuery & Bootstrap JS -->
 

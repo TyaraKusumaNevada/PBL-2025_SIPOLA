@@ -26,14 +26,98 @@
         </span>
     </a>
 </div>
+{{-- @if(role == mahasiswa)
+<div class="user-panel d-flex align-items-center px-3 py-3" style="border-bottom: 1px solid #d1d5db;">
+    <a href="{{ route('profil.index') }}" class="d-flex align-items-center text-dark text-decoration-none">
+        @php
+            $userId = Auth::id();
+            $userImagePath = 'storage/foto_profil/user_' . $userId . '.jpg';
+            $defaultImage = 'storage/foto_profil/user_.jpg';
+            $imagePath = file_exists(public_path($userImagePath)) ? asset($userImagePath) : asset($defaultImage);
 
+            $user = Auth::user();
+            $fullName = $user->name ?? ($user->nama ?? ($user->full_name ?? ($user->username ?? 'Guest')));
+            $nameParts = explode(' ', trim($fullName));
+
+            if (count($nameParts) <= 2) {
+                $displayName = $fullName;
+            } else {
+                $firstName = $nameParts[0];
+                $lastInitial = strtoupper(substr(end($nameParts), 0, 1));
+                $displayName = $firstName . ' ' . $lastInitial . '.';
+            }
+        @endphp
+        <img id="sidebar-foto-profil" src="{{ $imagePath }}" class="rounded-circle" alt="User Image"
+            style="width: 40px; height: 40px; object-fit: cover; border: 2px solid #d1d5db;">
+        <span id="sidebar-nama-user" class="ms-2 fw-semibold text-dark" title="{{ $fullName }}">
+            {{ $displayName }}
+        </span>
+    </a>
+</div>
+@elseif(role == admin)
+    <div class="user-panel d-flex align-items-center px-3 py-3" style="border-bottom: 1px solid #d1d5db;">
+    <a href="{{ route('profilAdmin.index') }}" class="d-flex align-items-center text-dark text-decoration-none">
+        @php
+            $userId = Auth::id();
+            $userImagePath = 'storage/foto_profil/user_' . $userId . '.jpg';
+            $defaultImage = 'storage/foto_profil/user_.jpg';
+            $imagePath = file_exists(public_path($userImagePath)) ? asset($userImagePath) : asset($defaultImage);
+
+            $user = Auth::user();
+            $fullName = $user->name ?? ($user->nama ?? ($user->full_name ?? ($user->username ?? 'Guest')));
+            $nameParts = explode(' ', trim($fullName));
+
+            if (count($nameParts) <= 2) {
+                $displayName = $fullName;
+            } else {
+                $firstName = $nameParts[0];
+                $lastInitial = strtoupper(substr(end($nameParts), 0, 1));
+                $displayName = $firstName . ' ' . $lastInitial . '.';
+            }
+        @endphp
+        <img id="sidebar-foto-profil" src="{{ $imagePath }}" class="rounded-circle" alt="User Image"
+            style="width: 40px; height: 40px; object-fit: cover; border: 2px solid #d1d5db;">
+        <span id="sidebar-nama-user" class="ms-2 fw-semibold text-dark" title="{{ $fullName }}">
+            {{ $displayName }}
+        </span>
+    </a>
+</div>
+@elseif(role == dosen)
+<div class="user-panel d-flex align-items-center px-3 py-3" style="border-bottom: 1px solid #d1d5db;">
+    <a href="{{ route('profilDosen.index') }}" class="d-flex align-items-center text-dark text-decoration-none">
+        @php
+            $userId = Auth::id();
+            $userImagePath = 'storage/foto_profil/user_' . $userId . '.jpg';
+            $defaultImage = 'storage/foto_profil/user_.jpg';
+            $imagePath = file_exists(public_path($userImagePath)) ? asset($userImagePath) : asset($defaultImage);
+
+            $user = Auth::user();
+            $fullName = $user->name ?? ($user->nama ?? ($user->full_name ?? ($user->username ?? 'Guest')));
+            $nameParts = explode(' ', trim($fullName));
+
+            if (count($nameParts) <= 2) {
+                $displayName = $fullName;
+            } else {
+                $firstName = $nameParts[0];
+                $lastInitial = strtoupper(substr(end($nameParts), 0, 1));
+                $displayName = $firstName . ' ' . $lastInitial . '.';
+            }
+        @endphp
+        <img id="sidebar-foto-profil" src="{{ $imagePath }}" class="rounded-circle" alt="User Image"
+            style="width: 40px; height: 40px; object-fit: cover; border: 2px solid #d1d5db;">
+        <span id="sidebar-nama-user" class="ms-2 fw-semibold text-dark" title="{{ $fullName }}">
+            {{ $displayName }}
+        </span>
+    </a>
+</div>
+@endif --}}
 <!-- Menu Items -->
 <ul class="menu-inner">
     <!-- Dashboard Admin -->
     <li class="menu-item {{ Request::is('admin/dashboard') ? 'active open' : '' }}">
         <a href="{{ url('/admin/dashboard') }}" class="menu-link d-flex align-items-center">
             <i class="bi bi-house-door menu-icon fs-5"></i>
-            <div class="text-truncate" data-i18n="Dashboard">Dashboard</div>
+            <div class="text-truncate" data-i18n="Dashboard">Dashboard Admin</div>
         </a>
     </li>
 
@@ -41,7 +125,7 @@
     <li class="menu-item {{ Request::is('dospem/dashboard') ? 'active open' : '' }}">
         <a href="{{ url('/dospem/dashboard') }}" class="menu-link d-flex align-items-center">
             <i class="bi bi-house-door menu-icon fs-5"></i>
-            <div class="text-truncate" data-i18n="Dashboard">Dashboard</div>
+            <div class="text-truncate" data-i18n="Dashboard">Dashboard Dosen</div>
         </a>
     </li>
 
@@ -49,34 +133,11 @@
     <li class="menu-item {{ Request::is('mahasiswa/dashboard') ? 'active open' : '' }}">
         <a href="{{ url('/mahasiswa/dashboard') }}" class="menu-link d-flex align-items-center">
             <i class="bi bi-house-door menu-icon fs-5"></i>
-            <div class="text-truncate" data-i18n="Dashboard">Dashboard</div>
+            <div class="text-truncate" data-i18n="Dashboard">Dashboard Mahasiswa</div>
         </a>
     </li>
 
-    <!-- Profil Admin -->
-    <li class="menu-item {{ Request::is('admin/profil') ? 'active open' : '' }}">
-        <a href="{{ url('/admin/profil') }}" class="menu-link d-flex align-items-center">
-            <i class="bi bi-person-circle menu-icon fs-5"></i>
-            <div class="text-truncate" data-i18n="AdminProfil">Profil</div>
-        </a>
-    </li>
-
-    <!-- Profil Dospem -->
-    <li class="menu-item {{ Request::is('dospem/profil') ? 'active open' : '' }}">
-        <a href="{{ url('/dospem/profil') }}" class="menu-link d-flex align-items-center">
-            <i class="bi bi-person-circle menu-icon fs-5"></i>
-            <div class="text-truncate" data-i18n="DospemProfil">Profil</div>
-        </a>
-    </li>
-
-    <!-- Profil Mahasiswa -->
-    <li class="menu-item {{ Request::is('mahasiswa/profil') ? 'active open' : '' }}">
-        <a href="{{ url('/mahasiswa/profil') }}" class="menu-link d-flex align-items-center">
-            <i class="bi bi-person-circle menu-icon fs-5"></i>
-            <div class="text-truncate" data-i18n="MahasiswaProfil">Profil</div>
-        </a>
-    </li>
-
+    
 
     <!-- Unggah Prestasi -->
     <li class="menu-item {{ Request::is('prestasi') ? 'active open' : '' }}">

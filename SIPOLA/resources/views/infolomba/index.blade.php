@@ -2,7 +2,7 @@
 @section('content')
 <div class="container py-5">
     <h2 class="mb-4">Info Lomba Terbaru</h2>
-<a href="{{ url('/landing') }}" class="btn btn-secondary mb-3">
+<a href="{{ url('/') }}" class="btn btn-secondary mb-3">
         <i class="bi bi-arrow-left"></i> Kembali
     </a>
 
