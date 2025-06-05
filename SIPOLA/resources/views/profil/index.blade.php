@@ -2,6 +2,7 @@
 
 @section('content')
     <style>
+        
         .btn-back:hover {
             background-color: #f41800 !important;
             border-color: #f41800 !important;
@@ -62,6 +63,29 @@
             border: 3px solid #e3e3e3;
         }
 
+        .academic-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .academic-item:last-child {
+            border-bottom: none;
+        }
+
+        .delete-btn {
+            color: #a8a8a8;
+            cursor: pointer;
+            font-size: 14px;
+            margin-left: 10px;
+        }
+
+        .delete-btn:hover {
+            color: #e41e1e;
+        }
+
         @media (max-width: 768px) {
             .profile-img {
                 text-align: center;
@@ -87,8 +111,8 @@
                 <div class="col-md-6">
                     <h3 id="display-nama">{{ $user->name }}</h3>
                     <p><strong>NIM:</strong> <span id="display-username">{{ $user->username }}</span></p>
-                    <p><strong>Program Studi:</strong> Teknik Informatika</p> {{-- Sesuaikan jika ada data program studi --}}
-                    <p><strong>Angkatan:</strong> 2022</p> {{-- Sesuaikan jika ada data angkatan --}}
+                    <p><strong>Program Studi:</strong> Teknik Informatika</p>
+                    <p><strong>Angkatan:</strong> 2022</p>
                 </div>
                 <div class="col-md-3 text-end">
                     <button class="btn btn-outline-primary" id="btn-edit-profile">
@@ -138,22 +162,25 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (['keahlian' => 'Bidang Keahlian', 'sertifikasi' => 'Sertifikasi', 'pengalaman' => 'Pengalaman'] as $key => $label)
+                            @foreach (['bidang_keahlian' => 'Keahlian', 'sertifikasi' => 'Minat', 'pengalaman' => 'Pengalaman'] as $key => $label)
                                 <tr>
                                     <td>{{ $label }}</td>
                                     <td id="td-{{ $key }}">
-                                        <ul class="mb-0 ps-3" id="list-{{ $key }}">
-                                            @foreach(explode(';', $user->$key) as $item)
+                                        <div id="list-{{ $key }}">
+                                            @foreach(explode(';', $user->$key) as $index => $item)
                                                 @if(trim($item) != '')
-                                                    <li>{{ trim($item) }}</li>
+                                                    <div class="academic-item" data-index="{{ $index }}">
+                                                        <span>{{ trim($item) }}</span>
+                                                        <i class="fa fa-trash delete-btn" onclick="deleteAcademicItem('{{ $key }}', {{ $index }})" title="Hapus item"></i>
+                                                    </div>
                                                 @endif
                                             @endforeach
-                                        </ul>
+                                        </div>
                                     </td>
                                     <td>
-                                        <button class="btn btn-sm btn-outline-primary"
-                                            onclick="showEditModal('{{ $key }}', '{{ $label }}')">
-                                            <i class="fa fa-edit"></i> Edit
+                                        <button class="btn btn-sm btn-outline-success"
+                                            onclick="showAddModal('{{ $key }}', '{{ $label }}')">
+                                            <i class="fa fa-plus"></i> Tambah
                                         </button>
                                     </td>
                                 </tr>
@@ -175,11 +202,33 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                     </div>
                     <div class="modal-body">
-                        <label for="academic-value" class="form-label">Isi (pisahkan dengan `;`)</label>
+                        <label for="academic-value" class="form-label">Isikan bidangnya saja (pisahkan dengan `;`)</label>
                         <textarea class="form-control" id="academic-value" name="value" rows="4" required></textarea>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-success">Simpan</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        {{-- Modal Tambah Akademik --}}
+        <div class="modal fade" id="addAcademicModal" tabindex="-1" aria-labelledby="addAcademicModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <form id="form-add-academic" class="modal-content">
+                    @csrf
+                    <input type="hidden" id="add-academic-type" name="type">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addAcademicModalLabel">Tambah Akademik</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                    </div>
+                    <div class="modal-body">
+                        <label for="add-academic-value" class="form-label">Tambahkan item baru</label>
+                        <input type="text" class="form-control" id="add-academic-value" name="value" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Tambah</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                     </div>
                 </form>
@@ -191,11 +240,6 @@
     {{-- FontAwesome CDN --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    {{-- Bootstrap JS CDN (pastikan sudah include di layout) --}}
-    {{-- Jika belum, tambahkan ini di bagian bawah sebelum </body> --}}
-    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> --}}
-
-    {{-- Script --}}
     <script>
         // Toggle tampilkan form edit profil
         document.getElementById('btn-edit-profile').addEventListener('click', () => {
@@ -270,10 +314,20 @@
             document.getElementById('editAcademicModalLabel').innerText = 'Edit ' + label;
 
             // Ambil data dari list dan gabungkan jadi string pisah ';'
-            const items = Array.from(document.querySelectorAll(`#td-${type} li`)).map(li => li.textContent.trim());
+            const items = Array.from(document.querySelectorAll(`#list-${type} .academic-item span`)).map(span => span.textContent.trim());
             document.getElementById('academic-value').value = items.join('; ');
 
             const modal = new bootstrap.Modal(document.getElementById('editAcademicModal'));
+            modal.show();
+        }
+
+        // Tampilkan modal tambah akademik
+        function showAddModal(type, label) {
+            document.getElementById('add-academic-type').value = type;
+            document.getElementById('addAcademicModalLabel').innerText = 'Tambah ' + label;
+            document.getElementById('add-academic-value').value = '';
+
+            const modal = new bootstrap.Modal(document.getElementById('addAcademicModal'));
             modal.show();
         }
 
@@ -292,24 +346,12 @@
                     "X-CSRF-TOKEN": token,
                     "Accept": "application/json"
                 },
-                body: JSON.stringify({ type: type, value: value })
+                body: JSON.stringify({ type: type, value: value, action: 'update' })
             })
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {
-                        const td = document.getElementById('td-' + type);
-                        const ul = document.createElement('ul');
-                        ul.className = 'mb-0 ps-3';
-                        value.split(';').forEach(item => {
-                            if (item.trim() !== '') {
-                                const li = document.createElement('li');
-                                li.textContent = item.trim();
-                                ul.appendChild(li);
-                            }
-                        });
-                        td.innerHTML = '';
-                        td.appendChild(ul);
-
+                        updateAcademicDisplay(type, data.items);
                         const modal = bootstrap.Modal.getInstance(document.getElementById('editAcademicModal'));
                         modal.hide();
                     } else {
@@ -318,5 +360,80 @@
                 })
                 .catch(err => console.error(err));
         });
+
+        // Submit form tambah akademik modal
+        document.getElementById('form-add-academic').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const type = document.getElementById('add-academic-type').value;
+            const value = document.getElementById('add-academic-value').value;
+            const token = document.querySelector('input[name="_token"]').value;
+
+            fetch("{{ route('profil.update.academic') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": token,
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify({ type: type, value: value, action: 'add' })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        updateAcademicDisplay(type, data.items);
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('addAcademicModal'));
+                        modal.hide();
+                    } else {
+                        alert(data.error || 'Terjadi kesalahan');
+                    }
+                })
+                .catch(err => console.error(err));
+        });
+
+        // Hapus item akademik
+        function deleteAcademicItem(type, index) {
+            if (confirm('Apakah Anda yakin ingin menghapus item ini?')) {
+                const token = document.querySelector('input[name="_token"]').value;
+
+                fetch("{{ route('profil.delete.academic') }}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": token,
+                        "Accept": "application/json"
+                    },
+                    body: JSON.stringify({ type: type, index: index })
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            updateAcademicDisplay(type, data.items);
+                        } else {
+                            alert(data.error || 'Terjadi kesalahan');
+                        }
+                    })
+                    .catch(err => console.error(err));
+            }
+        }
+
+        // Update tampilan akademik
+        function updateAcademicDisplay(type, items) {
+            const container = document.getElementById('list-' + type);
+            container.innerHTML = '';
+
+            items.forEach((item, index) => {
+                if (item.trim() !== '') {
+                    const div = document.createElement('div');
+                    div.className = 'academic-item';
+                    div.setAttribute('data-index', index);
+                    div.innerHTML = `
+                        <span>${item.trim()}</span>
+                        <i class="fa fa-trash delete-btn" onclick="deleteAcademicItem('${type}', ${index})" title="Hapus item"></i>
+                    `;
+                    container.appendChild(div);
+                }
+            });
+        }
     </script>
 @endsection

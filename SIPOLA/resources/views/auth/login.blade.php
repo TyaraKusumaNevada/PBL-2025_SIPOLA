@@ -1,6 +1,7 @@
 {{-- File: resources/views/auth/login.blade.php --}}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -25,8 +26,8 @@
     .form-control:focus {
       border-left: none;
       box-shadow: 0.25rem 0 0 0 #3B82F6,
-                  0 0.15rem 0 0 #3B82F6,
-                  0 -2px 0 0 #3B82F6;
+        0 0.15rem 0 0 #3B82F6,
+        0 -2px 0 0 #3B82F6;
     }
 
     .form-control {
@@ -102,8 +103,9 @@
       <div class="col-md-4 d-flex align-items-center justify-content-center">
         <form id="form-login" action="/login" method="POST" class="w-75">
           @csrf
-          <img src="{{ asset('image/logo_sipola.png') }}" alt="Gambar Logo" class="logo-image h-50 w-50 d-block mx-auto">
-          
+          <img src="{{ asset('image/logo_sipola.png') }}" alt="Gambar Logo"
+            class="logo-image h-50 w-50 d-block mx-auto">
+
           <!-- Username -->
           <div class="mb-3">
             <div class="input-group">
@@ -157,13 +159,15 @@
           },
           success: function (response) {
             if (response.status) {
-              window.location.href = response.redirect;
+              // arahkan ke route /welcome saat login sukses
+              window.location.href = '/welcome';
             } else {
               $.each(response.messages, function (field, messages) {
                 $('#error-' + field).text(messages[0]);
               });
             }
           },
+
           error: function (xhr) {
             if (xhr.status === 422) {
               var errors = xhr.responseJSON.errors;
@@ -179,4 +183,5 @@
     });
   </script>
 </body>
+
 </html>
