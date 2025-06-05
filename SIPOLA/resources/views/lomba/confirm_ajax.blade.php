@@ -31,20 +31,8 @@
                     <tr><th class="text-end">Kategori Lomba:</th><td>{{ $lomba->kategori_lomba }}</td></tr>
                     <tr><th class="text-end">Tingkat:</th><td>{{ ucfirst($lomba->tingkat_lomba) }}</td></tr>
                     <tr><th class="text-end">Penyelenggara:</th><td>{{ $lomba->penyelenggara_lomba }}</td></tr>
-                    <tr><th class="text-end">Deskripsi:</th><td>{{ $lomba->deskripsi }}</td></tr>
                     <tr><th class="text-end">Tanggal Mulai:</th><td>{{ $lomba->tanggal_mulai }}</td></tr>
                     <tr><th class="text-end">Tanggal Selesai:</th><td>{{ $lomba->tanggal_selesai }}</td></tr>
-                    <tr><th class="text-end">Status Verifikasi:</th><td>{{ $lomba->status_verifikasi }}</td></tr>
-                    <tr>
-                        <th class="text-end">Pamflet:</th>
-                        <td>
-                            @if($lomba->pamflet_lomba)
-                                <img src="{{ asset('storage/pamflet_lomba/' . $lomba->pamflet_lomba) }}" alt="Pamflet" class="img-fluid" style="max-width: 200px;">
-                            @else
-                                <span class="text-muted">Tidak ada pamflet</span>
-                            @endif
-                        </td>
-                    </tr>
                 </table>
             </div>
             <div class="modal-footer">
@@ -63,25 +51,46 @@
                         type: form.method,
                         data: $(form).serialize(),
                         success: function(response) {
-                        if (response.status) {
-                            // Tutup modal yang benar
-                            const modalEl = document.getElementById('myModal');
-                            const modalInstance = bootstrap.Modal.getInstance(modalEl);
-                            if (modalInstance) {
-                                modalInstance.hide();
+                            if (response.status) {
+                                $('#myModal').modal('hide'); // pastikan ID modal sesuai
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Berhasil',
+                                    text: response.message
+                                });
+                                dataLomba.ajax.reload();
+                            } else {
+                                $('.error-text').text('');
+                                $.each(response.msgField, function(prefix, val) {
+                                    $('#error-' + prefix).text(val[0]);
+                                });
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Terjadi Kesalahan',
+                                    text: response.message
+                                });
                             }
-
-                            // Reload datatable
-                            $('#table_lomba').DataTable().ajax.reload();
-
-                            // Notifikasi sukses
-                            Swal.fire('Berhasil', response.message, 'success');
-                        } else {
-                            Swal.fire('Gagal', response.message, 'error');
+                        },
+                        error: function(xhr) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal',
+                                text: 'Terjadi kesalahan saat menghapus data.'
+                            });
                         }
-                    },
                     });
                     return false;
+                },
+                errorElement: 'span',
+                errorPlacement: function(error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function(element) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function(element) {
+                    $(element).removeClass('is-invalid');
                 }
             });
         });
