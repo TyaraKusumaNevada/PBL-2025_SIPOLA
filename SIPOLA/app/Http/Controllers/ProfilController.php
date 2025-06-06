@@ -32,6 +32,40 @@ class ProfilController extends Controller
         return view('profil.index', compact('user', 'mahasiswa', 'fotoPath'));
     }
 
+     public function indexAdmin()
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        $fotoPath = asset('storage/foto_profil/user_' . $user->id . '.jpg');
+
+        if (!file_exists(public_path('storage/foto_profil/user_' . $user->id . '.jpg'))) {
+            $fotoPath = asset('storage/foto_profil/user_.jpg');
+        }
+
+        return view('profil.indexAdmin', compact('user', 'fotoPath'));
+    }
+
+     public function indexDosen()
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        $fotoPath = asset('storage/foto_profil/user_' . $user->id . '.jpg');
+
+        if (!file_exists(public_path('storage/foto_profil/user_' . $user->id . '.jpg'))) {
+            $fotoPath = asset('storage/foto_profil/user_.jpg');
+        }
+
+        return view('profil.indexDosen', compact('user', 'fotoPath'));
+    }
+
     public function updateUsername(Request $request)
     {
         $user = Auth::user();

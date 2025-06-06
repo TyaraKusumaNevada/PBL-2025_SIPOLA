@@ -1,4 +1,3 @@
-{{-- File: resources/views/auth/login.blade.php --}}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -101,10 +100,9 @@
 
       <!-- Kolom Form Login -->
       <div class="col-md-4 d-flex align-items-center justify-content-center">
-        <form id="form-login" action="/login" method="POST" class="w-75">
+        <form id="form-login" action="{{ url('/loginPost') }}" method="POST" class="w-75">
           @csrf
-          <img src="{{ asset('image/logo_sipola.png') }}" alt="Gambar Logo"
-            class="logo-image h-50 w-50 d-block mx-auto">
+          <img src="{{ asset('image/logo_sipola.png') }}" alt="Gambar Logo" class="logo-image h-50 w-50 d-block mx-auto">
 
           <!-- Username -->
           <div class="mb-3">
@@ -128,7 +126,7 @@
           <button type="submit" class="btn custom-primary w-100">Masuk</button>
 
           <!-- Link ke Signin -->
-          <div class="text-center mt-4">
+          <div class="text-center mt-2">
             <small class="form-text text-muted">
               Belum punya akun? <a href="{{ url('/signin') }}" class="custom">Signin</a>
             </small>
@@ -138,47 +136,73 @@
     </div>
   </div>
 
-  <!-- jQuery & Bootstrap JS -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- JavaScript -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <script>
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+
     $(document).ready(function () {
-      $('#form-login').on('submit', function (e) {
-        e.preventDefault();
-        $('.error-text').text('');
-
-        $.ajax({
-          url: $(this).attr('action'),
-          method: $(this).attr('method'),
-          data: $(this).serialize(),
-          dataType: 'json',
-          headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      $("#form-login").validate({
+        rules: {
+          username: {
+            required: true,
+            minlength: 3,
+            maxlength: 20
           },
-          success: function (response) {
-            if (response.status) {
-              // arahkan ke route /welcome saat login sukses
-              window.location.href = '/welcome';
-            } else {
-              $.each(response.messages, function (field, messages) {
-                $('#error-' + field).text(messages[0]);
-              });
-            }
-          },
-
-          error: function (xhr) {
-            if (xhr.status === 422) {
-              var errors = xhr.responseJSON.errors;
-              $.each(errors, function (field, messages) {
-                $('#error-' + field).text(messages[0]);
-              });
-            } else {
-              alert('Terjadi kesalahan. Silakan coba lagi nanti.');
-            }
+          password: {
+            required: true,
+            minlength: 5,
+            maxlength: 20
           }
-        });
+        },
+        submitHandler: function (form) {
+          $.ajax({
+            url: form.action,
+            type: form.method,
+            data: $(form).serialize(),
+            success: function (response) {
+              if (response.status) {
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Berhasil',
+                  text: response.message,
+                }).then(function () {
+                  window.location = response.redirect;
+                });
+              } else {
+                $('.error-text').text('');
+                $.each(response.msgField, function (prefix, val) {
+                  $('#error-' + prefix).text(val[0]);
+                });
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Terjadi Kesalahan',
+                  text: response.message
+                });
+              }
+            }
+          });
+          return false;
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+          error.addClass('invalid-feedback');
+          element.closest('.input-group').append(error);
+        },
+        highlight: function (element) {
+          $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element) {
+          $(element).removeClass('is-invalid');
+        }
       });
     });
   </script>

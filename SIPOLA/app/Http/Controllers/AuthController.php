@@ -66,7 +66,7 @@ class AuthController extends Controller
                 $userData = $dosen;
             } else {
                 // Check in admin table
-                $admin = AdminModel::where('nama_admin', $request->username)->first();
+                $admin = AdminModel::where('nama', $request->username)->first();
                 
                 if ($admin) {
                     $userFound = true;
@@ -106,7 +106,7 @@ class AuthController extends Controller
                 
                 // Redirect based on user role
                 
-              $redirectTo = '/';
+              $redirectTo = '/home';
                 
                 // Send response for the client-side alert (successful login)
                 return response()->json([
