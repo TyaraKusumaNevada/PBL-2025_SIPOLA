@@ -35,6 +35,7 @@ class MahasiswaModel extends Model
     }
 
 
+
     public function angkatan(): BelongsTo {
     return $this->belongsTo(AngkatanModel::class, 'id_angkatan', 'id_angkatan');
 }
@@ -42,7 +43,7 @@ class MahasiswaModel extends Model
 
     public function prodi(): BelongsTo {
         return $this->belongsTo(ProgramStudiModel::class, 'id_prodi','id');
-a71b31864e7e0d8bb35337fb4e423b1f6
+
     }
 
     public function rekomendasi(): HasMany {

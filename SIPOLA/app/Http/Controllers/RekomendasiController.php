@@ -12,6 +12,7 @@ class RekomendasiController extends Controller
         return view('rekomendasi.form');
     }
 
+
     public function hitung(Request $request)
     {
         $request->validate([
