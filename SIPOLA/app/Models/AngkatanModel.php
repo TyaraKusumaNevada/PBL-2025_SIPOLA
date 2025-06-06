@@ -12,6 +12,7 @@ class AngkatanModel extends Model
     protected $fillable = ['semester', 'tahun_ajaran'];
 
     public function mahasiswa() {
-        return $this->hasMany(MahasiswaModel::class, 'id_angkatan');
+        return $this->hasMany(MahasiswaModel::class, 'id_angkatan', 'id');
     }
+    
 }

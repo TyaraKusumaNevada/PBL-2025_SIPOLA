@@ -1,7 +1,6 @@
 <?php
 namespace App\Models;
 
-use App\Models\PrestasiModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,12 +8,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class MahasiswaModel extends Model
 {
+    use HasFactory;
+
     protected $table = 'mahasiswa';
     protected $primaryKey = 'id_mahasiswa';
-    
-    // Menambahkan 'id_role' ke dalam $fillable
+
     protected $fillable = [
-        'id_prodi', 
+        'id', 
         'nama', 
         'nim', 
         'password', 
@@ -23,26 +23,27 @@ class MahasiswaModel extends Model
         'bidang_keahlian', 
         'minat', 
         'id_angkatan', 
-        'id_role', // Menambahkan id_role di sini
+        'id_role',
     ];
 
-    public function role(): BelongsTo {         //1 mahasiswa memiliki 1 role
+    public function role(): BelongsTo {
         return $this->belongsTo(RoleModel::class, 'id_role', 'id_role');
     }
 
-    public function prestasi(): HasMany {       //mahasiswa memiliki banyak prestasi
+    public function prestasi(): HasMany {
         return $this->hasMany(PrestasiModel::class, 'id_mahasiswa', 'id_mahasiswa');
     }
 
-    public function angkatan() {
-        return $this->belongsTo(AngkatanModel::class, 'id_angkatan');
+    public function angkatan(): BelongsTo {
+    return $this->belongsTo(AngkatanModel::class, 'id_angkatan', 'id_angkatan');
+}
+
+
+    public function prodi(): BelongsTo {
+        return $this->belongsTo(ProgramStudiModel::class, 'id_prodi','id');
     }
 
-    public function prodi() {
-        return $this->belongsTo(ProgramStudiModel::class, 'id_prodi');
-    }
-
-    public function rekomendasi() {
+    public function rekomendasi(): HasMany {
         return $this->hasMany(RekomendasiModel::class, 'id_mahasiswa');
     }
 }

@@ -2,7 +2,6 @@
 
 @section('content')
     <style>
-        
         .btn-back:hover {
             background-color: #f41800 !important;
             border-color: #f41800 !important;
@@ -111,8 +110,13 @@
                 <div class="col-md-6">
                     <h3 id="display-nama">{{ $user->name }}</h3>
                     <p><strong>NIM:</strong> <span id="display-username">{{ $user->username }}</span></p>
-                    <p><strong>Program Studi:</strong> Teknik Informatika</p>
-                    <p><strong>Angkatan:</strong> 2022</p>
+                    @if ($mahasiswa)
+                        <p><strong>Program Studi:</strong> {{ $mahasiswa->prodi->nama_prodi ?? '-' }}</p>
+                      
+                    @else
+                        <p><strong>Program Studi:</strong> -</p>
+                    
+                    @endif
                 </div>
                 <div class="col-md-3 text-end">
                     <button class="btn btn-outline-primary" id="btn-edit-profile">
@@ -139,7 +143,8 @@
                     </div>
                     <div class="mb-3">
                         <label for="foto_profil" class="form-label">Foto Profil (jpg/png, max 2MB)</label>
-                        <input type="file" class="form-control" id="foto_profil" name="foto_profil" accept=".jpg,.jpeg,.png">
+                        <input type="file" class="form-control" id="foto_profil" name="foto_profil"
+                            accept=".jpg,.jpeg,.png">
                         <div id="error-foto" class="text-danger mt-1" style="display:none;"></div>
                     </div>
                     <button type="submit" class="btn btn-success">Simpan</button>
@@ -162,7 +167,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (['bidang_keahlian' => 'Keahlian', 'sertifikasi' => 'Minat', 'pengalaman' => 'Pengalaman'] as $key => $label)
+                            @foreach (['keahlian' => 'Keahlian', 'minat' => 'Minat', 'pengalaman' => 'Pengalaman'] as $key => $label)
                                 <tr>
                                     <td>{{ $label }}</td>
                                     <td id="td-{{ $key }}">
@@ -171,7 +176,9 @@
                                                 @if(trim($item) != '')
                                                     <div class="academic-item" data-index="{{ $index }}">
                                                         <span>{{ trim($item) }}</span>
-                                                        <i class="fa fa-trash delete-btn" onclick="deleteAcademicItem('{{ $key }}', {{ $index }})" title="Hapus item"></i>
+                                                        <i class="fa fa-trash delete-btn"
+                                                            onclick="deleteAcademicItem('{{ $key }}', {{ $index }})"
+                                                            title="Hapus item"></i>
                                                     </div>
                                                 @endif
                                             @endforeach
@@ -192,7 +199,8 @@
         </div>
 
         {{-- Modal Edit Akademik --}}
-        <div class="modal fade" id="editAcademicModal" tabindex="-1" aria-labelledby="editAcademicModalLabel" aria-hidden="true">
+        <div class="modal fade" id="editAcademicModal" tabindex="-1" aria-labelledby="editAcademicModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog">
                 <form id="form-edit-academic" class="modal-content">
                     @csrf
@@ -214,7 +222,8 @@
         </div>
 
         {{-- Modal Tambah Akademik --}}
-        <div class="modal fade" id="addAcademicModal" tabindex="-1" aria-labelledby="addAcademicModalLabel" aria-hidden="true">
+        <div class="modal fade" id="addAcademicModal" tabindex="-1" aria-labelledby="addAcademicModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog">
                 <form id="form-add-academic" class="modal-content">
                     @csrf
@@ -428,9 +437,9 @@
                     div.className = 'academic-item';
                     div.setAttribute('data-index', index);
                     div.innerHTML = `
-                        <span>${item.trim()}</span>
-                        <i class="fa fa-trash delete-btn" onclick="deleteAcademicItem('${type}', ${index})" title="Hapus item"></i>
-                    `;
+                            <span>${item.trim()}</span>
+                            <i class="fa fa-trash delete-btn" onclick="deleteAcademicItem('${type}', ${index})" title="Hapus item"></i>
+                        `;
                     container.appendChild(div);
                 }
             });

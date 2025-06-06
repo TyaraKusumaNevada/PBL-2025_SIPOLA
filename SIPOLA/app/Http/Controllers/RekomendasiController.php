@@ -25,8 +25,7 @@ class RekomendasiController extends Controller
         $user = Auth::user();
         $ipk = floatval($request->input('ipk'));
 
-        // Tentukan tingkatan lomba berdasarkan IPK
-        $tingkatanLomba = [];
+        // Tentukan tingkat lomba berdasarkan IPK
         if ($ipk < 3.0) {
             $tingkatanLomba = ['lokal'];
         } elseif ($ipk <= 3.4) {
@@ -35,19 +34,30 @@ class RekomendasiController extends Controller
             $tingkatanLomba = ['lokal', 'regional', 'internasional'];
         }
 
-        // Fungsi pembobotan
+        $keahlian = array_map('trim', explode(',', $user->keahlian ?? ''));
+        $pengalaman = array_map('trim', explode(',', $user->pengalaman ?? ''));
+        $minat = array_map('trim', explode(',', $user->minat ?? ''));
+
+        $opsiBidang = ['Desain', 'UI/UX', 'Olahraga'];
+
+        $bobotBidang = [];
+        foreach ($opsiBidang as $bidang) {
+            if (in_array($bidang, $keahlian)) {
+                $bobotBidang[$bidang] = 1.0;
+            } elseif (in_array($bidang, $pengalaman)) {
+                $bobotBidang[$bidang] = 0.5;
+            } elseif (in_array($bidang, $minat)) {
+                $bobotBidang[$bidang] = 0.1;
+            } else {
+                $bobotBidang[$bidang] = 0.0;
+            }
+        }
+
         function buatBobot($opsi, $pilihanUser)
         {
             $bobotTinggi = 1.0;
             $bobotRendah = 0.4;
             $bobot = [];
-
-            if (!$pilihanUser || (is_string($pilihanUser) && strtolower($pilihanUser) === 'default')) {
-                foreach ($opsi as $opsiItem) {
-                    $bobot[$opsiItem] = 0.0;
-                }
-                return $bobot;
-            }
 
             foreach ($opsi as $opsiItem) {
                 $bobot[$opsiItem] = ($opsiItem === $pilihanUser) ? $bobotTinggi : $bobotRendah;
@@ -56,70 +66,24 @@ class RekomendasiController extends Controller
             return $bobot;
         }
 
-              // Bobot bidang berdasarkan keahlian, minat dan hubungan kedekatan
-        $opsiBidang = ['IT', 'Sains', 'Desain', 'UI/UX', 'Olahraga'];
-        $bobotBidang = [];
+        $hargaUser = floatval($request->input('harga'));
 
-        $keahlian = $user->bidang_keahlian;
-        $minat = $user->sertifikasi;
-
-        foreach ($opsiBidang as $bidang) {
-            if ($bidang === $keahlian) {
-                $bobotBidang[$bidang] = 1.0;
-            } elseif (
-                ($keahlian === 'IT' && $bidang === 'UI/UX') ||
-                ($keahlian === 'UI/UX' && $bidang === 'IT') ||
-                ($keahlian === 'Desain' && $bidang === 'UI/UX') ||
-                ($keahlian === 'UI/UX' && $bidang === 'Desain')
-            ) {
-                $bobotBidang[$bidang] = 0.5;
-            } elseif ($bidang === $minat) {
-                $bobotBidang[$bidang] = 0.1;
-            } else {
-                $bobotBidang[$bidang] = 0.0;
-            }
-        }
-
-        // Bobot kriteria lainnya
         $bobotKriteria = [
             'jenis'   => buatBobot(['individu', 'tim'], $request->jenis),
-            'bidang'  => $bobotBidang,
+            'syarat'  => buatBobot(['bebas', 'folow ig', 'upload twiboon'], $request->syarat),
             'benefit' => buatBobot(['Dana Transportasi', 'Makan', 'Penginapan', 'Sertifikat', 'Gratis'], $request->benefit),
+            'bidang'  => $bobotBidang,
         ];
 
-        // Daftar lomba
         $lombaList = [
-            [
-                'nama' => 'Lomba Coding Nasional',
-                'tingkat' => 'internasional',
-                'jenis' => 'individu',
-                'bidang' => 'IT',
-                'benefit' => 'Sertifikat',
-                'harga' => 50000
-            ],
-            [
-                'nama' => 'Olimpiade Matematika',
-                'tingkat' => 'lokal',
-                'jenis' => 'tim',
-                'bidang' => 'Sains',
-                'benefit' => 'Makan',
-                'harga' => 30000
-            ],
             [
                 'nama' => 'Desain Poster Digital',
                 'tingkat' => 'regional',
                 'jenis' => 'individu',
                 'bidang' => 'Desain',
                 'benefit' => 'Gratis',
-                'harga' => 0
-            ],
-            [
-                'nama' => 'Hackathon Jawa Timur',
-                'tingkat' => 'regional',
-                'jenis' => 'tim',
-                'bidang' => 'IT',
-                'benefit' => 'Dana Transportasi',
-                'harga' => 75000
+                'harga' => 0,
+                'syarat' => 'folow ig'
             ],
             [
                 'nama' => 'UI/UX Challenge 2025',
@@ -127,7 +91,8 @@ class RekomendasiController extends Controller
                 'jenis' => 'individu',
                 'bidang' => 'UI/UX',
                 'benefit' => 'Penginapan',
-                'harga' => 60000
+                'harga' => 60000,
+                'syarat' => 'upload twiboon'
             ],
             [
                 'nama' => 'SportiCore',
@@ -135,85 +100,159 @@ class RekomendasiController extends Controller
                 'jenis' => 'tim',
                 'bidang' => 'Olahraga',
                 'benefit' => 'Sertifikat',
-                'harga' => 25000
+                'harga' => 25000,
+                'syarat' => 'bebas'
             ],
         ];
 
-        // Filter lomba berdasarkan IPK
-        $lombaList = array_filter($lombaList, function ($lomba) use ($tingkatanLomba) {
+        // Filter lomba berdasarkan tingkat
+        $lombaList = array_values(array_filter($lombaList, function ($lomba) use ($tingkatanLomba) {
             return in_array($lomba['tingkat'], $tingkatanLomba);
-        });
+        }));
 
-        $lombaList = array_values($lombaList); // reset index
-
-        // Matriks awal bobot
+        // Buat matriks awal, hitung nilai harga alternatif (1 atau 0.4)
         $matriks = [];
+
+        // Buat array nilai harga alternatif untuk cari nilai terkecil
+        $nilaiHargaAlternatif = [];
+
         foreach ($lombaList as $lomba) {
+            $nilaiHarga = ($lomba['harga'] == $hargaUser) ? 1.0 : 0.4;
+            $nilaiHargaAlternatif[] = $nilaiHarga;
+        }
+
+        // Ambil nilai harga terkecil dari alternatif (misal 0.4)
+        $hargaTerkecil = min($nilaiHargaAlternatif);
+
+        // Baris A0 dengan kriteria harga = nilai terkecil dari alternatif,
+        // kriteria lain tetap 1
+        $matriks[] = [
+            'nama'        => 'A0',
+            'tingkat'     => 'optimal',
+            'jenis_text'  => 'optimal',
+            'bidang_text' => 'optimal',
+            'syarat_text' => 'optimal',
+            'harga_text'  => (string) $hargaTerkecil,
+            'jenis'       => 1,
+            'bidang'      => 1,
+            'benefit'     => 1,
+            'syarat'      => 1,
+            'harga'       => $hargaTerkecil,
+        ];
+
+        foreach ($lombaList as $lomba) {
+            $nilaiHarga = ($lomba['harga'] == $hargaUser) ? 1.0 : 0.4;
+
             $matriks[] = [
-                'nama'    => $lomba['nama'],
-                'tingkat' => $lomba['tingkat'],
-                'jenis'   => $bobotKriteria['jenis'][$lomba['jenis']] ?? 0,
-                'bidang'  => $bobotKriteria['bidang'][$lomba['bidang']] ?? 0,
-                'benefit' => $bobotKriteria['benefit'][$lomba['benefit']] ?? 0,
-                'harga'   => floatval($lomba['harga']),
+                'nama'        => $lomba['nama'],
+                'tingkat'     => $lomba['tingkat'],
+                'jenis_text'  => $lomba['jenis'],
+                'bidang_text' => $lomba['bidang'],
+                'syarat_text' => $lomba['syarat'],
+                'harga_text'  => 'Rp ' . number_format($lomba['harga'], 0, ',', '.'),
+                'jenis'       => $bobotKriteria['jenis'][$lomba['jenis']] ?? 0,
+                'bidang'      => $bobotKriteria['bidang'][$lomba['bidang']] ?? 0,
+                'benefit'     => $bobotKriteria['benefit'][$lomba['benefit']] ?? 0,
+                'syarat'      => $bobotKriteria['syarat'][$lomba['syarat']] ?? 0,
+                'harga'       => $nilaiHarga,
             ];
         }
 
-        // Total masing-masing kriteria (harga sebagai cost)
+        // Tahap 2: Normalisasi
+        // Calculate the sum of all values for each criterion, including 'harga'
         $total = [
-            'jenis'   => array_sum(array_column($matriks, 'jenis')),
             'bidang'  => array_sum(array_column($matriks, 'bidang')),
             'benefit' => array_sum(array_column($matriks, 'benefit')),
+            'jenis'   => array_sum(array_column($matriks, 'jenis')),
+            'syarat'  => array_sum(array_column($matriks, 'syarat')),
+            'harga'   => array_sum(array_column($matriks, 'harga')), // Calculate total sum for 'harga'
         ];
 
-        $hargaList = array_column($matriks, 'harga');
-        $hargaMin = min($hargaList);
-
-        // Normalisasi
         $normalisasi = [];
         foreach ($matriks as $item) {
+            $normalizedHarga = 0;
+            // Apply the specific normalization for 'harga' (cost)
+            if ($total['harga'] > 0) {
+                // Ensure item['harga'] is not zero to avoid division by zero for the inverse
+                if ($item['harga'] != 0) {
+                    $normalizedHarga = (1 / $item['harga']) / $total['harga'];
+                }
+            }
+
             $normalisasi[] = [
                 'nama'    => $item['nama'],
-                'jenis'   => $total['jenis'] > 0 ? $item['jenis'] / $total['jenis'] : 0,
                 'bidang'  => $total['bidang'] > 0 ? $item['bidang'] / $total['bidang'] : 0,
                 'benefit' => $total['benefit'] > 0 ? $item['benefit'] / $total['benefit'] : 0,
-                'harga'   => $item['harga'] > 0 ? $hargaMin / $item['harga'] : 1,
+                'jenis'   => $total['jenis'] > 0 ? $item['jenis'] / $total['jenis'] : 0,
+                'syarat'  => $total['syarat'] > 0 ? $item['syarat'] / $total['syarat'] : 0,
+                'harga'   => $normalizedHarga, // Use the new normalization for 'harga'
             ];
         }
 
-        // Bobot global (total 1.0)
+        // Tahap 3: Normalisasi Terbobot
         $bobotGlobal = [
-            'bidang'  => 0.6,
-            'jenis'   => 0.1,
-            'benefit' => 0.15,
-            'harga'   => 0.15, // cost
+            'bidang'  => 0.4,
+            'benefit' => 0.2,
+            'jenis'   => 0.15,
+            'harga'   => 0.15,
+            'syarat'  => 0.1,
         ];
 
-        // Hitung skor akhir
-        $hasil = [];
-        foreach ($normalisasi as $i => $item) {
-            $skor =
-                ($item['jenis']   * $bobotGlobal['jenis']) +
-                ($item['bidang']  * $bobotGlobal['bidang']) +
-                ($item['benefit'] * $bobotGlobal['benefit']) +
-                ($item['harga']   * $bobotGlobal['harga']); // cost lebih baik jika lebih kecil
-
-            $hasil[] = [
-                'lomba'         => $lombaList[$i],
-                'skor'          => $skor,
-                'skor_relatif'  => 0,
+        $normalisasiTerbobot = [];
+        foreach ($normalisasi as $item) {
+            $normalisasiTerbobot[] = [
+                'nama'    => $item['nama'],
+                'bidang'  => $item['bidang'] * $bobotGlobal['bidang'],
+                'benefit' => $item['benefit'] * $bobotGlobal['benefit'],
+                'jenis'   => $item['jenis'] * $bobotGlobal['jenis'],
+                'harga'   => $item['harga'] * $bobotGlobal['harga'],
+                'syarat'  => $item['syarat'] * $bobotGlobal['syarat'],
             ];
         }
 
-        // Normalisasi skor relatif
-        $s0 = max(array_column($hasil, 'skor'));
-        foreach ($hasil as &$item) {
-            $item['skor_relatif'] = $s0 > 0 ? $item['skor'] / $s0 : 0;
+        // Tahap 4: Hitung Si dan Ki
+        $hasil = [];
+        $s0 = 0;
+
+        foreach ($normalisasiTerbobot as $i => $item) {
+            $si = $item['bidang'] + $item['benefit'] + $item['jenis'] + $item['harga'] + $item['syarat'];
+            if ($item['nama'] === 'A0') {
+                $s0 = $si;
+            } else {
+                // Adjust index for $lombaList as it doesn't include A0
+                $lombaIndex = $i - 1;
+                // Ensure the index is valid for $lombaList
+                if (isset($lombaList[$lombaIndex])) {
+                    $hasil[] = [
+                        'lomba' => $lombaList[$lombaIndex],
+                        'si' => round($si, 4),
+                        'ki' => 0,
+                        'ranking' => 0,
+                    ];
+                }
+            }
         }
 
-        // Urutkan berdasarkan skor relatif tertinggi
-        usort($hasil, fn($a, $b) => $b['skor_relatif'] <=> $a['skor_relatif']);
+        foreach ($hasil as &$item) {
+            $item['ki'] = $s0 > 0 ? round($item['si'] / $s0, 4) : 0;
+        }
 
-        return view('rekomendasi.hasil', compact('hasil', 'matriks'));
+        usort($hasil, fn($a, $b) => $b['ki'] <=> $a['ki']);
+        foreach ($hasil as $index => &$item) {
+            $item['ranking'] = $index + 1;
+        }
+
+        $arasData = [
+            'matriks_keputusan' => $matriks,
+            'normalisasi' => $normalisasi,
+            'normalisasi_terbobot' => $normalisasiTerbobot,
+            'bobot_global' => $bobotGlobal,
+            'harga_user' => $hargaUser,
+            's0' => round($s0, 4),
+            'total_normalisasi' => $total,
+            // 'total_harga' => $totalHarga, // Redundant, already in $total
+        ];
+
+        return view('rekomendasi.hasil', compact('hasil', 'matriks', 'arasData'));
     }
 }

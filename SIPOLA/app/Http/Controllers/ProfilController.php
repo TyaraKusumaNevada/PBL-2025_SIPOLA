@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
+use App\Models\MahasiswaModel;
 
 class ProfilController extends Controller
 {
@@ -17,13 +18,18 @@ class ProfilController extends Controller
             return redirect()->route('login');
         }
 
+        // Ambil data mahasiswa terkait (berelasi dengan user login)
+        $mahasiswa = MahasiswaModel::with(['prodi', 'angkatan'])
+            ->where('id_mahasiswa', $user->id)
+            ->first();
+
         $fotoPath = asset('storage/foto_profil/user_' . $user->id . '.jpg');
 
         if (!file_exists(public_path('storage/foto_profil/user_' . $user->id . '.jpg'))) {
             $fotoPath = asset('storage/foto_profil/user_.jpg');
         }
 
-        return view('profil.index', compact('user', 'fotoPath'));
+        return view('profil.index', compact('user', 'mahasiswa', 'fotoPath'));
     }
 
     public function updateUsername(Request $request)
@@ -52,6 +58,7 @@ class ProfilController extends Controller
     public function updateAcademicProfile(Request $request)
     {
         $user = Auth::user();
+        $mahasiswa = MahasiswaModel::where('id_mahasiswa', $user->id)->firstOrFail();
 
         $request->validate([
             'type' => ['required', 'in:keahlian,minat,pengalaman'],
@@ -64,34 +71,20 @@ class ProfilController extends Controller
             $value = $request->value;
             $action = $request->action ?? 'update';
 
-            // Field mapping
-            $fieldMap = [
-                'keahlian' => 'keahlian',
-                'minat' => 'minat',
-                'pengalaman' => 'pengalaman',
-            ];
-
-            $field = $fieldMap[$type];
-
             if ($action === 'add') {
-                // Tambah item baru
-                $existing = $user->$field ? explode(';', $user->$field) : [];
+                $existing = $mahasiswa->$type ? explode(';', $mahasiswa->$type) : [];
                 $existing = array_filter(array_map('trim', $existing));
                 $existing[] = trim($value);
-                
-                $user->$field = implode(';', $existing);
+                $mahasiswa->$type = implode(';', $existing);
             } else {
-                // Update semua data (replace)
                 $items = explode(';', $value);
                 $items = array_filter(array_map('trim', $items));
-                
-                $user->$field = implode(';', $items);
+                $mahasiswa->$type = implode(';', $items);
             }
 
-            $user->save();
+            $mahasiswa->save();
 
-            // Return updated items
-            $updatedItems = $user->$field ? explode(';', $user->$field) : [];
+            $updatedItems = $mahasiswa->$type ? explode(';', $mahasiswa->$type) : [];
             $updatedItems = array_filter(array_map('trim', $updatedItems));
 
             return response()->json([
@@ -109,6 +102,7 @@ class ProfilController extends Controller
     public function deleteAcademicItem(Request $request)
     {
         $user = Auth::user();
+        $mahasiswa = MahasiswaModel::where('id_user', $user->id)->firstOrFail();
 
         $request->validate([
             'type' => ['required', 'in:keahlian,minat,pengalaman'],
@@ -119,36 +113,20 @@ class ProfilController extends Controller
             $type = $request->type;
             $indexToDelete = $request->index;
 
-            // Field mapping
-            $fieldMap = [
-                'keahlian' => 'keahlian',
-                'minat' => 'minat',
-                'pengalaman' => 'pengalaman',
-            ];
+            $items = $mahasiswa->$type ? explode(';', $mahasiswa->$type) : [];
+            $items = array_values(array_filter(array_map('trim', $items)));
 
-            $field = $fieldMap[$type];
-
-            // Get current items
-            $items = $user->$field ? explode(';', $user->$field) : [];
-            $items = array_filter(array_map('trim', $items));
-
-            // Re-index array to ensure consecutive indices
-            $items = array_values($items);
-
-            // Check if index exists
             if (!isset($items[$indexToDelete])) {
                 return response()->json([
                     'error' => 'Item tidak ditemukan.'
                 ], 404);
             }
 
-            // Remove item at specified index
             unset($items[$indexToDelete]);
-            $items = array_values($items); // Re-index array
+            $items = array_values($items);
 
-            // Update database
-            $user->$field = empty($items) ? null : implode(';', $items);
-            $user->save();
+            $mahasiswa->$type = empty($items) ? null : implode(';', $items);
+            $mahasiswa->save();
 
             return response()->json([
                 'success' => true,
@@ -165,6 +143,7 @@ class ProfilController extends Controller
     public function updateProfile(Request $request)
     {
         $user = Auth::user();
+        $mahasiswa = MahasiswaModel::where('id_user', $user->id)->first();
 
         $request->validate([
             'nama' => ['nullable', 'string', 'max:255'],
@@ -173,34 +152,29 @@ class ProfilController extends Controller
         ]);
 
         try {
-            // Update nama jika ada
-            if ($request->filled('nama')) {
-                $user->name = $request->nama;
+            if ($request->filled('nama') && $mahasiswa) {
+                $mahasiswa->nama = $request->nama;
+                $mahasiswa->save();
             }
 
-            // Update username jika ada
             if ($request->filled('username')) {
                 $user->username = $request->username;
             }
 
-            // Update foto profil jika ada file dikirim
             if ($request->hasFile('foto_profil')) {
                 $foto = $request->file('foto_profil');
                 $fileName = 'user_' . $user->id . '.jpg';
                 $destinationPath = public_path('storage/foto_profil');
 
-                // Buat folder jika belum ada
                 if (!file_exists($destinationPath)) {
                     mkdir($destinationPath, 0755, true);
                 }
 
-                // Hapus file lama jika ada
                 $oldPath = $destinationPath . '/' . $fileName;
                 if (file_exists($oldPath)) {
                     unlink($oldPath);
                 }
 
-                // Simpan file baru
                 $foto->move($destinationPath, $fileName);
             }
 
@@ -211,6 +185,7 @@ class ProfilController extends Controller
             return response()->json([
                 'success' => true,
                 'user' => $user,
+                'nama' => $mahasiswa ? $mahasiswa->nama : null,
                 'fotoPath' => $fotoPath,
                 'message' => 'Profil berhasil diperbarui.',
             ]);
