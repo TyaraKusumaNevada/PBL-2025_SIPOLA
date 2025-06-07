@@ -11,6 +11,7 @@ use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\VerifikasiPrestasiController;
 use App\Http\Controllers\TambahLombaController;
 use App\Http\Controllers\DashboardMahasiswaController;
+use App\Http\Controllers\DashboardDospemController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -35,9 +36,9 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->n
     });
 
 // Root view
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 // --- ADMIN Manajemen Program Studi ---
 Route::prefix('admin/ManajemenProdi')->group(function () {
@@ -144,4 +145,9 @@ Route::get('/infolomba', [InfoLombaController::class, 'index'])->name('infolomba
 // -- Dashboard (Mahasiswa) --
 Route::prefix('mahasiswa')->group(function () {
     Route::get('/dashboard', [DashboardMahasiswaController::class, 'index'])->name('mahasiswa.dashboard.data');
+});
+
+// -- Dashboard (Dospem) --
+Route::prefix('dospem')->group(function () {
+    Route::get('/dashboard', [DashboardDospemController::class, 'index'])->name('dospem.dashboard.data');
 });
