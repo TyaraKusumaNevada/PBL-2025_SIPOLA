@@ -1,4 +1,8 @@
 <!-- Sidebar -->
+@php
+    $hakAkses = Auth::user()->id_role;
+@endphp
+
 <div class="user-panel d-flex align-items-center px-3 py-3" style="border-bottom: 1px solid #d1d5db;">
     <a href="{{ route('profil.index') }}" class="d-flex align-items-center text-dark text-decoration-none">
         @php
@@ -30,137 +34,166 @@
 <!-- Menu Items -->
 <ul class="menu-inner">
     <!-- Dashboard Admin -->
-    <li class="menu-item {{ Request::is('admin/dashboard') ? 'active open' : '' }}">
-        <a href="{{ url('/admin/dashboard') }}" class="menu-link d-flex align-items-center">
-            <i class="bi bi-house-door menu-icon fs-5"></i>
-            <div class="text-truncate" data-i18n="Dashboard">Dashboard</div>
-        </a>
-    </li>
+    @if ($hakAkses == 1)
+        <li class="menu-item {{ Request::is('admin/dashboard') ? 'active open' : '' }}">
+            <a href="{{ url('/admin/dashboard') }}" class="menu-link d-flex align-items-center">
+                <i class="bi bi-house-door menu-icon fs-5"></i>
+                <div class="text-truncate" data-i18n="Dashboard">Dashboard</div>
+            </a>
+        </li>
+    @endif
 
     <!-- Dashboard Dospem -->
-    <li class="menu-item {{ Request::is('dospem/dashboard') ? 'active open' : '' }}">
-        <a href="{{ url('/dospem/dashboard') }}" class="menu-link d-flex align-items-center">
-            <i class="bi bi-house-door menu-icon fs-5"></i>
-            <div class="text-truncate" data-i18n="Dashboard">Dashboard</div>
-        </a>
-    </li>
+    @if ($hakAkses == 2)
+        <li class="menu-item {{ Request::is('dospem/dashboard') ? 'active open' : '' }}">
+            <a href="{{ url('/dospem/dashboard') }}" class="menu-link d-flex align-items-center">
+                <i class="bi bi-house-door menu-icon fs-5"></i>
+                <div class="text-truncate" data-i18n="Dashboard">Dashboard</div>
+            </a>
+        </li>
+    @endif
 
     <!-- Dashboard Mahasiswa -->
-    <li class="menu-item {{ Request::is('mahasiswa/dashboard') ? 'active open' : '' }}">
-        <a href="{{ url('/mahasiswa/dashboard') }}" class="menu-link d-flex align-items-center">
-            <i class="bi bi-house-door menu-icon fs-5"></i>
-            <div class="text-truncate" data-i18n="Dashboard">Dashboard</div>
-        </a>
-    </li>
+    @if ($hakAkses == 3)
+        <li class="menu-item {{ Request::is('mahasiswa/dashboard') ? 'active open' : '' }}">
+            <a href="{{ url('/mahasiswa/dashboard') }}" class="menu-link d-flex align-items-center">
+                <i class="bi bi-house-door menu-icon fs-5"></i>
+                <div class="text-truncate" data-i18n="Dashboard">Dashboard</div>
+            </a>
+        </li>
+    @endif
 
     <!-- Profil Admin -->
-    <li class="menu-item {{ Request::is('admin/profil') ? 'active open' : '' }}">
-        <a href="{{ url('/admin/profil') }}" class="menu-link d-flex align-items-center">
-            <i class="bi bi-person-circle menu-icon fs-5"></i>
-            <div class="text-truncate" data-i18n="AdminProfil">Profil</div>
-        </a>
-    </li>
+    @if ($hakAkses == 1)
+        <li class="menu-item {{ Request::is('admin/profil') ? 'active open' : '' }}">
+            <a href="{{ url('/admin/profil') }}" class="menu-link d-flex align-items-center">
+                <i class="bi bi-person-circle menu-icon fs-5"></i>
+                <div class="text-truncate" data-i18n="AdminProfil">Profil</div>
+            </a>
+        </li>
+    @endif
 
     <!-- Profil Dospem -->
-    <li class="menu-item {{ Request::is('dospem/profil') ? 'active open' : '' }}">
-        <a href="{{ url('/dospem/profil') }}" class="menu-link d-flex align-items-center">
-            <i class="bi bi-person-circle menu-icon fs-5"></i>
-            <div class="text-truncate" data-i18n="DospemProfil">Profil</div>
-        </a>
-    </li>
+    @if ($hakAkses == 2)
+        <li class="menu-item {{ Request::is('dospem/profil') ? 'active open' : '' }}">
+            <a href="{{ url('/dospem/profil') }}" class="menu-link d-flex align-items-center">
+                <i class="bi bi-person-circle menu-icon fs-5"></i>
+                <div class="text-truncate" data-i18n="DospemProfil">Profil</div>
+            </a>
+        </li>
+    @endif
 
     <!-- Profil Mahasiswa -->
-    <li class="menu-item {{ Request::is('mahasiswa/profil') ? 'active open' : '' }}">
-        <a href="{{ url('/mahasiswa/profil') }}" class="menu-link d-flex align-items-center">
-            <i class="bi bi-person-circle menu-icon fs-5"></i>
-            <div class="text-truncate" data-i18n="MahasiswaProfil">Profil</div>
-        </a>
-    </li>
-
+    @if ($hakAkses == 3)
+        <li class="menu-item {{ Request::is('mahasiswa/profil') ? 'active open' : '' }}">
+            <a href="{{ url('/mahasiswa/profil') }}" class="menu-link d-flex align-items-center">
+                <i class="bi bi-person-circle menu-icon fs-5"></i>
+                <div class="text-truncate" data-i18n="MahasiswaProfil">Profil</div>
+            </a>
+        </li>
+    @endif
 
     <!-- Unggah Prestasi -->
-    <li class="menu-item {{ Request::is('prestasi') ? 'active open' : '' }}">
-        <a href="{{ url('/prestasi') }}" class="menu-link d-flex align-items-center">
-            <i class="bi bi-file-earmark-text menu-icon fs-5"></i>
-            <div class="text-truncate" data-i18n="ManajemenLomba">Unggah Prestasi</div>
-        </a>
-    </li>
+    @if ($hakAkses == 3)
+        <li class="menu-item {{ Request::is('prestasi') ? 'active open' : '' }}">
+            <a href="{{ url('/prestasi') }}" class="menu-link d-flex align-items-center">
+                <i class="bi bi-file-earmark-text menu-icon fs-5"></i>
+                <div class="text-truncate" data-i18n="ManajemenLomba">Unggah Prestasi</div>
+            </a>
+        </li>
+    @endif
 
     <!-- Menu Admin (Manajemen Lomba) -->
-    <li class="menu-item {{ Request::is('lomba') || Request::is('lomba/*') ? 'active open' : '' }}">
-        <a href="{{ url('/lomba') }}" class="menu-link d-flex align-items-center">
-            <i class="bi bi-trophy menu-icon fs-5"></i>
-            <div class="text-truncate" data-i18n="ManajemenLomba">Manajemen Lomba</div>
-        </a>
-    </li>
+    @if ($hakAkses == 1)
+        <li class="menu-item {{ Request::is('lomba') || Request::is('lomba/*') ? 'active open' : '' }}">
+            <a href="{{ url('/lomba') }}" class="menu-link d-flex align-items-center">
+                <i class="bi bi-trophy menu-icon fs-5"></i>
+                <div class="text-truncate" data-i18n="ManajemenLomba">Manajemen Lomba</div>
+            </a>
+        </li>
+    @endif
 
     <!-- Menu Mahasiswa (Lomba User) -->
-    <li class="menu-item {{ Request::is('lombaUser') || Request::is('lombaUser/*') ? 'active open' : '' }}">
-        <a href="{{ url('/lombaUser') }}" class="menu-link d-flex align-items-center">
-            <i class="bi bi-trophy menu-icon fs-5"></i>
-            <div class="text-truncate" data-i18n="ManajemenLombaUser">Lomba Mahasiswa</div>
-        </a>
-    </li>
+    @if ($hakAkses == 3)
+        <li class="menu-item {{ Request::is('lombaUser') || Request::is('lombaUser/*') ? 'active open' : '' }}">
+            <a href="{{ url('/lombaUser') }}" class="menu-link d-flex align-items-center">
+                <i class="bi bi-trophy menu-icon fs-5"></i>
+                <div class="text-truncate" data-i18n="ManajemenLombaUser">Lomba Mahasiswa</div>
+            </a>
+        </li>
+    @endif
 
-    <!-- Menu Dosen Pembimbing (Lomba Mahasiswa) -->
-    <li class="menu-item">
-        <a href="javascript:void(0);" class="menu-link menu-toggle">
-            <i class="bi bi-journal-text menu-icon fs-5"></i>
-            <div class="text-truncate" data-i18n="InfoLomba">Info Lomba</div>
-        </a>
-        <ul class="menu-sub">
-            <li class="menu-item {{ Request::is('lombaDospem') ? 'active open' : '' }}">
-                <a href="{{ url('/lombaDospem') }}" class="menu-link">
-                    <div class="text-truncate" data-i18n="LombaTersedia">Lomba Tersedia</div>
-                </a>
-            </li>
-            <li class="menu-item {{ Request::is('lombaDospem/histori') ? 'active open' : '' }}">
-                <a href="{{ url('/lombaDospem/histori') }}" class="menu-link">
-                    <div class="text-truncate" data-i18n="HistoriLomba">Histori Lomba</div>
-                </a>
-            </li>
-        </ul>
-    </li>
+    @if ($hakAkses == 2)
+        <!-- Menu Dosen Pembimbing (Lomba Mahasiswa) -->
+        <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="bi bi-journal-text menu-icon fs-5"></i>
+                <div class="text-truncate" data-i18n="InfoLomba">Info Lomba</div>
+            </a>
+            <ul class="menu-sub">
+                <li class="menu-item {{ Request::is('lombaDospem') ? 'active open' : '' }}">
+                    <a href="{{ url('/lombaDospem') }}" class="menu-link">
+                        <div class="text-truncate" data-i18n="LombaTersedia">Lomba Tersedia</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ Request::is('lombaDospem/histori') ? 'active open' : '' }}">
+                    <a href="{{ url('/lombaDospem/histori') }}" class="menu-link">
+                        <div class="text-truncate" data-i18n="HistoriLomba">Histori Lomba</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+    @endif
 
     <!-- Manajemen Pengguna -->
-    <li class="menu-item {{ Request::is('user*') ? 'active open' : '' }}">
-        <a href="{{ url('/user') }}" class="menu-link d-flex align-items-center">
-            <i class="bi bi-person-gear menu-icon fs-5"></i>
-            <span class="text-truncate" data-i18n="ManajemenPengguna">Manajemen Pengguna</span>
-        </a>
-    </li>
+    @if ($hakAkses == 1)
+        <li class="menu-item {{ Request::is('user*') ? 'active open' : '' }}">
+            <a href="{{ url('/user') }}" class="menu-link d-flex align-items-center">
+                <i class="bi bi-person-gear menu-icon fs-5"></i>
+                <span class="text-truncate" data-i18n="ManajemenPengguna">Manajemen Pengguna</span>
+            </a>
+        </li>
+    @endif
 
     <!-- Manajemen Periode/Angkatan -->
-    <li class="menu-item {{ Request::is('periode*') ? 'active open' : '' }}">
-        <a href="{{ url('/periode') }}" class="menu-link d-flex align-items-center">
-            <i class="bi bi-calendar2-week menu-icon fs-5"></i>
-            <span class="text-truncate" data-i18n="ManajemenProdi">Manajemen Periode</span>
-        </a>
-    </li>
+    @if ($hakAkses == 1)
+        <li class="menu-item {{ Request::is('periode*') ? 'active open' : '' }}">
+            <a href="{{ url('/periode') }}" class="menu-link d-flex align-items-center">
+                <i class="bi bi-calendar2-week menu-icon fs-5"></i>
+                <span class="text-truncate" data-i18n="ManajemenProdi">Manajemen Periode</span>
+            </a>
+        </li>
+    @endif
 
     <!-- Manajemen Prodi -->
-    <li class="menu-item {{ Request::is('admin*') ? 'active open' : '' }}">
-        <a href="{{ url('/admin/ManajemenProdi') }}" class="menu-link d-flex align-items-center">
-            <i class="bi bi-diagram-3 menu-icon fs-5"></i>
-            <div class="text-truncate" data-i18n="ManajemenProdi">Manajemen Prodi</div>
-        </a>
-    </li>
+    @if ($hakAkses == 1)
+        <li class="menu-item {{ Request::is('admin*') ? 'active open' : '' }}">
+            <a href="{{ url('/admin/ManajemenProdi') }}" class="menu-link d-flex align-items-center">
+                <i class="bi bi-diagram-3 menu-icon fs-5"></i>
+                <div class="text-truncate" data-i18n="ManajemenProdi">Manajemen Prodi</div>
+            </a>
+        </li>
+    @endif
 
     <!-- Verifikasi Prestasi -->
-    <li class="menu-item {{ Request::is('prestasiAdmin*') ? 'active open' : '' }}">
-        <a href="{{ url('/prestasiAdmin') }}" class="menu-link d-flex align-items-center">
-            <i class="bi bi-patch-check menu-icon fs-5"></i>
-            <div class="text-truncate" data-i18n="VerifikasiPrestasi">Verifikasi Prestasi</div>
-        </a>
-    </li>
+    @if ($hakAkses == 1)
+        <li class="menu-item {{ Request::is('prestasiAdmin*') ? 'active open' : '' }}">
+            <a href="{{ url('/prestasiAdmin') }}" class="menu-link d-flex align-items-center">
+                <i class="bi bi-patch-check menu-icon fs-5"></i>
+                <div class="text-truncate" data-i18n="VerifikasiPrestasi">Verifikasi Prestasi</div>
+            </a>
+        </li>
+    @endif
 
     <!-- Verifikasi Info Lomba -->
-    <li class="menu-item {{ Request::is('admin/verifikasilomba*') ? 'active open' : '' }}">
-        <a href="{{ url('admin/verifikasilomba') }}" class="menu-link d-flex align-items-center">
-            <i class="bi bi-file-earmark-check menu-icon fs-5"></i>
-            <div class="text-truncate" data-i18n="VerifikasiLomba">Verifikasi Info Lomba</div>
-        </a>
-    </li>
+    @if ($hakAkses == 1)
+        <li class="menu-item {{ Request::is('admin/verifikasilomba*') ? 'active open' : '' }}">
+            <a href="{{ url('admin/verifikasilomba') }}" class="menu-link d-flex align-items-center">
+                <i class="bi bi-file-earmark-check menu-icon fs-5"></i>
+                <div class="text-truncate" data-i18n="VerifikasiLomba">Verifikasi Info Lomba</div>
+            </a>
+        </li>
+    @endif
 
     <!-- Spacer supaya tombol logout di bawah -->
     <li style="flex-grow: 1;"></li>
