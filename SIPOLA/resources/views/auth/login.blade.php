@@ -1,4 +1,3 @@
-{{-- File: resources/views/auth/login.blade.php --}}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -124,11 +123,10 @@
                                 placeholder="Password" />
                         </div>
                         <span id="error-password" class="text-danger error-text"></span>
-
-                        <input type="checkbox" onclick="myFunction()" class="text-primary mx-3">Show Password
                     </div>
                     <!-- Tombol Login -->
                     <button type="submit" class="btn custom-primary w-100">Masuk</button>
+
 
                     <!-- Link ke Signin -->
                     <div class="text-center mt-2">
@@ -139,10 +137,11 @@
                 </form>
             </div>
         </div>
-    </div>
+                    
 
     <!-- jQuery & Bootstrap JS -->
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

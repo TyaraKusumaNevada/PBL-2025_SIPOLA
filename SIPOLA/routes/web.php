@@ -28,16 +28,14 @@ Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/loginPost', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 //-------------------------------------------------------------------------
-    Route::get('/', function () {
-        return view('welcome');
-    });
+    
 
     Route::get('/prestasi', function () {
         return view('mahasiswa.prestasi');
     });
 
 // Root view
-Route::get('/', function () {
+Route::get('/home', function () {
     return view('welcome');
 });
 
@@ -154,7 +152,9 @@ Route::prefix('lombaUser')->group(function () {
 
 
 // --- PROFIL ---
-Route::get('/profilmahasiswa', [ProfilController::class, 'index'])->name('profil.index');
+Route::get('/profilMahasiswa', [ProfilController::class, 'index'])->name('profil.index');
+Route::get('/profilAdmin', [ProfilController::class, 'indexAdmin'])->name('profilAdmin.index');
+Route::get('/profilDosen', [ProfilController::class, 'indexDosen'])->name('profilDosen.index');
 
 // ----------------------------------------------------------------------------------------
 // ROUTE ADMIN (Verifikasi Prestasi)
@@ -172,7 +172,7 @@ Route::post('/profil/update-username', [ProfilController::class, 'updateUsername
 Route::post('/profil/update-academic', [ProfilController::class, 'updateAcademicProfile'])->name('profil.update.academic')->middleware('auth');
 
 // --- LANDING & INFO LOMBA ---
-Route::get('/landing', [LandingController::class, 'index']);
+Route::get('/', [LandingController::class, 'index']);
 Route::get('/infolomba', [InfoLombaController::class, 'index'])->name('infolomba');
 
 // -- Dashboard (Mahasiswa) --

@@ -43,30 +43,24 @@
 
   {{-- Daftar Lomba Aktif --}}
   <div class="card mt-4">
-    <div class="card-header">
-      <h5>Lomba Aktif</h5>
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h5 class="mb-0"> Lomba Aktif Terbaru</h5>
     </div>
-    <div class="card-body table-responsive">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>Nama Lomba</th>
-            <th>Deadline</th>
-            <th>Penyelenggara</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
+    <div class="card-body px-0 position-relative" style="overflow-x: hidden;">
+      <div class="scroll-wrapper">
+        <div class="scroll-container px-4">
           @foreach ($lomba_terbaru as $lomba)
-          <tr>
-            <td>{{ $lomba->nama_lomba }}</td>
-            <td>{{ \Carbon\Carbon::parse($lomba->tanggal_selesai)->format('d M Y') }}</td>
-            <td>{{ $lomba->penyelenggara_lomba }}</td>
-            <td><span class="badge bg-success">Dibuka</span></td>
-          </tr>
+            <div class="lomba-card">
+              <img src="{{ asset('storage/pamflet_lomba/' . $lomba->pamflet_lomba) }}" alt="{{ $lomba->nama_lomba }}">
+              <div class="card-body">
+                <div class="lomba-title">{{ $lomba->nama_lomba }}</div>
+                <div><span class="badge badge-deadline">Sampai {{ \Carbon\Carbon::parse($lomba->tanggal_selesai)->translatedFormat('d M Y') }}</span></div>
+                <div class="text-muted mt-1" style="font-size: 0.85rem">{{ $lomba->penyelenggara_lomba }}</div>
+              </div>
+            </div>
           @endforeach
-        </tbody>
-      </table>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -114,3 +108,125 @@
 
 </div>
 @endsection
+
+@push('css')
+<style>
+  .scroll-wrapper {
+    overflow-x: auto;
+    width: 100%;
+    position: relative;
+  }
+
+  .scroll-wrapper::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scroll-container {
+    display: flex;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    min-height: 100%;
+  }
+
+  .lomba-card {
+    flex: 0 0 auto;
+    width: 250px;
+    scroll-snap-align: start;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    background-color: #fff;
+    transition: transform 0.2s;
+  }
+
+  .lomba-card:hover {
+    transform: scale(1.05);
+  }
+
+  .lomba-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: contain;
+    background-color: #f8f9fa;
+  }
+
+  .lomba-card .card-body {
+    padding: 0.75rem;
+  }
+
+  .lomba-title {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+
+  .badge-deadline {
+    font-size: 0.75rem;
+    background-color: #ffc107;
+    color: #000;
+  }
+
+  .scroll-btn {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    .scroll-btn {
+      display: inline-block;
+    }
+  }
+</style>
+@endpush
+
+@push('js')
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const scrollContainer = document.querySelector('.scroll-container');
+    const scrollLeftBtn = document.querySelector('.scroll-left');
+    const scrollRightBtn = document.querySelector('.scroll-right');
+    let autoScrollInterval;
+    let direction = 1; // 1: scroll right, -1: scroll left
+
+    function startAutoScroll() {
+      autoScrollInterval = setInterval(() => {
+        if (scrollContainer.scrollLeft + scrollContainer.clientWidth >= scrollContainer.scrollWidth) {
+          scrollContainer.scrollLeft = 0; // kembali ke awal
+        } else {
+          scrollContainer.scrollBy({
+            left: 2,
+            behavior: 'smooth'
+          });
+        }
+      }, 50);
+    }
+
+
+    function stopAutoScroll() {
+      clearInterval(autoScrollInterval);
+    }
+
+    scrollContainer.addEventListener('mouseenter', stopAutoScroll);
+    scrollContainer.addEventListener('mouseleave', startAutoScroll);
+
+    scrollLeftBtn.addEventListener('click', () => {
+      scrollContainer.scrollBy({ left: -300, behavior: 'smooth' });
+    });
+
+    scrollRightBtn.addEventListener('click', () => {
+      scrollContainer.scrollBy({ left: 300, behavior: 'smooth' });
+    });
+
+    function toggleScrollButtons() {
+      const isOverflowing = scrollContainer.scrollWidth > scrollContainer.clientWidth;
+      scrollLeftBtn.style.display = isOverflowing ? 'inline-block' : 'none';
+      scrollRightBtn.style.display = isOverflowing ? 'inline-block' : 'none';
+    }
+
+    window.addEventListener('resize', toggleScrollButtons);
+    toggleScrollButtons();
+    startAutoScroll(); // aktif saat pertama
+  });
+</script>
+@endpush

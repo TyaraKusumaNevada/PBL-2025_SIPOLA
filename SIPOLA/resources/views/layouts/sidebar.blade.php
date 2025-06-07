@@ -30,7 +30,91 @@
         </span>
     </a>
 </div>
+{{-- @if(role == mahasiswa)
+<div class="user-panel d-flex align-items-center px-3 py-3" style="border-bottom: 1px solid #d1d5db;">
+    <a href="{{ route('profil.index') }}" class="d-flex align-items-center text-dark text-decoration-none">
+        @php
+            $userId = Auth::id();
+            $userImagePath = 'storage/foto_profil/user_' . $userId . '.jpg';
+            $defaultImage = 'storage/foto_profil/user_.jpg';
+            $imagePath = file_exists(public_path($userImagePath)) ? asset($userImagePath) : asset($defaultImage);
 
+            $user = Auth::user();
+            $fullName = $user->name ?? ($user->nama ?? ($user->full_name ?? ($user->username ?? 'Guest')));
+            $nameParts = explode(' ', trim($fullName));
+
+            if (count($nameParts) <= 2) {
+                $displayName = $fullName;
+            } else {
+                $firstName = $nameParts[0];
+                $lastInitial = strtoupper(substr(end($nameParts), 0, 1));
+                $displayName = $firstName . ' ' . $lastInitial . '.';
+            }
+        @endphp
+        <img id="sidebar-foto-profil" src="{{ $imagePath }}" class="rounded-circle" alt="User Image"
+            style="width: 40px; height: 40px; object-fit: cover; border: 2px solid #d1d5db;">
+        <span id="sidebar-nama-user" class="ms-2 fw-semibold text-dark" title="{{ $fullName }}">
+            {{ $displayName }}
+        </span>
+    </a>
+</div>
+@elseif(role == admin)
+    <div class="user-panel d-flex align-items-center px-3 py-3" style="border-bottom: 1px solid #d1d5db;">
+    <a href="{{ route('profilAdmin.index') }}" class="d-flex align-items-center text-dark text-decoration-none">
+        @php
+            $userId = Auth::id();
+            $userImagePath = 'storage/foto_profil/user_' . $userId . '.jpg';
+            $defaultImage = 'storage/foto_profil/user_.jpg';
+            $imagePath = file_exists(public_path($userImagePath)) ? asset($userImagePath) : asset($defaultImage);
+
+            $user = Auth::user();
+            $fullName = $user->name ?? ($user->nama ?? ($user->full_name ?? ($user->username ?? 'Guest')));
+            $nameParts = explode(' ', trim($fullName));
+
+            if (count($nameParts) <= 2) {
+                $displayName = $fullName;
+            } else {
+                $firstName = $nameParts[0];
+                $lastInitial = strtoupper(substr(end($nameParts), 0, 1));
+                $displayName = $firstName . ' ' . $lastInitial . '.';
+            }
+        @endphp
+        <img id="sidebar-foto-profil" src="{{ $imagePath }}" class="rounded-circle" alt="User Image"
+            style="width: 40px; height: 40px; object-fit: cover; border: 2px solid #d1d5db;">
+        <span id="sidebar-nama-user" class="ms-2 fw-semibold text-dark" title="{{ $fullName }}">
+            {{ $displayName }}
+        </span>
+    </a>
+</div>
+@elseif(role == dosen)
+<div class="user-panel d-flex align-items-center px-3 py-3" style="border-bottom: 1px solid #d1d5db;">
+    <a href="{{ route('profilDosen.index') }}" class="d-flex align-items-center text-dark text-decoration-none">
+        @php
+            $userId = Auth::id();
+            $userImagePath = 'storage/foto_profil/user_' . $userId . '.jpg';
+            $defaultImage = 'storage/foto_profil/user_.jpg';
+            $imagePath = file_exists(public_path($userImagePath)) ? asset($userImagePath) : asset($defaultImage);
+
+            $user = Auth::user();
+            $fullName = $user->name ?? ($user->nama ?? ($user->full_name ?? ($user->username ?? 'Guest')));
+            $nameParts = explode(' ', trim($fullName));
+
+            if (count($nameParts) <= 2) {
+                $displayName = $fullName;
+            } else {
+                $firstName = $nameParts[0];
+                $lastInitial = strtoupper(substr(end($nameParts), 0, 1));
+                $displayName = $firstName . ' ' . $lastInitial . '.';
+            }
+        @endphp
+        <img id="sidebar-foto-profil" src="{{ $imagePath }}" class="rounded-circle" alt="User Image"
+            style="width: 40px; height: 40px; object-fit: cover; border: 2px solid #d1d5db;">
+        <span id="sidebar-nama-user" class="ms-2 fw-semibold text-dark" title="{{ $fullName }}">
+            {{ $displayName }}
+        </span>
+    </a>
+</div>
+@endif --}}
 <!-- Menu Items -->
 <ul class="menu-inner">
     <!-- Dashboard Admin -->
