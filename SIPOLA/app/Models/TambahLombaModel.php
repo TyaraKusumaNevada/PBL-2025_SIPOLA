@@ -9,7 +9,11 @@ class TambahLombaModel extends Model
 {
     protected $table = 'tambah_lomba';
     protected $primaryKey = 'id_tambahLomba';
-    protected $fillable = ['nama_lomba', 'kategori_lomba', 'tingkat_lomba', 'penyelenggara_lomba', 'deskripsi', 'tanggal_mulai', 'tanggal_selesai', 'pamflet_lomba', 'status_verifikasi'];
+    protected $fillable = ['nama_lomba', 'kategori_lomba', 'tingkat_lomba', 'penyelenggara_lomba', 'deskripsi', 'tanggal_mulai', 'tanggal_selesai', 'pamflet_lomba', 'status_verifikasi', 'user_id'];
+
+    public function user() {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
     public function infoLomba() {
         return $this->hasOne(InfoLombaModel::class, 'id_lomba');
