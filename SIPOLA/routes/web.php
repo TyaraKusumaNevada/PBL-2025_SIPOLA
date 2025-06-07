@@ -11,6 +11,8 @@ use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\VerifikasiPrestasiController;
 use App\Http\Controllers\TambahLombaController;
 use App\Http\Controllers\DashboardMahasiswaController;
+use App\Http\Controllers\MahasiswaLombaController;
+use App\Http\Controllers\DospemLombaController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -107,14 +109,46 @@ Route::prefix('prestasi')->group(function () {
 // ROUTE ADMIN (Manajemen Lomba)
 Route::prefix('lomba')->group(function () {
     Route::get('/', [TambahLombaController::class, 'index']);
-    Route::post('/list', [TambahLombaController::class, 'list']);
-    Route::get('/create_ajax', [TambahLombaController::class, 'create_ajax']);
+    Route::post('list', [TambahLombaController::class, 'list']);
+    Route::get('create_ajax', [TambahLombaController::class, 'create_ajax']);
     Route::post('/ajax', [TambahLombaController::class, 'store_ajax']);
     Route::get('{id}/show_ajax', [TambahLombaController::class, 'show_ajax']);
     Route::get('{id}/edit_ajax', [TambahLombaController::class, 'edit_ajax']);
     Route::put('{id}/update_ajax', [TambahLombaController::class, 'update_ajax']);
     Route::get('/{id}/delete_ajax', [TambahLombaController::class, 'confirm_ajax']);
     Route::delete('/{id}/delete_ajax', [TambahLombaController::class, 'delete_ajax']);
+});
+// ----------------------------------------------------------------------------------------
+
+
+// ----------------------------------------------------------------------------------------
+// ROUTE DOSEN PEMBIMBING (Info Lomba)
+Route::prefix('lombaDospem')->group(function () {
+    Route::get('/', [DospemLombaController::class, 'index']);
+    Route::post('list', [DospemLombaController::class, 'list']);
+    Route::get('{id}/show_info', [DospemLombaController::class, 'show_info']);
+    Route::get('create_ajax', [DospemLombaController::class, 'create_ajax']);
+    Route::post('ajax', [DospemLombaController::class, 'store_ajax']);
+    Route::get('histori', [DospemLombaController::class, 'histori'])->name('lombaDospem.histori');
+    Route::get('{id}/show_tambah', [DospemLombaController::class, 'show_tambah']);
+});
+// ----------------------------------------------------------------------------------------
+
+
+// ----------------------------------------------------------------------------------------
+// ROUTE MAHASISWA (Manajemen Lomba)
+Route::prefix('lombaUser')->group(function () {
+    Route::get('/', [MahasiswaLombaController::class, 'index']);
+    Route::post('/tersedia', [MahasiswaLombaController::class, 'getLombaTersedia']);
+    Route::post('/histori', [MahasiswaLombaController::class, 'getLombaHistori']);
+    Route::post('/list', [MahasiswaLombaController::class, 'list']);
+    Route::get('{id}/show_ajax', [MahasiswaLombaController::class, 'show_ajax']);
+    Route::get('{id}/edit_ajax', [MahasiswaLombaController::class, 'edit_ajax']);
+    Route::put('{id}/update_ajax', [MahasiswaLombaController::class, 'update_ajax']);
+    Route::get('/create_ajax', [MahasiswaLombaController::class, 'create_ajax']);
+    Route::post('/ajax', [MahasiswaLombaController::class, 'store_ajax']);
+    // Route::get('/{id}/delete_ajax', [TambahLombaController::class, 'confirm_ajax']);
+    // Route::delete('/{id}/delete_ajax', [TambahLombaController::class, 'delete_ajax']);
 });
 // ----------------------------------------------------------------------------------------
 

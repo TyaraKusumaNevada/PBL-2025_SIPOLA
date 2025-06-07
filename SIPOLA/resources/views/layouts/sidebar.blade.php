@@ -86,12 +86,40 @@
         </a>
     </li>
 
-    <!-- Manajemen Lomba -->
-    <li class="menu-item {{ Request::is('lomba*') ? 'active open' : '' }}">
+    <!-- Menu Admin (Manajemen Lomba) -->
+    <li class="menu-item {{ Request::is('lomba') || Request::is('lomba/*') ? 'active open' : '' }}">
         <a href="{{ url('/lomba') }}" class="menu-link d-flex align-items-center">
             <i class="bi bi-trophy menu-icon fs-5"></i>
             <div class="text-truncate" data-i18n="ManajemenLomba">Manajemen Lomba</div>
         </a>
+    </li>
+
+    <!-- Menu Mahasiswa (Lomba User) -->
+    <li class="menu-item {{ Request::is('lombaUser') || Request::is('lombaUser/*') ? 'active open' : '' }}">
+        <a href="{{ url('/lombaUser') }}" class="menu-link d-flex align-items-center">
+            <i class="bi bi-trophy menu-icon fs-5"></i>
+            <div class="text-truncate" data-i18n="ManajemenLombaUser">Lomba Mahasiswa</div>
+        </a>
+    </li>
+
+    <!-- Menu Dosen Pembimbing (Lomba Mahasiswa) -->
+    <li class="menu-item">
+        <a href="javascript:void(0);" class="menu-link menu-toggle">
+            <i class="bi bi-journal-text menu-icon fs-5"></i>
+            <div class="text-truncate" data-i18n="InfoLomba">Info Lomba</div>
+        </a>
+        <ul class="menu-sub">
+            <li class="menu-item {{ Request::is('lombaDospem') ? 'active open' : '' }}">
+                <a href="{{ url('/lombaDospem') }}" class="menu-link">
+                    <div class="text-truncate" data-i18n="LombaTersedia">Lomba Tersedia</div>
+                </a>
+            </li>
+            <li class="menu-item {{ Request::is('lombaDospem/histori') ? 'active open' : '' }}">
+                <a href="{{ url('/lombaDospem/histori') }}" class="menu-link">
+                    <div class="text-truncate" data-i18n="HistoriLomba">Histori Lomba</div>
+                </a>
+            </li>
+        </ul>
     </li>
 
     <!-- Manajemen Pengguna -->
