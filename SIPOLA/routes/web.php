@@ -33,7 +33,7 @@ Route::post('/rekomendasi', [RekomendasiController::class, 'hitung'])->name('rek
 //ROUTE LOGIN
 // Authentication Routes
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/loginPost', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
 // --- REGISTER / SIGNIN ---
