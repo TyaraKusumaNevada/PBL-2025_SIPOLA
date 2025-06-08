@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -87,8 +88,8 @@ class AuthController extends Controller
 
             if (!$user) {
                 // User doesn't exist in users table yet, create based on corresponding specialized table
-                $name = $userType === 'student' ? $userData->nama : ($userType === 'dosen' ? $userData->nama_dosen : $userData->nama_admin);
-                
+                // $name = $userType === 'student' ? $userData->nama : ($userType === 'dosen' ? $userData->nama_dosen : $userData->nama_admin);
+                $name = $userType === 'student' ? $userData->nama : ($userType === 'dosen' ? $userData->nama : $userData->nama);
                 $user = User::create([
                     'name' => $name,
                     'username' => $request->username,
