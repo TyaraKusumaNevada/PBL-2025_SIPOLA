@@ -5,6 +5,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\DospemModel; 
 
 class MahasiswaModel extends Model
 {
@@ -24,6 +25,8 @@ class MahasiswaModel extends Model
         'minat', 
         'id_angkatan', 
         'id_role',
+        'id_dosen'
+
     ];
 
     public function role(): BelongsTo {
@@ -32,6 +35,10 @@ class MahasiswaModel extends Model
 
     public function prestasi(): HasMany {
         return $this->hasMany(PrestasiModel::class, 'id_mahasiswa', 'id_mahasiswa');
+    }
+
+    public function user(): BelongsTo {
+        return $this->belongsTo(User::class, 'user_id');
     }
 
 
@@ -48,5 +55,13 @@ class MahasiswaModel extends Model
 
     public function rekomendasi(): HasMany {
         return $this->hasMany(RekomendasiModel::class, 'id_mahasiswa');
+    }
+
+    public function dospem(): BelongsTo {
+        return $this->belongsTo(DospemModel::class, 'id_dosen', 'id_dosen');
+    }
+
+    public function tambahLomba(): BelongsTo {
+        return $this->belongsTo(DospemModel::class, 'id_tambahLomba', 'id_tambahLomba');
     }
 }
