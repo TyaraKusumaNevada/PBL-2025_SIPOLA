@@ -1,4 +1,4 @@
-<form action="{{ url('/lomba/ajax') }}" method="POST" enctype="multipart/form-data" id="form-tambah">
+<form action="{{ url('/lombaMahasiswa/ajax') }}" method="POST" enctype="multipart/form-data" id="form-tambah">
     @csrf
     <div id="modal-master" class="modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -65,12 +65,6 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="link_pendaftaran" class="form-label">Link Pendaftaran</label>
-                    <input type="url" class="form-control" name="link_pendaftaran" placeholder="https://contoh.com/daftar" required>
-                    <div id="error-link_pendaftaran" class="form-text text-danger"></div>
-                </div>
-                
-                <div class="mb-3">
                     <label for="pamflet_lomba" class="form-label">Pamflet Lomba</label>
                     <input type="file" class="form-control" name="pamflet_lomba" accept="image/*" required>
                     <div id="error-pamflet_lomba" class="form-text text-danger"></div>
@@ -113,12 +107,6 @@
                     required: true,
                     date: true
                 },
-                link_pendaftaran: {
-                    required: true,
-                    url: true, 
-                    minlength: 3,
-                    maxlength: 255
-                },
                 pamflet_lomba: {
                     required: true,
                     extension: "jpg|jpeg|png"
@@ -149,12 +137,6 @@
                     required: "Tanggal selesai wajib diisi",
                     date: "Format tanggal tidak valid"
                 },
-                link_pendaftaran: {
-                    required: "Link pendaftaran wajib diisi",
-                    url: "Masukkan URL yang valid (contoh: https://...)",
-                    minlength: "Link terlalu pendek",
-                    maxlength: "Link terlalu panjang (maksimal 255 karakter)"
-                },
                 pamflet_lomba: {
                     required: "Pamflet lomba wajib diunggah",
                     extension: "File harus berupa gambar (jpg, jpeg, png)"
@@ -184,8 +166,8 @@
                                 text: response.message
                             });
 
-                            if (typeof dataLomba !== 'undefined') {
-                                dataLomba.ajax.reload();
+                            if (typeof dataHistoriMahasiswa !== 'undefined') {
+                                dataHistoriMahasiswa.ajax.reload();
                             }
 
                             // Reset form dan error

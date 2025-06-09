@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -66,7 +67,7 @@ class AuthController extends Controller
                 $userData = $dosen;
             } else {
                 // Check in admin table
-                $admin = AdminModel::where('nama_admin', $request->username)->first();
+                $admin = AdminModel::where('nama', $request->username)->first();
                 
                 if ($admin) {
                     $userFound = true;
@@ -87,8 +88,8 @@ class AuthController extends Controller
 
             if (!$user) {
                 // User doesn't exist in users table yet, create based on corresponding specialized table
-                $name = $userType === 'student' ? $userData->nama : ($userType === 'dosen' ? $userData->nama_dosen : $userData->nama_admin);
-                
+                // $name = $userType === 'student' ? $userData->nama : ($userType === 'dosen' ? $userData->nama_dosen : $userData->nama_admin);
+                $name = $userType === 'student' ? $userData->nama : ($userType === 'dosen' ? $userData->nama : $userData->nama);
                 $user = User::create([
                     'name' => $name,
                     'username' => $request->username,
@@ -106,7 +107,7 @@ class AuthController extends Controller
                 
                 // Redirect based on user role
                 
-              $redirectTo = '/';
+              $redirectTo = '/home';
                 
                 // Send response for the client-side alert (successful login)
                 return response()->json([

@@ -95,6 +95,14 @@
                     </div>
 
                     <div class="mb-3">
+                        <label class="form-label">Link Pendaftaran</label>
+                        <input type="url" name="link_pendaftaran" class="form-control" 
+                            value="{{ old('link_pendaftaran', $lomba->link_pendaftaran) }}" 
+                            placeholder="https://contoh.com/daftar" required>
+                        <div id="error-link_pendaftaran" class="form-text text-danger"></div>
+                    </div>
+                    
+                    <div class="mb-3">
                         <label for="form-label" class="form-label">Upload Pamflet (Gambar) 
                             <small
                                 class="text-muted">(Kosongkan jika tidak diubah)
@@ -123,7 +131,8 @@
                     penyelenggara_lomba: "required",
                     deskripsi: "required",
                     tanggal_mulai: "required",
-                    tanggal_selesai: "required"
+                    tanggal_selesai: "required",
+                    link_pendaftaran: "required"
                     // pamflet_lomba: {
                     //     extension: "jpg|jpeg|png|gif" // validasi tipe file gambar
                     // }
@@ -135,7 +144,8 @@
                     penyelenggara_lomba: "Penyelenggara wajib diisi.",
                     deskripsi: "Deskripsi wajib diisi.",
                     tanggal_mulai: "Tanggal mulai wajib diisi.",
-                    tanggal_selesai: "Tanggal selesai wajib diisi."
+                    tanggal_selesai: "Tanggal selesai wajib diisi.",
+                    link_pendaftaran: "Link Pendaftaran wajib diisi."
                     // pamflet_lomba: {
                     //     extension: "File harus berupa gambar (jpg, jpeg, png, gif)."
                     // }
