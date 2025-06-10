@@ -19,13 +19,21 @@ class AdminLombaController extends Controller
             'list'  => ['Home', 'Lomba']
         ];
 
-        $lomba = TambahLombaModel::all();
+        // Ambil user yang sedang login
+        $userId = auth()->id();
+
+        // Ambil data lomba yang dibuat oleh user tersebut
+        $lomba = TambahLombaModel::where('user_id', $userId)->get();
 
         return view('lomba.index', ['breadcrumb' => $breadcrumb, 'lomba' => $lomba]);
     }
 
     public function list(Request $request) {
-        $lombas = TambahLombaModel::select(
+        $user = auth()->user();
+
+        $lombas = TambahLombaModel::query()
+            ->where('user_id', $user->id) // filter by user login
+            ->select(
             'id_tambahLomba',
             'nama_lomba',
             'kategori_lomba',
