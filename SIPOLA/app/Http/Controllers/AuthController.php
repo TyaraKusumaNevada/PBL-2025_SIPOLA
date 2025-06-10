@@ -66,7 +66,7 @@ class AuthController extends Controller
                 $userData = $dosen;
             } else {
                 // Check in admin table
-                $admin = AdminModel::where('nama_admin', $request->username)->first();
+                $admin = AdminModel::where('nama', $request->username)->first();
                 
                 if ($admin) {
                     $userFound = true;
@@ -87,7 +87,7 @@ class AuthController extends Controller
 
             if (!$user) {
                 // User doesn't exist in users table yet, create based on corresponding specialized table
-                $name = $userType === 'student' ? $userData->nama : ($userType === 'dosen' ? $userData->nama_dosen : $userData->nama_admin);
+                $name = $userType === 'student' ? $userData->nama : ($userType === 'dosen' ? $userData->nama_dosen : $userData->nama);
                 
                 $user = User::create([
                     'name' => $name,
