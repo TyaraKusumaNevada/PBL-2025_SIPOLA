@@ -49,10 +49,6 @@
                     <th>Tanggal Selesai</th>
                     <td>{{ \Carbon\Carbon::parse($lomba->tanggal_selesai)->translatedFormat('d F Y, H:i') }}</td>
                 </tr>
-                <tr>
-                    <th>Link Pendaftaran</th>
-                    <td>{{ $lomba->link_pendaftaran }}</td>
-                </tr>
                  <tr>
                     <th>Pamflet</th>
                     <td>

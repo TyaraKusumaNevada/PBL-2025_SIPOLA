@@ -1,4 +1,3 @@
-
 @extends('layouts.template')
 
 @section('content')
@@ -63,29 +62,6 @@
             border: 3px solid #e3e3e3;
         }
 
-        .academic-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 5px 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        .academic-item:last-child {
-            border-bottom: none;
-        }
-
-        .delete-btn {
-            color: #a8a8a8;
-            cursor: pointer;
-            font-size: 14px;
-            margin-left: 10px;
-        }
-
-        .delete-btn:hover {
-            color: #e41e1e;
-        }
-
         @media (max-width: 768px) {
             .profile-img {
                 text-align: center;
@@ -111,13 +87,8 @@
                 <div class="col-md-6">
                     <h3 id="display-nama">{{ $user->name }}</h3>
                     <p><strong>NIM:</strong> <span id="display-username">{{ $user->username }}</span></p>
-                    @if ($mahasiswa)
-                        <p><strong>Program Studi:</strong> {{ $mahasiswa->prodi->nama_prodi ?? '-' }}</p>
-                      
-                    @else
-                        <p><strong>Program Studi:</strong> -</p>
-                    
-                    @endif
+                    <p><strong>Program Studi:</strong> Teknik Informatika</p> {{-- Sesuaikan jika ada data program studi --}}
+                    <p><strong>Angkatan:</strong> 2022</p> {{-- Sesuaikan jika ada data angkatan --}}
                 </div>
                 <div class="col-md-3 text-end">
                     <button class="btn btn-outline-primary" id="btn-edit-profile">
@@ -144,8 +115,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="foto_profil" class="form-label">Foto Profil (jpg/png, max 2MB)</label>
-                        <input type="file" class="form-control" id="foto_profil" name="foto_profil"
-                            accept=".jpg,.jpeg,.png">
+                        <input type="file" class="form-control" id="foto_profil" name="foto_profil" accept=".jpg,.jpeg,.png">
                         <div id="error-foto" class="text-danger mt-1" style="display:none;"></div>
                     </div>
                     <button type="submit" class="btn btn-success">Simpan</button>
@@ -168,27 +138,22 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (['keahlian' => 'Keahlian', 'minat' => 'Minat', 'pengalaman' => 'Pengalaman'] as $key => $label)
+                            @foreach (['keahlian' => 'Bidang Keahlian', 'sertifikasi' => 'Sertifikasi', 'pengalaman' => 'Pengalaman'] as $key => $label)
                                 <tr>
                                     <td>{{ $label }}</td>
                                     <td id="td-{{ $key }}">
-                                        <div id="list-{{ $key }}">
-                                            @foreach(explode(';', $user->$key) as $index => $item)
+                                        <ul class="mb-0 ps-3" id="list-{{ $key }}">
+                                            @foreach(explode(';', $user->$key) as $item)
                                                 @if(trim($item) != '')
-                                                    <div class="academic-item" data-index="{{ $index }}">
-                                                        <span>{{ trim($item) }}</span>
-                                                        <i class="fa fa-trash delete-btn"
-                                                            onclick="deleteAcademicItem('{{ $key }}', {{ $index }})"
-                                                            title="Hapus item"></i>
-                                                    </div>
+                                                    <li>{{ trim($item) }}</li>
                                                 @endif
                                             @endforeach
-                                        </div>
+                                        </ul>
                                     </td>
                                     <td>
-                                        <button class="btn btn-sm btn-outline-success"
-                                            onclick="showAddModal('{{ $key }}', '{{ $label }}')">
-                                            <i class="fa fa-plus"></i> Tambah
+                                        <button class="btn btn-sm btn-outline-primary"
+                                            onclick="showEditModal('{{ $key }}', '{{ $label }}')">
+                                            <i class="fa fa-edit"></i> Edit
                                         </button>
                                     </td>
                                 </tr>
@@ -200,8 +165,7 @@
         </div>
 
         {{-- Modal Edit Akademik --}}
-        <div class="modal fade" id="editAcademicModal" tabindex="-1" aria-labelledby="editAcademicModalLabel"
-            aria-hidden="true">
+        <div class="modal fade" id="editAcademicModal" tabindex="-1" aria-labelledby="editAcademicModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <form id="form-edit-academic" class="modal-content">
                     @csrf
@@ -211,34 +175,11 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                     </div>
                     <div class="modal-body">
-                        <label for="academic-value" class="form-label">Isikan bidangnya saja (pisahkan dengan `;`)</label>
+                        <label for="academic-value" class="form-label">Isi (pisahkan dengan `;`)</label>
                         <textarea class="form-control" id="academic-value" name="value" rows="4" required></textarea>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-success">Simpan</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        {{-- Modal Tambah Akademik --}}
-        <div class="modal fade" id="addAcademicModal" tabindex="-1" aria-labelledby="addAcademicModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog">
-                <form id="form-add-academic" class="modal-content">
-                    @csrf
-                    <input type="hidden" id="add-academic-type" name="type">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="addAcademicModalLabel">Tambah Akademik</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-                    </div>
-                    <div class="modal-body">
-                        <label for="add-academic-value" class="form-label">Tambahkan item baru</label>
-                        <input type="text" class="form-control" id="add-academic-value" name="value" required>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-success">Tambah</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                     </div>
                 </form>
@@ -250,6 +191,11 @@
     {{-- FontAwesome CDN --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
+    {{-- Bootstrap JS CDN (pastikan sudah include di layout) --}}
+    {{-- Jika belum, tambahkan ini di bagian bawah sebelum </body> --}}
+    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> --}}
+
+    {{-- Script --}}
     <script>
         // Toggle tampilkan form edit profil
         document.getElementById('btn-edit-profile').addEventListener('click', () => {
@@ -324,20 +270,10 @@
             document.getElementById('editAcademicModalLabel').innerText = 'Edit ' + label;
 
             // Ambil data dari list dan gabungkan jadi string pisah ';'
-            const items = Array.from(document.querySelectorAll(`#list-${type} .academic-item span`)).map(span => span.textContent.trim());
+            const items = Array.from(document.querySelectorAll(`#td-${type} li`)).map(li => li.textContent.trim());
             document.getElementById('academic-value').value = items.join('; ');
 
             const modal = new bootstrap.Modal(document.getElementById('editAcademicModal'));
-            modal.show();
-        }
-
-        // Tampilkan modal tambah akademik
-        function showAddModal(type, label) {
-            document.getElementById('add-academic-type').value = type;
-            document.getElementById('addAcademicModalLabel').innerText = 'Tambah ' + label;
-            document.getElementById('add-academic-value').value = '';
-
-            const modal = new bootstrap.Modal(document.getElementById('addAcademicModal'));
             modal.show();
         }
 
@@ -356,12 +292,24 @@
                     "X-CSRF-TOKEN": token,
                     "Accept": "application/json"
                 },
-                body: JSON.stringify({ type: type, value: value, action: 'update' })
+                body: JSON.stringify({ type: type, value: value })
             })
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {
-                        updateAcademicDisplay(type, data.items);
+                        const td = document.getElementById('td-' + type);
+                        const ul = document.createElement('ul');
+                        ul.className = 'mb-0 ps-3';
+                        value.split(';').forEach(item => {
+                            if (item.trim() !== '') {
+                                const li = document.createElement('li');
+                                li.textContent = item.trim();
+                                ul.appendChild(li);
+                            }
+                        });
+                        td.innerHTML = '';
+                        td.appendChild(ul);
+
                         const modal = bootstrap.Modal.getInstance(document.getElementById('editAcademicModal'));
                         modal.hide();
                     } else {
@@ -370,80 +318,5 @@
                 })
                 .catch(err => console.error(err));
         });
-
-        // Submit form tambah akademik modal
-        document.getElementById('form-add-academic').addEventListener('submit', function (e) {
-            e.preventDefault();
-
-            const type = document.getElementById('add-academic-type').value;
-            const value = document.getElementById('add-academic-value').value;
-            const token = document.querySelector('input[name="_token"]').value;
-
-            fetch("{{ route('profil.update.academic') }}", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": token,
-                    "Accept": "application/json"
-                },
-                body: JSON.stringify({ type: type, value: value, action: 'add' })
-            })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.success) {
-                        updateAcademicDisplay(type, data.items);
-                        const modal = bootstrap.Modal.getInstance(document.getElementById('addAcademicModal'));
-                        modal.hide();
-                    } else {
-                        alert(data.error || 'Terjadi kesalahan');
-                    }
-                })
-                .catch(err => console.error(err));
-        });
-
-        // Hapus item akademik
-        function deleteAcademicItem(type, index) {
-            if (confirm('Apakah Anda yakin ingin menghapus item ini?')) {
-                const token = document.querySelector('input[name="_token"]').value;
-
-                fetch("{{ route('profil.delete.academic') }}", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRF-TOKEN": token,
-                        "Accept": "application/json"
-                    },
-                    body: JSON.stringify({ type: type, index: index })
-                })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.success) {
-                            updateAcademicDisplay(type, data.items);
-                        } else {
-                            alert(data.error || 'Terjadi kesalahan');
-                        }
-                    })
-                    .catch(err => console.error(err));
-            }
-        }
-
-        // Update tampilan akademik
-        function updateAcademicDisplay(type, items) {
-            const container = document.getElementById('list-' + type);
-            container.innerHTML = '';
-
-            items.forEach((item, index) => {
-                if (item.trim() !== '') {
-                    const div = document.createElement('div');
-                    div.className = 'academic-item';
-                    div.setAttribute('data-index', index);
-                    div.innerHTML = `
-                            <span>${item.trim()}</span>
-                            <i class="fa fa-trash delete-btn" onclick="deleteAcademicItem('${type}', ${index})" title="Hapus item"></i>
-                        `;
-                    container.appendChild(div);
-                }
-            });
-        }
     </script>
 @endsection

@@ -34,6 +34,7 @@ class TambahLombaController extends Controller
         'deskripsi',
         'tanggal_mulai',
         'tanggal_selesai',
+        'link_pendaftaran',
         'pamflet_lomba'
     );
 
@@ -93,6 +94,7 @@ class TambahLombaController extends Controller
                 'deskripsi'          => 'required|string',
                 'tanggal_mulai'      => 'required|date',
                 'tanggal_selesai'    => 'required|date|after_or_equal:tanggal_mulai',
+                'link_pendaftaran'   => 'required|url|max:255',
                 'pamflet_lomba'      => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
             ];
 
@@ -112,6 +114,19 @@ class TambahLombaController extends Controller
             $randomName = Str::uuid()->toString() . '.' . $extension;
             $filePath = $file->storeAs('pamflet_lomba', $randomName, 'public');
 
+            $status = 'Pending'; // default status
+            $userId = null;
+
+            if (auth()->check()) {
+                $user = auth()->user();
+                $userId = $user->id;
+
+                // Misal id_role 1 adalah admin
+                if ($user->id_role == 1) {
+                    $status = 'Disetujui';
+                }
+            }
+
             // Simpan ke database
             $tambahLomba = TambahLombaModel::create([
                 'nama_lomba'          => $request->nama_lomba,
@@ -121,7 +136,10 @@ class TambahLombaController extends Controller
                 'deskripsi'           => $request->deskripsi,
                 'tanggal_mulai'       => $request->tanggal_mulai,
                 'tanggal_selesai'     => $request->tanggal_selesai,
+                'link_pendaftaran'    => $request->link_pendaftaran,
                 'pamflet_lomba'       => $filePath,
+                'status_verifikasi'   => $status,
+                'user_id'             => $userId,
             ]);
 
             return response()->json([
@@ -158,6 +176,7 @@ class TambahLombaController extends Controller
                 'deskripsi'          => 'required|string',
                 'tanggal_mulai'      => 'required|date',
                 'tanggal_selesai'    => 'required|date|after_or_equal:tanggal_mulai',
+                'link_pendaftaran'   => 'required|url|max:255', 
                 'pamflet_lomba'      => 'nullable|image|max:2048',
                 // 'status_verifikasi'  => 'required|in:Pending,Disetujui,Ditolak'
             ];
@@ -186,9 +205,10 @@ class TambahLombaController extends Controller
                 'kategori_lomba',
                 'tingkat_lomba',
                 'penyelenggara_lomba',
-                'deskripsi',
+                'deskripsi', 
                 'tanggal_mulai',
                 'tanggal_selesai',
+                'link_pendaftaran',
             ]);
 
             if ($request->hasFile('pamflet_lomba')) {

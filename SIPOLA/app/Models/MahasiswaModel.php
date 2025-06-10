@@ -1,7 +1,6 @@
 <?php
 namespace App\Models;
 
-use App\Models\PrestasiModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,11 +9,13 @@ use App\Models\DospemModel;
 
 class MahasiswaModel extends Model
 {
+    use HasFactory;
+
     protected $table = 'mahasiswa';
     protected $primaryKey = 'id_mahasiswa';
 
     protected $fillable = [
-        'id_prodi', 
+        'id', 
         'nama', 
         'nim', 
         'password', 
@@ -25,6 +26,7 @@ class MahasiswaModel extends Model
         'id_angkatan', 
         'id_role',
         'id_dosen'
+
     ];
 
     public function role(): BelongsTo {
@@ -39,15 +41,19 @@ class MahasiswaModel extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function angkatan() {
-        return $this->belongsTo(AngkatanModel::class, 'id_angkatan');
+
+
+    public function angkatan(): BelongsTo {
+    return $this->belongsTo(AngkatanModel::class, 'id_angkatan', 'id_angkatan');
+}
+
+
+    public function prodi(): BelongsTo {
+        return $this->belongsTo(ProgramStudiModel::class, 'id_prodi','id');
+
     }
 
-    public function prodi() {
-        return $this->belongsTo(ProgramStudiModel::class, 'id_prodi');
-    }
-
-    public function rekomendasi() {
+    public function rekomendasi(): HasMany {
         return $this->hasMany(RekomendasiModel::class, 'id_mahasiswa');
     }
 

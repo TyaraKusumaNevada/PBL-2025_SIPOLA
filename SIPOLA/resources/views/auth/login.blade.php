@@ -1,4 +1,3 @@
-{{-- File: resources/views/auth/login.blade.php --}}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -124,9 +123,8 @@
                                 placeholder="Password" />
                         </div>
                         <span id="error-password" class="text-danger error-text"></span>
-
-                        <input type="checkbox" onclick="myFunction()" class="text-primary mx-3">Show Password
                     </div>
+
                     <!-- Tombol Login -->
                     <button type="submit" class="btn custom-primary w-100">Masuk</button>
 
@@ -141,18 +139,17 @@
         </div>
     </div>
 
+    <!-- JavaScript -->
     <!-- jQuery & Bootstrap JS -->
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
     <!-- jQuery Validation -->
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/additional-methods.min.js"></script>
-
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
         function myFunction() {
             var x = document.getElementById("password");
@@ -171,7 +168,7 @@
         $(document).ready(function() {
             $("#form-login").validate({
                 rules: {
-                    userame: {
+                    username: {
                         required: true,
                         minlength: 3,
                         maxlength: 20
@@ -182,13 +179,13 @@
                         maxlength: 20
                     }
                 },
-                submitHandler: function(form) { // ketika valid, maka bagian yg akan dijalankan
+                submitHandler: function(form) {
                     $.ajax({
                         url: form.action,
                         type: form.method,
                         data: $(form).serialize(),
                         success: function(response) {
-                            if (response.status) { // jika sukses
+                            if (response.status) {
                                 Swal.fire({
                                     icon: 'success',
                                     title: 'Berhasil',
@@ -196,7 +193,7 @@
                                 }).then(function() {
                                     window.location = response.redirect;
                                 });
-                            } else { // jika error
+                            } else {
                                 $('.error-text').text('');
                                 $.each(response.msgField, function(prefix, val) {
                                     $('#error-' + prefix).text(val[0]);
@@ -216,10 +213,10 @@
                     error.addClass('invalid-feedback');
                     element.closest('.input-group').append(error);
                 },
-                highlight: function(element, errorClass, validClass) {
+                highlight: function(element) {
                     $(element).addClass('is-invalid');
                 },
-                unhighlight: function(element, errorClass, validClass) {
+                unhighlight: function(element) {
                     $(element).removeClass('is-invalid');
                 }
             });
