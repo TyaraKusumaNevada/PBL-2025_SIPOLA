@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardMahasiswaController;
+use App\Http\Controllers\DashboardDospemController;
 use App\Http\Controllers\InfoLombaController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\PeriodeController;
@@ -25,6 +26,7 @@ Route::get('/landing', [LandingController::class, 'index']);
 // --- INFO LOMBA ---
 Route::get('/infolomba', [InfoLombaController::class, 'index'])->name('infolomba');
 
+
 // --- REKOMENDASI LOMBA ---
 Route::get('/rekomendasi', [RekomendasiController::class, 'form'])->name('rekomendasi.form');
 Route::post('/rekomendasi', [RekomendasiController::class, 'hitung'])->name('rekomendasi.hitung');
@@ -40,6 +42,11 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->n
 Route::get('/signin', [siginController::class, 'showRegistrationForm'])->name('signin');
 Route::post('/signin', [siginController::class, 'register']);
 
+
+// Root view
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 // --- WELCOME / HOME PAGE ---
 Route::get('/welcome', function () {
     return view('welcome');
@@ -47,6 +54,7 @@ Route::get('/welcome', function () {
 Route::get('/home', function () {
     return view('welcome');
 });
+
 
 // --- DASHBOARD MAHASISWA ---
 Route::prefix('mahasiswa')->group(function () {
@@ -217,6 +225,11 @@ Route::get('/infolomba', [InfoLombaController::class, 'index'])->name('infolomba
 // -- Dashboard (Mahasiswa) --
 Route::prefix('mahasiswa')->group(function () {
     Route::get('/dashboard', [DashboardMahasiswaController::class, 'index'])->name('mahasiswa.dashboard.data');
+});
+
+// -- Dashboard (Dospem) --
+Route::prefix('dospem')->group(function () {
+    Route::get('/dashboard', [DashboardDospemController::class, 'index'])->name('dospem.dashboard.data');
 });
 
 Route::post('/profil/delete-academic', [ProfilController::class, 'deleteAcademicItem'])->name('profil.delete.academic');
