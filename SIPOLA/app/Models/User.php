@@ -25,7 +25,8 @@ class User extends Authenticatable
 
     public function lomba() {
         return $this->hasMany(TambahLombaModel::class, 'user_id');
-
+    }
+    
     public function dosen()
     {
         return $this->hasOne(DospemModel::class, 'nidn', 'username');
