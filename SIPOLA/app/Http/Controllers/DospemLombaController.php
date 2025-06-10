@@ -49,6 +49,7 @@ class DospemLombaController extends Controller
                 'deskripsi'           => 'required|string',
                 'tanggal_mulai'       => 'required|date',
                 'tanggal_selesai'     => 'required|date|after_or_equal:tanggal_mulai',
+                'link_pendaftaran'    => 'required|url|max:255',
                 'pamflet_lomba'       => 'required|file|mimes:jpg,jpeg,png|max:5120',
             ];
 
@@ -92,6 +93,7 @@ class DospemLombaController extends Controller
                 'deskripsi'           => $request->deskripsi,
                 'tanggal_mulai'       => $request->tanggal_mulai,
                 'tanggal_selesai'     => $request->tanggal_selesai,
+                'link_pendaftaran'    => $request->link_pendaftaran,
                 'pamflet_lomba'       => $filePath,
                 'status_verifikasi'   => $status,
                 'user_id'             => $userId,
@@ -138,6 +140,7 @@ class DospemLombaController extends Controller
                 'deskripsi',
                 'tanggal_mulai',
                 'tanggal_selesai',
+                'link_pendaftaran',
                 'pamflet_lomba',
                 'status_verifikasi'
             );
