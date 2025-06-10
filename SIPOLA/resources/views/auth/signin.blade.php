@@ -146,10 +146,10 @@
         <div class="mb-3">
           <div class="input-group">
             <span class="input-group-text"><i class="bi bi-journal-code"></i></span>
-            <select name="id_prodi" class="form-control">
+            <select name="id_prodi" class="form-control" required>
               <option value="">-- Pilih Program Studi --</option>
               @foreach($prodi as $item)
-                <option value="{{ $item->id }}">{{ $item->nama_prodi }}</option>
+                <option value="{{ $item->id_prodi }}">{{ $item->nama_prodi }}</option>
               @endforeach
             </select>
           </div>
