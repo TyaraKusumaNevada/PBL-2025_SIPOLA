@@ -93,6 +93,46 @@
             });
         }
 
+        function resetPassword(url) {
+            Swal.fire({
+                title: 'Reset Password?',
+                text: 'Password akan direset ke "sipola123"',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Reset!',
+                cancelButtonText: 'Batal',
+                reverseButtons: true,
+                preConfirm: () => {
+                    Swal.showLoading(); //tampilkan loading spinner
+                    return $.ajax({
+                        url: url,
+                        type: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // pastikan ada <meta> ini di layout!
+                        }
+                    }).then(response => {
+                        if (!response.status) {
+                            throw new Error(response.message);
+                        }
+                        return response;
+                    }).catch(error => {
+                        Swal.showValidationMessage(
+                            `Gagal reset: ${error.message}`
+                        );
+                    });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then(result => {
+                if (result.isConfirmed && result.value) {
+                    Swal.fire({
+                        title: 'Berhasil!',
+                        text: result.value.message,
+                        icon: 'success'
+                    });
+                }
+            });
+        }
+
         // Inisialisasi DataTable
         var dataUser;
         $(document).ready(function() {

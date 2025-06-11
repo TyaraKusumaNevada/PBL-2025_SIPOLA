@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\RoleModel;
+use App\Models\User;
 use App\Models\AdminModel;
 use App\Models\DospemModel;
 use App\Models\MahasiswaModel;
@@ -69,15 +70,22 @@ class UserController extends Controller
             ->addColumn('aksi', function ($user) {
                 $id = $user['id_user'] ?? 0;
                 $role = $user['role_user'] ?? 'unknown';
+                    $urlShow = url("/user/$id/$role/show_ajax");
+                    $urlEdit = url("/user/$id/$role/edit_ajax");
+                    $urlDelete = url("/user/$id/$role/delete_ajax");
+                    $urlReset = url("/user/{$id}/reset_ajax"); // route reset password
                 return '
-                    <button onclick="modalAction(\''.url("/user/$id/$role/show_ajax").'\')" class="btn btn-info btn-sm">
+                    <button onclick="modalAction(\'' . $urlShow . '\')" class="btn btn-info btn-sm">
                         <i class="bi bi-eye"></i><span class="ms-2">Detail</span>
                     </button>
-                    <button onclick="modalAction(\''.url("/user/$id/$role/edit_ajax").'\')" class="btn btn-warning btn-sm">
+                    <button onclick="modalAction(\''. $urlEdit .'\')" class="btn btn-warning btn-sm">
                         <i class="bi bi-pencil-square"></i><span class="ms-2">Edit</span>
                     </button>
-                    <button onclick="modalAction(\''.url("/user/$id/$role/delete_ajax").'\')" class="btn btn-danger btn-sm">
+                    <button onclick="modalAction(\''. $urlDelete .'\')" class="btn btn-danger btn-sm">
                         <i class="bi bi-trash"></i><span class="ms-2">Hapus</span>
+                    </button>
+                    <button onclick="resetPassword(\'' . $urlReset . '\')" class="btn btn-secondary btn-sm">
+                        <i class="bi bi-arrow-counterclockwise"></i><span class="ms-2">Reset</span>
                     </button>
                 ';
             })
@@ -339,4 +347,56 @@ class UserController extends Controller
 
         return redirect('/');
     }
+
+    public function resetPassword_ajax(Request $request, string $id) {
+        // Cek apakah request dari AJAX dan user adalah admin
+        if (($request->ajax() || $request->wantsJson()) && auth()->user()->role === 'admin') {
+            $user = User::find($id);
+
+            if (!$user) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'User tidak ditemukan.',
+                ]);
+            }
+
+            // Reset password ke default (misalnya: 'sipola123')
+            $user->password = Hash::make('sipola123');
+            $user->save();
+
+            // Tambahkan juga untuk mahasiswa jika perlu
+            $mahasiswa = MahasiswaModel::where('user_id', $user->id)->first();
+            if ($mahasiswa) {
+                $mahasiswa->password = Hash::make('sipola123');
+                $mahasiswa->save();
+            }
+
+            // Reset password di tabel dospem
+            // $dospem = DospemModel::where('user_id', $user->id)->first();
+            // $dospem = $user->dosen;
+            // if ($dospem) {
+            //     $dospem->password = Hash::make('sipola123');
+            //     $dospem->save();
+            // }
+
+            // // Reset password di tabel admin
+            // $admin = AdminModel::where('user_id', $user->id)->first();
+            // if ($admin) {
+            //     $admin->password = Hash::make('sipola123');
+            //     $admin->save();
+            // }
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Password berhasil direset ke "sipola123".',
+            ]);
+        }
+
+        return response()->json([
+            'status' => false,
+            'message' => 'Unauthorized atau bukan AJAX request.',
+        ], 403);
+    }
+
+
 }
