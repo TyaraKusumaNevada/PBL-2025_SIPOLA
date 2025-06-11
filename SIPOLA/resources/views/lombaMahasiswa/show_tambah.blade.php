@@ -50,6 +50,18 @@
                     <td>{{ \Carbon\Carbon::parse($lomba->tanggal_selesai)->translatedFormat('d F Y, H:i') }}</td>
                 </tr>
                 <tr>
+                    <th>Link Pendaftaran</th>
+                    <td>
+                        @if ($lomba->link_pendaftaran)
+                            <a href="{{ $lomba->link_pendaftaran }}" target="_blank">
+                                {{ $lomba->link_pendaftaran }}
+                            </a>
+                        @else
+                            <span class="text-muted">Tidak ada link</span>
+                        @endif
+                    </td>
+                </tr>
+                <tr>
                     <th>Pamflet</th>
                     <td>
                         <a href="{{ asset('storage/' . $lomba->pamflet_lomba) }}" target="_blank"

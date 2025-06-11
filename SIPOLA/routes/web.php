@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardMahasiswaController;
+use App\Http\Controllers\DashboardDospemController;
 use App\Http\Controllers\InfoLombaController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\PeriodeController;
@@ -11,7 +12,7 @@ use App\Http\Controllers\ProgramStudiController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\RekomendasiController;
 use App\Http\Controllers\siginController;
-use App\Http\Controllers\TambahLombaController;
+use App\Http\Controllers\AdminLombaController;
 use App\Http\Controllers\MahasiswaLombaController;
 use App\Http\Controllers\DospemLombaController;
 use App\Http\Controllers\UserController;
@@ -24,6 +25,7 @@ Route::get('/landing', [LandingController::class, 'index']);
 
 // --- INFO LOMBA ---
 Route::get('/infolomba', [InfoLombaController::class, 'index'])->name('infolomba');
+
 
 // --- REKOMENDASI LOMBA ---
 Route::get('/rekomendasi', [RekomendasiController::class, 'form'])->name('rekomendasi.form');
@@ -40,6 +42,11 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->n
 Route::get('/signin', [siginController::class, 'showRegistrationForm'])->name('signin');
 Route::post('/signin', [siginController::class, 'register']);
 
+
+// Root view
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 // --- WELCOME / HOME PAGE ---
 Route::get('/welcome', function () {
     return view('welcome');
@@ -47,6 +54,7 @@ Route::get('/welcome', function () {
 Route::get('/home', function () {
     return view('welcome');
 });
+
 
 // --- DASHBOARD MAHASISWA ---
 Route::prefix('mahasiswa')->group(function () {
@@ -138,15 +146,28 @@ Route::prefix('prestasi')->group(function () {
 
 // --- MANAJEMEN LOMBA (ADMIN) ---
 Route::prefix('lomba')->group(function () {
-    Route::get('/', [TambahLombaController::class, 'index']);
-    Route::post('list', [TambahLombaController::class, 'list']);
-    Route::get('create_ajax', [TambahLombaController::class, 'create_ajax']);
-    Route::post('/ajax', [TambahLombaController::class, 'store_ajax']);
-    Route::get('{id}/show_ajax', [TambahLombaController::class, 'show_ajax']);
-    Route::get('{id}/edit_ajax', [TambahLombaController::class, 'edit_ajax']);
-    Route::put('{id}/update_ajax', [TambahLombaController::class, 'update_ajax']);
-    Route::get('/{id}/delete_ajax', [TambahLombaController::class, 'confirm_ajax']);
-    Route::delete('/{id}/delete_ajax', [TambahLombaController::class, 'delete_ajax']);
+    Route::get('/', [AdminLombaController::class, 'index']);
+    Route::post('list', [AdminLombaController::class, 'list']);
+    Route::get('create_ajax', [AdminLombaController::class, 'create_ajax']);
+    Route::post('/ajax', [AdminLombaController::class, 'store_ajax']);
+    Route::get('{id}/show_ajax', [AdminLombaController::class, 'show_ajax']);
+    Route::get('{id}/edit_ajax', [AdminLombaController::class, 'edit_ajax']);
+    Route::put('{id}/update_ajax', [AdminLombaController::class, 'update_ajax']);
+    Route::get('/{id}/delete_ajax', [AdminLombaController::class, 'confirm_ajax']);
+    Route::delete('/{id}/delete_ajax', [AdminLombaController::class, 'delete_ajax']);
+});
+
+// --- VERIFIKASI LOMBA (ADMIN) ---
+Route::prefix('lomba/verifikasi')->group(function () {
+    Route::get('/', [AdminLombaController::class, 'indexVerifikasi']);
+    Route::post('list', [AdminLombaController::class, 'listVerifikasi']);
+    Route::get('{id}/showVerifikasi', [AdminLombaController::class, 'showVerifikasi']);
+    Route::get('{id}/ubahStatus', [AdminLombaController::class, 'ubahStatus']);
+    Route::post('{id}/ubahStatus', [AdminLombaController::class, 'simpanStatus']);  
+    Route::get('{id}/editVerifikasi', [AdminLombaController::class, 'editVerifikasi']);
+    Route::put('{id}/updateVerifikasi', [AdminLombaController::class, 'updateVerifikasi']);
+    Route::get('/{id}/deleteVerifikasi', [AdminLombaController::class, 'confirmVerifikasi']);
+    Route::delete('/{id}/deleteVerifikasi', [AdminLombaController::class, 'deleteVerifikasi']);
 });
 
 // ----------------------------------------------------------------------------------------
@@ -174,7 +195,6 @@ Route::prefix('lombaMahasiswa')->group(function () {
     Route::get('{id}/show_tambah', [MahasiswaLombaController::class, 'show_tambah']);
 });
 // ----------------------------------------------------------------------------------------
-
 
 // ----------------------------------------------------------------------------------------
 // ROUTE ADMIN (Verifikasi Prestasi)
@@ -205,6 +225,11 @@ Route::get('/infolomba', [InfoLombaController::class, 'index'])->name('infolomba
 // -- Dashboard (Mahasiswa) --
 Route::prefix('mahasiswa')->group(function () {
     Route::get('/dashboard', [DashboardMahasiswaController::class, 'index'])->name('mahasiswa.dashboard.data');
+});
+
+// -- Dashboard (Dospem) --
+Route::prefix('dospem')->group(function () {
+    Route::get('/dashboard', [DashboardDospemController::class, 'index'])->name('dospem.dashboard.data');
 });
 
 Route::post('/profil/delete-academic', [ProfilController::class, 'deleteAcademicItem'])->name('profil.delete.academic');
