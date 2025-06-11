@@ -190,7 +190,7 @@ Route::prefix('/prestasiAdmin')->group(function () {
 // --- PROFIL ---
 // --- PROFIL MAHASISWA/ADMIN/DOSEN ---
 Route::get('/profilMahasiswa', [ProfilController::class, 'index'])->name('profil.index');
-Route::get('/profilAdmin', [ProfilController::class, 'indexAdmin'])->name('profilAdmin.index');
+Route::get('/profilAdmin', [ProfilController::class, 'indexAdmin'])->name('profil.indexAdmin');
 Route::get('/profilDosen', [ProfilController::class, 'indexDosen'])->name('profilDosen.index');
 
 // --- AKSI PROFIL (Update & Hapus Akademik) ---
