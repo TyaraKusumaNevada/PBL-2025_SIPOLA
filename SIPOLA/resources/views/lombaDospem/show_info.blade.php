@@ -58,6 +58,18 @@
                         <th scope="row">Tanggal Selesai</th>
                         <td>{{ \Carbon\Carbon::parse($lomba->tanggal_selesai)->translatedFormat('d F Y, H:i') }}</td>
                     </tr>
+                    <tr>
+                    <th>Link Pendaftaran</th>
+                    <td>
+                        @if ($lomba->link_pendaftaran)
+                            <a href="{{ $lomba->link_pendaftaran }}" target="_blank">
+                                {{ $lomba->link_pendaftaran }}
+                            </a>
+                        @else
+                            <span class="text-muted">Tidak ada link</span>
+                        @endif
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </div>

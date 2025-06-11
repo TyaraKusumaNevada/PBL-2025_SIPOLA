@@ -51,7 +51,7 @@
         <div class="scroll-container px-4">
           @foreach ($lomba_terbaru as $lomba)
             <div class="lomba-card">
-              <img src="{{ asset('storage/pamflet_lomba/' . $lomba->pamflet_lomba) }}" alt="{{ $lomba->nama_lomba }}">
+              <img src="{{ asset('storage/' . $lomba->pamflet_lomba) }}" alt="{{ $lomba->nama_lomba }}">
               <div class="card-body">
                 <div class="lomba-title">{{ $lomba->nama_lomba }}</div>
                 <div><span class="badge badge-deadline">Sampai {{ \Carbon\Carbon::parse($lomba->tanggal_selesai)->translatedFormat('d M Y') }}</span></div>
