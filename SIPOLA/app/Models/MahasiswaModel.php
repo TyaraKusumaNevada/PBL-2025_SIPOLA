@@ -22,7 +22,8 @@ class MahasiswaModel extends Model
         'email', 
         'nomor_telepon',
         'bidang_keahlian', 
-        'minat', 
+        'minat',
+        'id_prodi', 
         'id_angkatan', 
         'id_role',
         'id_dosen'
