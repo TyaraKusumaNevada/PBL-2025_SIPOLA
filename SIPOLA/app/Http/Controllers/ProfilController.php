@@ -26,7 +26,7 @@ class ProfilController extends Controller
             $fotoPath = asset('storage/foto_profil/user_.jpg');
         }
 
-        switch ($user->role) {
+        switch ($user->id_role) {
             case 1: // Admin
                 $admin = AdminModel::where('id_admin', $user->id)->first();
                 return view('profil.indexAdmin', compact('user', 'admin', 'fotoPath'));

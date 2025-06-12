@@ -82,35 +82,20 @@
 </head>
 
 <body>
+    <!-- Tombol kembali -->
+    <a href="{{ url('/landing') }}" class="back-button">
+        <i class="bi bi-arrow-left"></i>
+    </a>
 
-  <!-- Tombol kembali -->
-  <a href="{{ url('/landing') }}" class="back-button">
-    <i class="bi bi-arrow-left"></i>
-  </a>
-
-  <div class="container-fluid">
-    <div class="row full-height">
-      <!-- Kolom Gambar -->
-      <div class="col-md-8 d-none d-md-block p-0 position-relative">
-        <img src="{{ asset('image/polinema.png') }}" alt="Gambar Login" class="login-image h-100 w-100">
-        <div class="position-absolute bottom-0 start-0 p-4 text-white text-left">
-          <h4>Bersama, kita unggul di Polinema!</h4>
-          <h2><strong>TI FAST, TI BRAVO</strong></h2>
-        </div>
-      </div>
-
-      <!-- Kolom Form Login -->
-      <div class="col-md-4 d-flex align-items-center justify-content-center">
-        <form id="form-login" action="{{ url('/login') }}" method="POST" class="w-75">
-          @csrf
-          <img src="{{ asset('image/logo_sipola.png') }}" alt="Gambar Logo" class="logo-image h-50 w-50 d-block mx-auto">
-
-          <!-- Username -->
-          <div class="mb-3">
-            <div class="input-group">
-              <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
-              <input type="text" name="username" class="form-control" id="username" placeholder="Username">
-
+    <div class="container-fluid">
+        <div class="row full-height">
+            <!-- Kolom Gambar -->
+            <div class="col-md-8 d-none d-md-block p-0 position-relative">
+                <img src="{{ asset('image/polinema.png') }}" alt="Gambar Login" class="login-image h-100 w-100">
+                <div class="position-absolute bottom-0 start-0 p-4 text-white text-left">
+                    <h4>Bersama, kita unggul di Polinema!</h4>
+                    <h2><strong>TI FAST, TI BRAVO</strong></h2>
+                </div>
             </div>
 
             <!-- Kolom Form Login -->
@@ -131,50 +116,57 @@
                     </div>
 
                     <!-- Password -->
-                    <div>
+                    <div class="mb-5">
                         <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
                             <input type="password" name="password" class="form-control" id="password"
                                 placeholder="Password" />
                         </div>
                         <span id="error-password" class="text-danger error-text"></span>
-                    </div>
 
-                    <div class="text-end mb-4">
-                        <small class="form-text text-muted small">
-                            Lupa password? <a
-                                href="https://wa.me/6285742217624?text=Halo%20admin%2C%20saya%20ingin%20me-reset%20akun%20SIPOLA%20saya."
-                                class="custom" target="_blank">
-                                Hubungi admin!
-                            </a>
-                        </small>
+
                     </div>
 
                     <!-- Tombol Login -->
-                    <button type="submit" class="btn custom-primary w-100">Masuk</button>
+                    <div class="mb-3">
+                        <button type="submit" class="btn custom-primary w-100">Masuk</button>
+                    </div>
 
                     <!-- Link ke Signin -->
-                    <div class="text-center mt-2">
+                    <div class="text-center mt-4">
                         <small class="form-text text-muted">
-                            Belum punya akun? <a href="{{ url('/signin') }}" class="custom">Daftar</a>
+                            Belum punya akun? <a href="{{ url('/signin') }}" class="custom">Signin</a>
                         </small>
                     </div>
                 </form>
             </div>
+
+
+
+
+
+
+
+
+
+
+
         </div>
     </div>
 
-    <!-- JavaScript -->
+
     <!-- jQuery & Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <!-- jQuery Validation -->
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/additional-methods.min.js"></script>
+
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <script>
         function myFunction() {
             var x = document.getElementById("password");
@@ -193,7 +185,7 @@
         $(document).ready(function() {
             $("#form-login").validate({
                 rules: {
-                    username: {
+                    userame: {
                         required: true,
                         minlength: 3,
                         maxlength: 20
@@ -204,13 +196,13 @@
                         maxlength: 20
                     }
                 },
-                submitHandler: function(form) {
+                submitHandler: function(form) { // ketika valid, maka bagian yg akan dijalankan
                     $.ajax({
                         url: form.action,
                         type: form.method,
                         data: $(form).serialize(),
                         success: function(response) {
-                            if (response.status) {
+                            if (response.status) { // jika sukses
                                 Swal.fire({
                                     icon: 'success',
                                     title: 'Berhasil',
@@ -218,7 +210,7 @@
                                 }).then(function() {
                                     window.location = response.redirect;
                                 });
-                            } else {
+                            } else { // jika error
                                 $('.error-text').text('');
                                 $.each(response.msgField, function(prefix, val) {
                                     $('#error-' + prefix).text(val[0]);
@@ -238,10 +230,10 @@
                     error.addClass('invalid-feedback');
                     element.closest('.input-group').append(error);
                 },
-                highlight: function(element) {
+                highlight: function(element, errorClass, validClass) {
                     $(element).addClass('is-invalid');
                 },
-                unhighlight: function(element) {
+                unhighlight: function(element, errorClass, validClass) {
                     $(element).removeClass('is-invalid');
                 }
             });

@@ -1,6 +1,6 @@
 <!-- Sidebar -->
 @php
-    $hakAkses = Auth::user()->role;
+    $hakAkses = Auth::user()->id_role;
 @endphp
 
 <div class="user-panel d-flex align-items-center px-3 py-3" style="border-bottom: 1px solid #d1d5db;">
@@ -60,6 +60,7 @@
                 <div class="text-truncate" data-i18n="Dashboard">Dashboard</div>
             </a>
         </li>
+         
     @endif
 
     {{-- <!-- Profil Admin -->
@@ -99,6 +100,29 @@
                 <i class="bi bi-file-earmark-text menu-icon fs-5"></i>
                 <div class="text-truncate" data-i18n="ManajemenLomba">Unggah Prestasi</div>
             </a>
+        </li>
+        <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="bi bi-journal-text menu-icon fs-5"></i>
+                <div class="text-truncate" data-i18n="InfoLomba">Info Lomba</div>
+            </a>
+            <ul class="menu-sub">
+                <li class="menu-item {{ Request::is('lombaMahasiswa') ? 'active open' : '' }}">
+                    <a href="{{ url('/lombaMahasiswa') }}" class="menu-link">
+                        <div class="text-truncate" data-i18n="LombaTersedia">Lomba Tersedia</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ Request::is('rekomendasi') ? 'active open' : '' }}">
+                    <a href="{{ url('/rekomendasi') }}" class="menu-link">
+                        <div class="text-truncate" data-i18n="Rekomendasi Lomba">Rekomedasi Lomba</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ Request::is('lombaMahasiswa/histori') ? 'active open' : '' }}">
+                    <a href="{{ url('/lombaMahasiswa/histori') }}" class="menu-link">
+                        <div class="text-truncate" data-i18n="HistoriLomba">Histori Lomba</div>
+                    </a>
+                </li>
+            </ul>
         </li>
     @endif
 
@@ -146,7 +170,6 @@
                     <a href="{{ url('/rekomendasi') }}" class="menu-link">
                         <div class="text-truncate" data-i18n="Rekomendasi Lomba">Rekomedasi Lomba</div>
                     </a>
-                </li>
                 <li class="menu-item {{ Request::is('lombaMahasiswa') ? 'active open' : '' }}">
                     <a href="{{ url('/lombaMahasiswa') }}" class="menu-link">
                         <div class="text-truncate" data-i18n="LombaTersedia">Lomba Tersedia</div>
@@ -157,10 +180,6 @@
                         <div class="text-truncate" data-i18n="HistoriLomba">Histori Lomba</div>
                     </a>
                 </li>
-            </ul>
-        </li>
-    @endif
-
     @if ($hakAkses == 2)
         <!-- Menu Dosen Pembimbing (Lomba Mahasiswa) -->
         <li class="menu-item">
