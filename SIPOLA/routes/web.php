@@ -17,6 +17,7 @@ use App\Http\Controllers\MahasiswaLombaController;
 use App\Http\Controllers\DospemLombaController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VerifikasiPrestasiController;
+use App\Http\Controllers\LaporanPrestasiController;
 
 
 // --- LANDING ---
@@ -221,3 +222,14 @@ Route::prefix('dospem')->group(function () {
 });
 
 Route::post('/profil/delete-academic', [ProfilController::class, 'deleteAcademicItem'])->name('profil.delete.academic');
+
+
+
+// -- Laporan dan Analisis (Admin)
+Route::prefix('/laporanAdmin')->group(function () {
+    Route::get('/', [LaporanPrestasiController::class, 'index'])->name('laporan.index');
+    Route::get('/list', [LaporanPrestasiController::class, 'list'])->name('laporan.list');
+    Route::get('/grafik', [LaporanPrestasiController::class, 'grafik'])->name('laporan.grafik');
+    Route::get('/export-pdf', [LaporanPrestasiController::class, 'exportPdf'])->name('laporan.exportPdf');
+});
+
