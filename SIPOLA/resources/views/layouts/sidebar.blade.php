@@ -112,14 +112,17 @@
         </li>
     @endif
 
-    <!-- Menu Mahasiswa (Lomba User) -->
-    @if ($hakAkses == 3)
+   <!-- Menu Dosen Pembimbing -->
+    @if ($hakAkses == 2)
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="bi bi-journal-text menu-icon fs-5"></i>
-                <div class="text-truncate" data-i18n="InfoLomba">Info Lomba</div>
+                <i class="bi bi-person-badge menu-icon fs-5"></i>
+                <div class="text-truncate" data-i18n="Bimbingan">Mahasiswa Binaan</div>
             </a>
             <ul class="menu-sub">
+                <li class="menu-item {{ Request::is('dospem/mahasiswa_prestasi') ? 'active open' : '' }}">
+                    <a href="{{ url('/dospem/mahasiswa_prestasi') }}" class="menu-link">
+                        <div class="text-truncate" data-i18n="PrestasiMahasiswa">Info Prestasi</div>
                 <li class="menu-item {{ Request::is('rekomendasi') ? 'active open' : '' }}">
                     <a href="{{ url('/rekomendasi') }}" class="menu-link">
                         <div class="text-truncate" data-i18n="Rekomendasi Lomba">Rekomedasi Lomba</div>
@@ -130,11 +133,21 @@
                         <div class="text-truncate" data-i18n="LombaTersedia">Lomba Tersedia</div>
                     </a>
                 </li>
-                <li class="menu-item {{ Request::is('lombaMahasiswa/histori') ? 'active open' : '' }}">
-                    <a href="{{ url('/lombaMahasiswa/histori') }}" class="menu-link">
-                        <div class="text-truncate" data-i18n="HistoriLomba">Histori Lomba</div>
+                {{-- <li class="menu-item {{ Request::is('dospem/bimbingan') ? 'active open' : '' }}">
+                    <a href="{{ url('/dospem/bimbingan') }}" class="menu-link">
+                        <div class="text-truncate" data-i18n="DaftarMahasiswa">Daftar Mahasiswa</div>
                     </a>
                 </li>
+                <li class="menu-item {{ Request::is('dospem/prestasi') ? 'active open' : '' }}">
+                    <a href="{{ url('/dospem/prestasi') }}" class="menu-link">
+                        <div class="text-truncate" data-i18n="PrestasiMahasiswa">Semua Prestasi</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ Request::is('dospem/prestasi/filter') ? 'active open' : '' }}">
+                    <a href="{{ url('/dospem/prestasi/filter') }}" class="menu-link">
+                        <div class="text-truncate" data-i18n="FilterPrestasi">Filter Prestasi</div>
+                    </a>
+                </li> --}}
             </ul>
         </li>
     @endif

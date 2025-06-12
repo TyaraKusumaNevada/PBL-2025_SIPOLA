@@ -13,6 +13,7 @@ use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\RekomendasiController;
 use App\Http\Controllers\siginController;
 use App\Http\Controllers\AdminLombaController;
+use App\Http\Controllers\DospemController;
 use App\Http\Controllers\MahasiswaLombaController;
 use App\Http\Controllers\DospemLombaController;
 use App\Http\Controllers\UserController;
@@ -176,6 +177,15 @@ Route::prefix('lombaDospem')->group(function () {
     Route::post('ajax', [DospemLombaController::class, 'store_ajax']);
     Route::get('histori', [DospemLombaController::class, 'histori'])->name('lombaDospem.histori');
     Route::get('{id}/show_tambah', [DospemLombaController::class, 'show_tambah']);
+});
+// ----------------------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------------------
+// ROUTE DOSPEM (Mahasiswa Bimbingan)
+Route::prefix('dospem/mahasiswa_prestasi')->group(function () {
+    Route::get('/', [DospemController::class, 'index'])->name('dospem.mahasiswa_prestasi.index');
+    Route::get('list', [DospemController::class, 'listMahasiswaPrestasi'])->name('dospem.mahasiswa_prestasi.list');
+    Route::get('{id}/detail', [DospemController::class, 'detailPrestasi'])->name('dospem.mahasiswa_prestasi.detail');
 });
 // ----------------------------------------------------------------------------------------
 
