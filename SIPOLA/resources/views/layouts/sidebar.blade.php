@@ -147,7 +147,7 @@
         </li>
     @endif
 
-    <!-- Profil Admin -->
+    {{-- <!-- Profil Admin -->
     @if ($hakAkses == 1)
         <li class="menu-item {{ Request::is('admin/profil') ? 'active open' : '' }}">
             <a href="{{ url('/admin/profil') }}" class="menu-link d-flex align-items-center">
@@ -175,7 +175,7 @@
                 <div class="text-truncate" data-i18n="MahasiswaProfil">Profil</div>
             </a>
         </li>
-    @endif
+    @endif --}}
 
     <!-- Unggah Prestasi -->
     @if ($hakAkses == 3)
@@ -300,6 +300,17 @@
             </a>
         </li>
     @endif
+    
+    <!-- Laporan dan Analisis -->
+    @if ($hakAkses == 1)
+    <li class="menu-item {{ Request::is('laporanAdmin*') ? 'active open' : '' }}">
+        <a href="{{ url('/laporanAdmin') }}" class="menu-link d-flex align-items-center">
+            <i class="bi bi-bar-chart-line menu-icon fs-5"></i>
+            <div class="text-truncate" data-i18n="LaporanAnalisis">Laporan & Analisis</div>
+        </a>
+    </li>
+    @endif
+
 
     <!-- Spacer supaya tombol logout di bawah -->
     <li style="flex-grow: 1;"></li>
