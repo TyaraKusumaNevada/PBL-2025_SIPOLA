@@ -16,27 +16,22 @@ class LaporanPrestasiController extends Controller
             'list'  => ['Home', 'Laporan & Analisis Prestasi']
         ];
         
-        $verifikasiStatus = ['pending', 'divalidasi', 'ditolak']; 
+        $kategoriLomba = ['akademik', 'non-akademik'];
+        return view('admin.laporan.index', compact('breadcrumb', 'kategoriLomba'));
 
-        return view('admin.laporan.index', compact('breadcrumb', 'verifikasiStatus'));
     }
 
     public function list(Request $request)
     {
         $prestasis = PrestasiModel::with('mahasiswa');
 
-        if ($request->status) {
-            $prestasis->where('status', $request->status);
+        // Filter kategori jika ada
+        if ($request->has('kategori') && $request->kategori != '') {
+            $prestasis->where('kategori_prestasi', $request->kategori);
         }
 
         return DataTables::eloquent($prestasis)
             ->addIndexColumn()
-            // Kolom nama mahasiswa (harus manual untuk support pencarian)
-            ->filterColumn('nama', function($query, $keyword) {
-                $query->whereHas('mahasiswa', function ($q) use ($keyword) {
-                    $q->where('nama', 'like', "%$keyword%");
-                });
-            })
             ->addColumn('nama', fn($row) => $row->mahasiswa->nama ?? '-')
             ->addColumn('nama_prestasi', fn($row) => $row->nama_prestasi ?? '-')
             ->addColumn('kategori_prestasi', fn($row) => $row->kategori_prestasi ?? '-')
@@ -50,16 +45,33 @@ class LaporanPrestasiController extends Controller
             ->addColumn('catatan', fn($row) => $row->catatan ?? '-')
             ->rawColumns(['status'])
             ->make(true);
-        }
+    }
 
     public function grafik()
     {
-        $statistik = PrestasiModel::selectRaw('status, COUNT(*) as total')
-            ->groupBy('status')
-            ->pluck('total', 'status');
+        $statistik = PrestasiModel::selectRaw('kategori_prestasi, COUNT(*) as total')
+            ->groupBy('kategori_prestasi')
+            ->pluck('total', 'kategori_prestasi');
 
         return response()->json($statistik);
     }
+
+public function statistikBox(Request $request)
+{
+    $kategori = $request->kategori;
+
+    $query = PrestasiModel::query();
+    if ($kategori) {
+        $query->where('kategori_prestasi', $kategori);
+    }
+
+    return response()->json([
+        'mahasiswa' => $query->distinct('mahasiswa_id')->count('mahasiswa_id'),
+        'total' => $query->count(),
+        'divalidasi' => $query->where('status', 'divalidasi')->count(),
+        'pending' => $query->where('status', 'pending')->count(),
+    ]);
+}
 
     public function exportPdf()
     {
