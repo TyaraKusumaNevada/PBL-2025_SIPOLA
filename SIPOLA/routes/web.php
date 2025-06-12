@@ -190,6 +190,15 @@ Route::prefix('dospem/mahasiswa_prestasi')->group(function () {
 // ----------------------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------------------
+// ROUTE DOSPEM (Mahasiswa Bimbingan)
+// Route::prefix('dospem')->name('dospem.')->middleware(['auth', 'role:dospem'])->group(function () {
+Route::prefix('dospem/prestasi')->group(function () {
+    Route::get('filter', [DospemController::class, 'filterView'])->name('prestasi.filter');
+    Route::get('filter/data', [DospemController::class, 'filterData'])->name('prestasi.filter.data');
+});
+// ----------------------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------------------
 // ROUTE MAHASISWA (Lomba)
 Route::prefix('lombaMahasiswa')->group(function () {
     Route::get('/', [MahasiswaLombaController::class, 'index']);
@@ -250,4 +259,3 @@ Route::prefix('/laporanAdmin')->group(function () {
     Route::get('/statistikBox', [LaporanPrestasiController::class, 'statistikBox'])->name('laporan.statistikBox');
     Route::get('/statistikMahasiswa', [LaporanPrestasiController::class, 'statistikMahasiswa'])->name('laporan.statistikMahasiswa');
 });
-
