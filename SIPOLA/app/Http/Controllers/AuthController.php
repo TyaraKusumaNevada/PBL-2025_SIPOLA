@@ -55,7 +55,7 @@ class AuthController extends Controller
         
         if ($mahasiswa) {
             $userFound = true;
-            $userType = 'student';
+            $userType = 'mahasiswa';
             $userData = $mahasiswa;
         } else {
             // Check in dosen table for NIP/NIDN
@@ -88,7 +88,7 @@ class AuthController extends Controller
 
             if (!$user) {
                 // User doesn't exist in users table yet, create based on corresponding specialized table
-                $name = $userType === 'student' ? $userData->nama : ($userType === 'dosen' ? $userData->nama : $userData->nama);
+                $name = $userType === 'mahasiswa' ? $userData->nama : ($userType === 'dosen' ? $userData->nama : $userData->nama);
                 
                 $user = User::create([
                     'name' => $name,
@@ -107,7 +107,21 @@ class AuthController extends Controller
                 
                 // Redirect based on user role
                 
-              $redirectTo = '/home';
+            //   $redirectTo = '/home';
+            switch ($userType) {
+                case 'mahasiswa':   //pakai mahasiswa biar konsisten BUKAN student
+                    $redirectTo = route('mahasiswa.dashboard.data');
+                    break;
+                case 'dosen':
+                    $redirectTo = route('dospem.dashboard.data');
+                    break;
+                //INI DI MATIKAN DULU SOALNYA BELUM ADA VIEW NYA
+                // case 'admin':
+                //     $redirectTo = route('admin.dashboard'); // ganti sesuai nama route admin kalau ada
+                //     break;
+                default:
+                    $redirectTo = '/home';
+            }
                 
                 // Send response for the client-side alert (successful login)
                 return response()->json([

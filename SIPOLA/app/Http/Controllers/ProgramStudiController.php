@@ -42,7 +42,7 @@ class ProgramStudiController extends Controller
     public function store_ajax(Request $request)
     {
         $request->validate([
-            'nama_prodi' => 'required|string|max:255',
+            'nama_prodi' => 'required|string|max:100',      //cegah injection
             'jenjang'    => 'required|in:D2,D3,D4',
         ]);
         ProgramStudiModel::create($request->only('nama_prodi', 'jenjang'));
@@ -64,7 +64,7 @@ class ProgramStudiController extends Controller
     public function update_ajax(Request $request, $id)
     {
     $request->validate([
-        'nama_prodi' => 'required|string|max:255',
+        'nama_prodi' => 'required|string|max:100',      //cegah injection
         'jenjang'    => 'required|in:D2,D3,D4',
     ]);
 
