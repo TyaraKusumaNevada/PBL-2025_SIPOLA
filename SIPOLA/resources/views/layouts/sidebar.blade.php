@@ -290,6 +290,17 @@
             </a>
         </li>
     @endif
+    
+    <!-- Laporan dan Analisis -->
+    @if ($hakAkses == 1)
+    <li class="menu-item {{ Request::is('laporanAdmin*') ? 'active open' : '' }}">
+        <a href="{{ url('/laporanAdmin') }}" class="menu-link d-flex align-items-center">
+            <i class="bi bi-bar-chart-line menu-icon fs-5"></i>
+            <div class="text-truncate" data-i18n="LaporanAnalisis">Laporan & Analisis</div>
+        </a>
+    </li>
+    @endif
+
 
     <!-- Spacer supaya tombol logout di bawah -->
     <li style="flex-grow: 1;"></li>
