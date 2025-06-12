@@ -147,7 +147,7 @@
         </li>
     @endif
 
-    <!-- Profil Admin -->
+    {{-- <!-- Profil Admin -->
     @if ($hakAkses == 1)
         <li class="menu-item {{ Request::is('admin/profil') ? 'active open' : '' }}">
             <a href="{{ url('/admin/profil') }}" class="menu-link d-flex align-items-center">
@@ -175,7 +175,7 @@
                 <div class="text-truncate" data-i18n="MahasiswaProfil">Profil</div>
             </a>
         </li>
-    @endif
+    @endif --}}
 
     <!-- Unggah Prestasi -->
     @if ($hakAkses == 3)
