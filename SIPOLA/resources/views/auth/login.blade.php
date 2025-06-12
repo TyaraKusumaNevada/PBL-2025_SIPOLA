@@ -116,7 +116,7 @@
                     </div>
 
                     <!-- Password -->
-                    <div class="mb-5">
+                    <div>
                         <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
                             <input type="password" name="password" class="form-control" id="password"
@@ -125,13 +125,23 @@
                         <span id="error-password" class="text-danger error-text"></span>
                     </div>
 
+                    <div class="text-end mb-4">
+                        <small class="form-text text-muted small">
+                            Lupa password? <a
+                                href="https://wa.me/6285742217624?text=Halo%20admin%2C%20saya%20ingin%20me-reset%20akun%20SIPOLA%20saya."
+                                class="custom" target="_blank">
+                                Hubungi admin!
+                            </a>
+                        </small>
+                    </div>
+
                     <!-- Tombol Login -->
                     <button type="submit" class="btn custom-primary w-100">Masuk</button>
 
                     <!-- Link ke Signin -->
                     <div class="text-center mt-2">
                         <small class="form-text text-muted">
-                            Belum punya akun? <a href="{{ url('/signin') }}" class="custom">Signin</a>
+                            Belum punya akun? <a href="{{ url('/signin') }}" class="custom">Daftar</a>
                         </small>
                     </div>
                 </form>

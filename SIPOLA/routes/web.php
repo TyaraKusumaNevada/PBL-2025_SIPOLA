@@ -126,6 +126,7 @@ Route::prefix('user')->group(function () {
     Route::put('{id}/{role}/update_ajax', [UserController::class, 'update_ajax']);
     Route::get('{id}/{role}/delete_ajax', [UserController::class, 'confirm_ajax']);
     Route::delete('{id}/{role}/delete_ajax', [UserController::class, 'delete_ajax']);
+    Route::post('{id}/{role}/reset_ajax', [UserController::class, 'resetPassword_ajax']);
 });
 
 // ----------------------------------------------------------------------------------------
