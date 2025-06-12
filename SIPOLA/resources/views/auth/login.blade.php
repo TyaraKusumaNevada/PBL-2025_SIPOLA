@@ -100,7 +100,7 @@
 
       <!-- Kolom Form Login -->
       <div class="col-md-4 d-flex align-items-center justify-content-center">
-        <form id="form-login" action="{{ url('/loginPost') }}" method="POST" class="w-75">
+        <form id="form-login" action="{{ url('/login') }}" method="POST" class="w-75">
           @csrf
           <img src="{{ asset('image/logo_sipola.png') }}" alt="Gambar Logo" class="logo-image h-50 w-50 d-block mx-auto">
 

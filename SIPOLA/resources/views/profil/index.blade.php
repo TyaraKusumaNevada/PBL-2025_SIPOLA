@@ -1,4 +1,3 @@
-
 @extends('layouts.template')
 
 @section('content')
@@ -13,6 +12,22 @@
             font-family: 'Poppins', sans-serif;
             background-color: #f9fafc;
             color: #333;
+        }
+
+        .btn-outline-success {
+            border-color: #4026d1;
+            color: #4026d1;
+            background-color: transparent;
+        }
+
+        .btn-outline-success:hover,
+        .btn-outline-success:focus,
+        .btn-outline-success:active,
+        .btn-outline-success:active:focus {
+            background-color: #4026d1;
+            color: white;
+            border-color: #4026d1;
+            box-shadow: none;
         }
 
         h1,
@@ -39,9 +54,9 @@
         }
 
         .btn-outline-primary:hover {
-            background-color: #2b3ea0;
+            background-color: #4026d1;
             color: white;
-            border-color: #2b3ea0;
+            border-color: #4026d1;
         }
 
         .btn-secondary {
@@ -51,7 +66,7 @@
         }
 
         .table thead {
-            background-color: #2b3ea0;
+            background-color: #4026d1;
         }
 
         .table thead th {
@@ -102,7 +117,7 @@
         <h1 class="mb-4">Profil Mahasiswa</h1>
 
         {{-- Profil Display --}}
-        <div class="card p-4">
+        <div class="card p-4" >
             <div class="row align-items-center">
                 <div class="col-md-3 text-center profile-img">
                     <img id="profile-photo" src="{{ $fotoPath }}" alt="Foto Profil" class="rounded-circle" width="150"
@@ -113,10 +128,10 @@
                     <p><strong>NIM:</strong> <span id="display-username">{{ $user->username }}</span></p>
                     @if ($mahasiswa)
                         <p><strong>Program Studi:</strong> {{ $mahasiswa->prodi->nama_prodi ?? '-' }}</p>
-                      
+
                     @else
                         <p><strong>Program Studi:</strong> -</p>
-                    
+
                     @endif
                 </div>
                 <div class="col-md-3 text-end">
@@ -148,7 +163,8 @@
                             accept=".jpg,.jpeg,.png">
                         <div id="error-foto" class="text-danger mt-1" style="display:none;"></div>
                     </div>
-                    <button type="submit" class="btn btn-success">Simpan</button>
+                    <button type="submit" class="btn btn-success"
+                        style="background-color: #4026d1; border-color: #4026d1; box-shadow: none;">Simpan</button>
                     <button type="button" class="btn btn-secondary" id="btn-cancel">Batal</button>
                 </form>
             </div>
@@ -238,7 +254,7 @@
                         <input type="text" class="form-control" id="add-academic-value" name="value" required>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-success">Tambah</button>
+                        <button type="submit" class="btn btn-success" style="background-color: #4026d1; border-color: #4026d1; box-shadow: none;">Tambah</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                     </div>
                 </form>
@@ -438,9 +454,9 @@
                     div.className = 'academic-item';
                     div.setAttribute('data-index', index);
                     div.innerHTML = `
-                            <span>${item.trim()}</span>
-                            <i class="fa fa-trash delete-btn" onclick="deleteAcademicItem('${type}', ${index})" title="Hapus item"></i>
-                        `;
+                                                <span>${item.trim()}</span>
+                                                <i class="fa fa-trash delete-btn" onclick="deleteAcademicItem('${type}', ${index})" title="Hapus item"></i>
+                                            `;
                     container.appendChild(div);
                 }
             });

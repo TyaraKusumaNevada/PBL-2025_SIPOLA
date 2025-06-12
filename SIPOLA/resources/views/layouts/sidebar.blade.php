@@ -1,6 +1,6 @@
 <!-- Sidebar -->
 @php
-    $hakAkses = Auth::user()->id_role;
+    $hakAkses = Auth::user()->role;
 @endphp
 
 <div class="user-panel d-flex align-items-center px-3 py-3" style="border-bottom: 1px solid #d1d5db;">
@@ -30,91 +30,6 @@
         </span>
     </a>
 </div>
-{{-- @if(role == mahasiswa)
-<div class="user-panel d-flex align-items-center px-3 py-3" style="border-bottom: 1px solid #d1d5db;">
-    <a href="{{ route('profil.index') }}" class="d-flex align-items-center text-dark text-decoration-none">
-        @php
-            $userId = Auth::id();
-            $userImagePath = 'storage/foto_profil/user_' . $userId . '.jpg';
-            $defaultImage = 'storage/foto_profil/user_.jpg';
-            $imagePath = file_exists(public_path($userImagePath)) ? asset($userImagePath) : asset($defaultImage);
-
-            $user = Auth::user();
-            $fullName = $user->name ?? ($user->nama ?? ($user->full_name ?? ($user->username ?? 'Guest')));
-            $nameParts = explode(' ', trim($fullName));
-
-            if (count($nameParts) <= 2) {
-                $displayName = $fullName;
-            } else {
-                $firstName = $nameParts[0];
-                $lastInitial = strtoupper(substr(end($nameParts), 0, 1));
-                $displayName = $firstName . ' ' . $lastInitial . '.';
-            }
-        @endphp
-        <img id="sidebar-foto-profil" src="{{ $imagePath }}" class="rounded-circle" alt="User Image"
-            style="width: 40px; height: 40px; object-fit: cover; border: 2px solid #d1d5db;">
-        <span id="sidebar-nama-user" class="ms-2 fw-semibold text-dark" title="{{ $fullName }}">
-            {{ $displayName }}
-        </span>
-    </a>
-</div>
-@elseif(role == admin)
-    <div class="user-panel d-flex align-items-center px-3 py-3" style="border-bottom: 1px solid #d1d5db;">
-    <a href="{{ route('profilAdmin.index') }}" class="d-flex align-items-center text-dark text-decoration-none">
-        @php
-            $userId = Auth::id();
-            $userImagePath = 'storage/foto_profil/user_' . $userId . '.jpg';
-            $defaultImage = 'storage/foto_profil/user_.jpg';
-            $imagePath = file_exists(public_path($userImagePath)) ? asset($userImagePath) : asset($defaultImage);
-
-            $user = Auth::user();
-            $fullName = $user->name ?? ($user->nama ?? ($user->full_name ?? ($user->username ?? 'Guest')));
-            $nameParts = explode(' ', trim($fullName));
-
-            if (count($nameParts) <= 2) {
-                $displayName = $fullName;
-            } else {
-                $firstName = $nameParts[0];
-                $lastInitial = strtoupper(substr(end($nameParts), 0, 1));
-                $displayName = $firstName . ' ' . $lastInitial . '.';
-            }
-        @endphp
-        <img id="sidebar-foto-profil" src="{{ $imagePath }}" class="rounded-circle" alt="User Image"
-            style="width: 40px; height: 40px; object-fit: cover; border: 2px solid #d1d5db;">
-        <span id="sidebar-nama-user" class="ms-2 fw-semibold text-dark" title="{{ $fullName }}">
-            {{ $displayName }}
-        </span>
-    </a>
-</div>
-@elseif(role == dosen)
-<div class="user-panel d-flex align-items-center px-3 py-3" style="border-bottom: 1px solid #d1d5db;">
-    <a href="{{ route('profilDosen.index') }}" class="d-flex align-items-center text-dark text-decoration-none">
-        @php
-            $userId = Auth::id();
-            $userImagePath = 'storage/foto_profil/user_' . $userId . '.jpg';
-            $defaultImage = 'storage/foto_profil/user_.jpg';
-            $imagePath = file_exists(public_path($userImagePath)) ? asset($userImagePath) : asset($defaultImage);
-
-            $user = Auth::user();
-            $fullName = $user->name ?? ($user->nama ?? ($user->full_name ?? ($user->username ?? 'Guest')));
-            $nameParts = explode(' ', trim($fullName));
-
-            if (count($nameParts) <= 2) {
-                $displayName = $fullName;
-            } else {
-                $firstName = $nameParts[0];
-                $lastInitial = strtoupper(substr(end($nameParts), 0, 1));
-                $displayName = $firstName . ' ' . $lastInitial . '.';
-            }
-        @endphp
-        <img id="sidebar-foto-profil" src="{{ $imagePath }}" class="rounded-circle" alt="User Image"
-            style="width: 40px; height: 40px; object-fit: cover; border: 2px solid #d1d5db;">
-        <span id="sidebar-nama-user" class="ms-2 fw-semibold text-dark" title="{{ $fullName }}">
-            {{ $displayName }}
-        </span>
-    </a>
-</div>
-@endif --}}
 <!-- Menu Items -->
 <ul class="menu-inner">
     <!-- Dashboard Admin -->
@@ -306,7 +221,6 @@
         padding-top: 0.25rem;
         margin: 0;
     }
-
     .menu-inner a.menu-link,
     .menu-inner button.menu-link {
         padding: 10px 16px;
@@ -320,12 +234,12 @@
 
     .menu-inner a.menu-link:hover,
     .menu-inner button.menu-link:hover {
-        background-color: #2b3ea0 !important;
+        background-color: #4026d1 !important;
         color: #ffffff !important;
     }
 
     .menu-item.active>a.menu-link {
-        background-color: #2b3ea0 !important;
+        background-color: #4026d1 !important;
         color: #ffffff !important;
         font-weight: 600;
     }
@@ -337,7 +251,6 @@
     .menu-inner li {
         list-style: none;
     }
-
     .user-panel {
         margin: 0;
         padding: 12px 16px;
@@ -358,7 +271,7 @@
             text: "Anda akan keluar dari sesi saat ini.",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
+            confirmButtonColor: '#dc2626',
             cancelButtonColor: '#6c757d',
             confirmButtonText: 'Ya, Logout',
             cancelButtonText: 'Batal'

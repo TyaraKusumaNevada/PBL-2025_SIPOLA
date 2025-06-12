@@ -1,4 +1,3 @@
-
 <?php
 
 namespace App\Http\Controllers;
@@ -8,6 +7,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
 use App\Models\MahasiswaModel;
+use App\Models\DospemModel;
+use App\Models\AdminModel;
+use App\Models\User;
 
 class ProfilController extends Controller
 {
@@ -19,52 +21,31 @@ class ProfilController extends Controller
             return redirect()->route('login');
         }
 
-        // Ambil data mahasiswa terkait (berelasi dengan user login)
-        $mahasiswa = MahasiswaModel::with(['prodi', 'angkatan'])
-            ->where('id_mahasiswa', $user->id)
-            ->first();
-
         $fotoPath = asset('storage/foto_profil/user_' . $user->id . '.jpg');
-
         if (!file_exists(public_path('storage/foto_profil/user_' . $user->id . '.jpg'))) {
             $fotoPath = asset('storage/foto_profil/user_.jpg');
         }
 
-        return view('profil.index', compact('user', 'mahasiswa', 'fotoPath'));
-    }
+        switch ($user->role) {
+            case 1: // Admin
+                $admin = AdminModel::where('id_admin', $user->id)->first();
+                return view('profil.indexAdmin', compact('user', 'admin', 'fotoPath'));
 
-     public function indexAdmin()
-    {
-        $user = Auth::user();
+            case 2: // Dosen
+                $dosen = DospemModel::with(['prodi', 'angkatan'])
+                    ->where('id_dosen', $user->id)
+                    ->first();
+                return view('profil.indexDosen', compact('user', 'dosen', 'fotoPath'));
 
-        if (!$user) {
-            return redirect()->route('login');
+            case 3: // Mahasiswa
+                $mahasiswa = MahasiswaModel::with(['prodi', 'angkatan'])
+                    ->where('id_mahasiswa', $user->id)
+                    ->first();
+                return view('profil.index', compact('user', 'mahasiswa', 'fotoPath'));
+
+            default:
+                abort(403, 'Role tidak dikenali.');
         }
-
-        $fotoPath = asset('storage/foto_profil/user_' . $user->id . '.jpg');
-
-        if (!file_exists(public_path('storage/foto_profil/user_' . $user->id . '.jpg'))) {
-            $fotoPath = asset('storage/foto_profil/user_.jpg');
-        }
-
-        return view('profil.indexAdmin', compact('user', 'fotoPath'));
-    }
-
-     public function indexDosen()
-    {
-        $user = Auth::user();
-
-        if (!$user) {
-            return redirect()->route('login');
-        }
-
-        $fotoPath = asset('storage/foto_profil/user_' . $user->id . '.jpg');
-
-        if (!file_exists(public_path('storage/foto_profil/user_' . $user->id . '.jpg'))) {
-            $fotoPath = asset('storage/foto_profil/user_.jpg');
-        }
-
-        return view('profil.indexDosen', compact('user', 'fotoPath'));
     }
 
     public function updateUsername(Request $request)
@@ -93,7 +74,6 @@ class ProfilController extends Controller
     public function updateAcademicProfile(Request $request)
     {
         $user = Auth::user();
-        $mahasiswa = MahasiswaModel::where('id_mahasiswa', $user->id)->firstOrFail();
 
         $request->validate([
             'type' => ['required', 'in:keahlian,minat,pengalaman'],
@@ -106,20 +86,24 @@ class ProfilController extends Controller
             $value = $request->value;
             $action = $request->action ?? 'update';
 
+            if (!in_array($type, ['keahlian', 'minat', 'pengalaman'])) {
+                return response()->json(['error' => 'Kolom tidak valid.'], 400);
+            }
+
             if ($action === 'add') {
-                $existing = $mahasiswa->$type ? explode(';', $mahasiswa->$type) : [];
+                $existing = $user->$type ? explode(';', $user->$type) : [];
                 $existing = array_filter(array_map('trim', $existing));
                 $existing[] = trim($value);
-                $mahasiswa->$type = implode(';', $existing);
+                $user->$type = implode(';', $existing);
             } else {
                 $items = explode(';', $value);
                 $items = array_filter(array_map('trim', $items));
-                $mahasiswa->$type = implode(';', $items);
+                $user->$type = implode(';', $items);
             }
 
-            $mahasiswa->save();
+            $user->save();
 
-            $updatedItems = $mahasiswa->$type ? explode(';', $mahasiswa->$type) : [];
+            $updatedItems = $user->$type ? explode(';', $user->$type) : [];
             $updatedItems = array_filter(array_map('trim', $updatedItems));
 
             return response()->json([
@@ -137,7 +121,6 @@ class ProfilController extends Controller
     public function deleteAcademicItem(Request $request)
     {
         $user = Auth::user();
-        $mahasiswa = MahasiswaModel::where('id_user', $user->id)->firstOrFail();
 
         $request->validate([
             'type' => ['required', 'in:keahlian,minat,pengalaman'],
@@ -148,7 +131,7 @@ class ProfilController extends Controller
             $type = $request->type;
             $indexToDelete = $request->index;
 
-            $items = $mahasiswa->$type ? explode(';', $mahasiswa->$type) : [];
+            $items = $user->$type ? explode(';', $user->$type) : [];
             $items = array_values(array_filter(array_map('trim', $items)));
 
             if (!isset($items[$indexToDelete])) {
@@ -160,8 +143,8 @@ class ProfilController extends Controller
             unset($items[$indexToDelete]);
             $items = array_values($items);
 
-            $mahasiswa->$type = empty($items) ? null : implode(';', $items);
-            $mahasiswa->save();
+            $user->$type = empty($items) ? null : implode(';', $items);
+            $user->save();
 
             return response()->json([
                 'success' => true,
@@ -178,7 +161,7 @@ class ProfilController extends Controller
     public function updateProfile(Request $request)
     {
         $user = Auth::user();
-        $mahasiswa = MahasiswaModel::where('id_user', $user->id)->first();
+        $mahasiswa = MahasiswaModel::where('id_mahasiswa', $user->id)->first();
 
         $request->validate([
             'nama' => ['nullable', 'string', 'max:255'],

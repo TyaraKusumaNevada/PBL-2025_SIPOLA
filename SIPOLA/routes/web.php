@@ -170,14 +170,14 @@ Route::prefix('lombaUser')->group(function () {
 
 // --- PROFIL ---
 // --- PROFIL MAHASISWA/ADMIN/DOSEN ---
-Route::get('/profilMahasiswa', [ProfilController::class, 'index'])->name('profil.index');
-Route::get('/profilAdmin', [ProfilController::class, 'indexAdmin'])->name('profilAdmin.index');
-Route::get('/profilDosen', [ProfilController::class, 'indexDosen'])->name('profilDosen.index');
+
+Route::get('/profil', [ProfilController::class, 'index'])->name('profil.index');
 
 // --- AKSI PROFIL (Update & Hapus Akademik) ---
 Route::post('/profil/update-profile', [ProfilController::class, 'updateProfile'])->name('profil.update.profile')->middleware('auth');
 Route::post('/profil/update-username', [ProfilController::class, 'updateUsername'])->name('profil.update.username')->middleware('auth');
 Route::post('/profil/update-academic', [ProfilController::class, 'updateAcademicProfile'])->name('profil.update.academic')->middleware('auth');
+Route::post('/profil/delete-academic', [ProfilController::class, 'deleteAcademicItem'])->name('profil.deleteAcademicItem');
 
 // --- LANDING & INFO LOMBA ---
 Route::get('/', [LandingController::class, 'index']);
