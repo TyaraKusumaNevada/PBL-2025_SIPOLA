@@ -89,7 +89,7 @@ class VerifikasiPrestasiController extends Controller
             // Aturan validasi
             $rules = [
                 'status' => 'required|in:pending,divalidasi,ditolak',
-                'catatan' => 'nullable|string|max:255'
+                'catatan' => 'nullable|string|max:150'  //cegah injection 
             ];
 
             // Proses validasi manual
