@@ -228,7 +228,7 @@ Route::post('/profil/delete-academic', [ProfilController::class, 'deleteAcademic
 // -- Laporan dan Analisis (Admin)
 Route::prefix('/laporanAdmin')->group(function () {
     Route::get('/', [LaporanPrestasiController::class, 'index'])->name('laporan.index');
-    Route::get('/list', [LaporanPrestasiController::class, 'list'])->name('laporan.list');
+    Route::post('/list', [LaporanPrestasiController::class, 'list'])->name('laporan.list');
     Route::get('/grafik', [LaporanPrestasiController::class, 'grafik'])->name('laporan.grafik');
     Route::get('/export-pdf', [LaporanPrestasiController::class, 'exportPdf'])->name('laporan.exportPdf');
 });

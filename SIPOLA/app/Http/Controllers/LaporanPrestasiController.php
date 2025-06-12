@@ -16,7 +16,9 @@ class LaporanPrestasiController extends Controller
             'list'  => ['Home', 'Laporan & Analisis Prestasi']
         ];
         
-        return view('admin.laporan.index', compact('breadcrumb'));
+        $verifikasiStatus = ['pending', 'divalidasi', 'ditolak']; 
+
+        return view('admin.laporan.index', compact('breadcrumb', 'verifikasiStatus'));
     }
 
     public function list()
