@@ -238,5 +238,7 @@ Route::prefix('/laporanAdmin')->group(function () {
     Route::post('/list', [LaporanPrestasiController::class, 'list'])->name('laporan.list');
     Route::get('/grafik', [LaporanPrestasiController::class, 'grafik'])->name('laporan.grafik');
     Route::get('/export-pdf', [LaporanPrestasiController::class, 'exportPdf'])->name('laporan.exportPdf');
+    Route::get('/statistikBox', [LaporanPrestasiController::class, 'statistikBox'])->name('laporan.statistikBox');
+    Route::get('/statistikMahasiswa', [LaporanPrestasiController::class, 'statistikMahasiswa'])->name('laporan.statistikMahasiswa');
 });
 

@@ -15,6 +15,41 @@
                                 </a>
                             </div>
 
+                            <div class="row mb-4">
+                            <div class="col-md-3">
+                                <div class="card text-center border-start border-primary border-4 shadow-sm">
+                                <div class="card-body">
+                                    <h6 class="text-muted">Total Mahasiswa</h6>
+                                    <h3 class="fw-bold text-primary" id="boxMahasiswa">0</h3>
+                                </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card text-center border-start border-info border-4 shadow-sm">
+                                <div class="card-body">
+                                    <h6 class="text-muted">Total Prestasi</h6>
+                                    <h3 class="fw-bold text-info" id="boxTotalPrestasi">0</h3>
+                                </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card text-center border-start border-success border-4 shadow-sm">
+                                <div class="card-body">
+                                    <h6 class="text-muted">Prestasi Disetujui</h6>
+                                    <h3 class="fw-bold text-success" id="boxDivalidasi">0</h3>
+                                </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card text-center border-start border-warning border-4 shadow-sm">
+                                <div class="card-body">
+                                    <h6 class="text-muted">Prestasi Pending</h6>
+                                    <h3 class="fw-bold text-warning" id="boxPending">0</h3>
+                                </div>
+                                </div>
+                            </div>
+                            </div>
+                            
                             <div class="mb-4 d-flex justify-content-center">
                                 <canvas id="grafikPrestasi" class="grafik-pie"></canvas>
                             </div>
@@ -68,6 +103,20 @@
         max-height: 300px !important;
     }
     </style>
+
+    <style>
+        .border-4 {
+            border-width: 4px !important;
+        }
+        .card-body h3 {
+            font-size: 2rem;
+            margin: 0;
+        }
+        .card h6 {
+            font-weight: 500;
+        }
+    </style>
+
 @endpush
 
 @push('js')
@@ -80,6 +129,17 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+
+        function loadStatistikBox() {
+    $.get('{{ route("laporan.statistikBox") }}', { kategori: $('#kategori').val() }, function (res) {
+        $('#boxMahasiswa').text(res.mahasiswa);
+        $('#boxTotalPrestasi').text(res.total);
+        $('#boxDivalidasi').text(res.divalidasi);
+        $('#boxPending').text(res.pending);
+    });
+}
+
+loadStatistikBox(); // Load saat pertama
         
         var tabelLaporan = $('#tabelLaporan').DataTable({
             processing: true,
@@ -116,6 +176,11 @@
 
         $('#kategori').on('change', function () {
             tabelLaporan.ajax.reload();
+        });
+
+        // Ambil data jumlah mahasiswa berprestasi
+        $.get('{{ route("laporan.statistikMahasiswa") }}', function (res) {
+            $('#jumlahMahasiswa').text(res.jumlah);
         });
 
         // Grafik Prestasi

@@ -56,6 +56,23 @@ class LaporanPrestasiController extends Controller
         return response()->json($statistik);
     }
 
+public function statistikBox(Request $request)
+{
+    $kategori = $request->kategori;
+
+    $query = PrestasiModel::query();
+    if ($kategori) {
+        $query->where('kategori_prestasi', $kategori);
+    }
+
+    return response()->json([
+        'mahasiswa' => $query->distinct('mahasiswa_id')->count('mahasiswa_id'),
+        'total' => $query->count(),
+        'divalidasi' => $query->where('status', 'divalidasi')->count(),
+        'pending' => $query->where('status', 'pending')->count(),
+    ]);
+}
+
     public function exportPdf()
     {
         $prestasi = PrestasiModel::with('mahasiswa')->get();
