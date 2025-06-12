@@ -132,10 +132,11 @@ class UserController extends Controller
 
             $rules = [
                 'id_role'    => 'required|exists:role,id_role',
-                'nama'       => 'required|string|max:255',
+                'nama'       => 'required|string|max:100',                  //cegah injection 
                 'email'      => ['required', 'email', $emailRule],
-                'nomor_telepon'  => 'required|string|max:20',
-                'password'   => 'required|string|min:6',
+                'nomor_telepon' => 'required|regex:/^\+?[0-9]{10,15}$/',    //cegah injection 
+                // 'nomor_telepon'  => 'required|string|max:20',
+                'password'   => 'required|string|min:6|max:64',             //cegah injection
                 'nim_nidn'   => 'required_if:id_role,2|required_if:id_role,3',
                 'id_prodi'   => 'required_if:id_role,3',
             ];
@@ -156,11 +157,11 @@ class UserController extends Controller
                 $role = RoleModel::findOrFail($request->id_role);
 
                 $data = [
-                    'id_role'  => $request->id_role,
-                    'nama'     => $request->nama,
-                    'email'    => $request->email,
-                    'nomor_telepon'    => $request->nomor_telepon,
-                    'password' => Hash::make($request->password),
+                    'id_role'           => $request->id_role,
+                    'nama'              => $request->nama,
+                    'email'             => $request->email,
+                    'nomor_telepon'     => $request->nomor_telepon,
+                    'password'          => Hash::make($request->password),
                 ];
 
                 switch ($role->role_kode) {
@@ -234,7 +235,7 @@ class UserController extends Controller
         // Validasi
         $validator = Validator::make($request->all(), [
             'id_role' => 'required|exists:role,id_role',
-            'nama' => 'required|string|max:255',
+            'nama' => 'required|string|max:100',    //cegah injection
             'email' => [
                 'required',
                 'email',

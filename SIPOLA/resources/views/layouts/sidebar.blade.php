@@ -199,12 +199,6 @@
 
     <!-- Menu Mahasiswa (Lomba User) -->
     @if ($hakAkses == 3)
-        {{-- <li class="menu-item {{ Request::is('lombaUser') || Request::is('lombaUser/*') ? 'active open' : '' }}">
-            <a href="{{ url('/lombaUser') }}" class="menu-link d-flex align-items-center">
-                <i class="bi bi-trophy menu-icon fs-5"></i>
-                <div class="text-truncate" data-i18n="ManajemenLombaUser">Lomba Mahasiswa</div>
-            </a>
-        </li> --}}
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="bi bi-journal-text menu-icon fs-5"></i>
