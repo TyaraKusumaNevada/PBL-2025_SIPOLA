@@ -26,12 +26,12 @@ class SiginController extends Controller
         $validator = Validator::make($request->all(), [
             'nama' => 'required|string|max:100',
             'nim' => 'required|string|max:20|unique:mahasiswa,nim|unique:users,username',
-            'email' => 'required|string|email|max:254|unique:users,email',      //cegah injection
+            'email' => 'required|string|email|max:100|unique:users,email',      //cegah injection
             'password' => 'required|string|min:8|max:64|confirmed',             //cegah injection
             'password_confirmation' => 'required',
             'id_prodi' => 'required|exists:program_studi,id_prodi',
             'bidang_keahlian' => 'nullable|string|max:100',                     //cegah injection
-            'minat' => 'nullable|string|max:150',                               //cegah injection
+            'minat' => 'nullable|string|max:100',                               //cegah injection
         ], [
             'nama.required' => 'Nama lengkap tidak boleh kosong',
             'nim.required' => 'NIM tidak boleh kosong',

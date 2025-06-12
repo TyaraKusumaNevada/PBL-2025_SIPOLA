@@ -94,11 +94,11 @@ class PrestasiMahasiswaController extends Controller
 
             // Validasi
             $rules = [
-                'nama_prestasi'     => 'required|string|min:3|max:255',     //cegah injection
+                'nama_prestasi'     => 'required|string|min:3|max:100',     //cegah injection
                 'kategori_prestasi' => 'required|in:akademik,non-akademik',
                 'tingkat_prestasi'  => 'required|in:politeknik,kota,provinsi,nasional,internasional',
                 'juara'             => 'required|string|max:100',
-                'penyelenggara'     => 'required|string|min:3|max:255',     //cegah injection
+                'penyelenggara'     => 'required|string|min:3|max:100',     //cegah injection
                 'tanggal'           => 'required|date',
                 'bukti_file'        => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
             ];
@@ -152,11 +152,11 @@ class PrestasiMahasiswaController extends Controller
     public function update_ajax(Request $request, $id) {
         if ($request->ajax() || $request->wantsJson()) {
             $rules = [
-                'nama_prestasi'     => 'required|string|min:3|max:255',     //cegah injection
+                'nama_prestasi'     => 'required|string|min:3|max:100',     //cegah injection
                 'kategori_prestasi' => 'required|in:akademik,non-akademik',
                 'tingkat_prestasi'  => 'required|in:politeknik,kota,provinsi,nasional,internasional',
                 'juara'             => 'required|string|max:100',
-                'penyelenggara'     => 'required|string|min:3|max:255',     //cegah injection
+                'penyelenggara'     => 'required|string|min:3|max:100',     //cegah injection
                 'tanggal'           => 'required|date',
                 'bukti_file'        => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
             ];

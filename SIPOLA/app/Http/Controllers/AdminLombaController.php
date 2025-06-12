@@ -95,14 +95,14 @@ class AdminLombaController extends Controller
     public function store_ajax(Request $request) {
         if ($request->ajax() || $request->wantsJson()) {
             $rules = [
-                'nama_lomba'          => 'required|string|max:255',     //cegah injection
+                'nama_lomba'          => 'required|string|max:100',     //cegah injection
                 'kategori_lomba'      => 'required|in:akademik,non-akademik',
                 'tingkat_lomba'       => 'required|in:politeknik,kota,provinsi,nasional,internasional',
-                'penyelenggara_lomba' => 'required|string|max:255',     //cegah injection
-                'deskripsi'           => 'required|string|max:1000',    //cegah injection
+                'penyelenggara_lomba' => 'required|string|max:100',     //cegah injection
+                'deskripsi'           => 'required|string|max:100',    //cegah injection
                 'tanggal_mulai'       => 'required|date',
                 'tanggal_selesai'     => 'required|date|after_or_equal:tanggal_mulai',
-                'link_pendaftaran'    => 'nullable|url|max:255',
+                'link_pendaftaran'    => 'nullable|url|max:100',
                 'pamflet_lomba'       => 'required|file|mimes:jpg,jpeg,png|max:5120',
             ];
 
@@ -177,14 +177,14 @@ class AdminLombaController extends Controller
     {
         if ($request->ajax() || $request->wantsJson()) {
             $rules = [
-                'nama_lomba'          => 'required|string|max:255',     //cegah injection
+                'nama_lomba'          => 'required|string|max:100',     //cegah injection
                 'kategori_lomba'      => 'required|in:akademik,non-akademik',
                 'tingkat_lomba'       => 'required|in:politeknik,kota,provinsi,nasional,internasional',
-                'penyelenggara_lomba' => 'required|string|max:255',     //cegah injection
-                'deskripsi'           => 'required|string|max:1000',    //cegah injection
+                'penyelenggara_lomba' => 'required|string|max:100',     //cegah injection
+                'deskripsi'           => 'required|string|max:100',    //cegah injection
                 'tanggal_mulai'       => 'required|date',
                 'tanggal_selesai'     => 'required|date|after_or_equal:tanggal_mulai',
-                'link_pendaftaran'    => 'nullable|url|max:255',
+                'link_pendaftaran'    => 'nullable|url|max:100',
                 'pamflet_lomba'       => 'required|file|mimes:jpg,jpeg,png|max:5120',
                 // 'status_verifikasi'  => 'required|in:Pending,Disetujui,Ditolak'
             ];
@@ -415,14 +415,14 @@ class AdminLombaController extends Controller
     {
         if ($request->ajax() || $request->wantsJson()) {
             $rules = [
-                'nama_lomba'          => 'required|string|max:255',     //cegah injection
+                'nama_lomba'          => 'required|string|max:100',     //cegah injection
                 'kategori_lomba'      => 'required|in:akademik,non-akademik',
                 'tingkat_lomba'       => 'required|in:politeknik,kota,provinsi,nasional,internasional',
-                'penyelenggara_lomba' => 'required|string|max:255',     //cegah injection
-                'deskripsi'           => 'required|string|max:1000',    //cegah injection
+                'penyelenggara_lomba' => 'required|string|max:100',     //cegah injection
+                'deskripsi'           => 'required|string|max:100',    //cegah injection
                 'tanggal_mulai'       => 'required|date',
                 'tanggal_selesai'     => 'required|date|after_or_equal:tanggal_mulai',
-                'link_pendaftaran'    => 'nullable|url|max:255',
+                'link_pendaftaran'    => 'nullable|url|max:100',
                 'pamflet_lomba'       => 'required|file|mimes:jpg,jpeg,png|max:5120',
                 // 'status_verifikasi'  => 'required|in:Pending,Disetujui,Ditolak'
             ];
