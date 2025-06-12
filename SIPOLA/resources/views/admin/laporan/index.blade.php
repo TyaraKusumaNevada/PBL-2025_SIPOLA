@@ -22,13 +22,13 @@
                             <div class="row mb-4">
                                 <label class="col-form-label col-1">Filter:</label>
                                 <div class="col-3">
-                                    <select class="form-control" id="status" name="status">
+                                    <select class="form-control" id="kategori" name="kategori">
                                         <option value="">- Semua -</option>
-                                        @foreach($verifikasiStatus as $status)
-                                            <option value="{{ $status }}">{{ ucfirst($status) }}</option>
+                                        @foreach($kategoriLomba as $kategori)
+                                            <option value="{{ $kategori }}">{{ ucfirst($kategori) }}</option>
                                         @endforeach
                                     </select>
-                                    <small class="form-text text-muted">Status</small>
+                                    <small class="form-text text-muted">Kategori Lomba</small>
                                 </div>
                             </div>
 
@@ -88,7 +88,7 @@
                 url: '{{ url("laporanAdmin/list") }}',
                 type: "POST",
                 data: function (d) {
-                    d.status = $('#status').val();
+                    d.kategori = $('#kategori').val();
                 }
             },
             columns: [
@@ -114,7 +114,7 @@
             }
         });
 
-        $('#status').on('change', function () {
+        $('#kategori').on('change', function () {
             tabelLaporan.ajax.reload();
         });
 
