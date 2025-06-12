@@ -32,7 +32,7 @@
     </style>
 
     <div class="container form-section">
-        <a href="{{ url('/') }}" class="btn btn-secondary mb-3 btn-back">
+        <a href="{{ url('/mahasiswa/dashboard') }}" class="btn btn-secondary mb-3 btn-back">
             <i class="fa fa-arrow-left me-1"></i> Kembali
         </a>
 

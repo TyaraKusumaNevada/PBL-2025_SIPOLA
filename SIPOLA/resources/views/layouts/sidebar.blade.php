@@ -205,6 +205,11 @@
                 <div class="text-truncate" data-i18n="InfoLomba">Info Lomba</div>
             </a>
             <ul class="menu-sub">
+                <li class="menu-item {{ Request::is('rekomendasi') ? 'active open' : '' }}">
+                    <a href="{{ url('/rekomendasi') }}" class="menu-link">
+                        <div class="text-truncate" data-i18n="Rekomendasi Lomba">Rekomedasi Lomba</div>
+                    </a>
+                </li>
                 <li class="menu-item {{ Request::is('lombaMahasiswa') ? 'active open' : '' }}">
                     <a href="{{ url('/lombaMahasiswa') }}" class="menu-link">
                         <div class="text-truncate" data-i18n="LombaTersedia">Lomba Tersedia</div>
