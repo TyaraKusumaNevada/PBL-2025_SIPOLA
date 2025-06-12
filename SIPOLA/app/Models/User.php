@@ -23,6 +23,14 @@ class User extends Authenticatable
         return $this->hasOne(MahasiswaModel::class, 'user_id');
     }
 
+    public function admin() {
+        return $this->hasOne(AdminModel::class, 'user_id');
+    }
+
+    public function lomba() {
+        return $this->hasMany(TambahLombaModel::class, 'user_id');
+    }
+    
     public function dosen()
     {
         return $this->hasOne(DospemModel::class, 'nidn', 'username');

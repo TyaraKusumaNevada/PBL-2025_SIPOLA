@@ -147,7 +147,7 @@
         </li>
     @endif
 
-    <!-- Profil Admin -->
+    {{-- <!-- Profil Admin -->
     @if ($hakAkses == 1)
         <li class="menu-item {{ Request::is('admin/profil') ? 'active open' : '' }}">
             <a href="{{ url('/admin/profil') }}" class="menu-link d-flex align-items-center">
@@ -175,7 +175,7 @@
                 <div class="text-truncate" data-i18n="MahasiswaProfil">Profil</div>
             </a>
         </li>
-    @endif
+    @endif --}}
 
     <!-- Unggah Prestasi -->
     @if ($hakAkses == 3)
@@ -189,7 +189,7 @@
 
     <!-- Menu Admin (Manajemen Lomba) -->
     @if ($hakAkses == 1)
-        <li class="menu-item {{ Request::is('lomba') || Request::is('lomba/*') ? 'active open' : '' }}">
+        <li class="menu-item {{ (Request::is('lomba') || (Request::is('lomba/*') && !Request::is('lomba/verifikasi*'))) ? 'active open' : '' }}">
             <a href="{{ url('/lomba') }}" class="menu-link d-flex align-items-center">
                 <i class="bi bi-trophy menu-icon fs-5"></i>
                 <div class="text-truncate" data-i18n="ManajemenLomba">Manajemen Lomba</div>
@@ -199,12 +199,6 @@
 
     <!-- Menu Mahasiswa (Lomba User) -->
     @if ($hakAkses == 3)
-        {{-- <li class="menu-item {{ Request::is('lombaUser') || Request::is('lombaUser/*') ? 'active open' : '' }}">
-            <a href="{{ url('/lombaUser') }}" class="menu-link d-flex align-items-center">
-                <i class="bi bi-trophy menu-icon fs-5"></i>
-                <div class="text-truncate" data-i18n="ManajemenLombaUser">Lomba Mahasiswa</div>
-            </a>
-        </li> --}}
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="bi bi-journal-text menu-icon fs-5"></i>
@@ -289,8 +283,8 @@
 
     <!-- Verifikasi Info Lomba -->
     @if ($hakAkses == 1)
-        <li class="menu-item {{ Request::is('admin/verifikasilomba*') ? 'active open' : '' }}">
-            <a href="{{ url('admin/verifikasilomba') }}" class="menu-link d-flex align-items-center">
+        <li class="menu-item {{ Request::is('lomba/verifikasi*') ? 'active open' : '' }}">
+            <a href="{{ url('lomba/verifikasi') }}" class="menu-link d-flex align-items-center">
                 <i class="bi bi-file-earmark-check menu-icon fs-5"></i>
                 <div class="text-truncate" data-i18n="VerifikasiLomba">Verifikasi Info Lomba</div>
             </a>

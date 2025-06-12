@@ -60,8 +60,9 @@ class PeriodeController extends Controller
         // cek apakah request berupa ajax
         if($request->ajax() || $request->wantsJson()) {
             $rules = [
-                'semester'      => 'required|string|max:10',    
-                'tahun_ajaran'  => 'required|string|max:255',   
+                'semester'      => 'required|string|max:10',   
+                'tahun_ajaran'  => 'required|string|regex:/^\d{4}\/\d{4}$/|max:9',      //cegah injection
+                // 'tahun_ajaran'  => 'required|string|max:255',   
             ];
 
             $validator = Validator::make($request->all(), $rules);
@@ -96,7 +97,8 @@ class PeriodeController extends Controller
         // cek apakah request dari ajax
         if ($request->ajax() || $request->wantsJson()) {
             $rules = [
-               'semester'      => 'required|string|max:10',     
+               'semester'      => 'required|string|max:10',    
+               'tahun_ajaran'  => 'required|string|regex:/^\d{4}\/\d{4}$/|max:9',   //cegah injection 
                'tahun_ajaran'  => 'required|string|max:255',  
             ];
 
