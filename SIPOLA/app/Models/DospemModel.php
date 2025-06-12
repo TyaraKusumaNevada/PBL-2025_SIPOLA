@@ -19,4 +19,8 @@ class DospemModel extends Model
     public function rekomendasi() {
         return $this->hasMany(RekomendasiModel::class, 'id_dosen');
     }
+
+    public function mahasiswa() {
+        return $this->hasMany(MahasiswaModel::class, 'id_dosen');
+    }
 }

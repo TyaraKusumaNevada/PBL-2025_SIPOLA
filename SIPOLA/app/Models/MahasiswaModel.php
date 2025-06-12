@@ -48,7 +48,6 @@ class MahasiswaModel extends Model
 
     public function prodi(): BelongsTo {
         return $this->belongsTo(ProgramStudiModel::class, 'id_prodi','id_prodi');
-
     }
 
     public function rekomendasi(): HasMany {
