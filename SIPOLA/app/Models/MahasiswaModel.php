@@ -26,8 +26,8 @@ class MahasiswaModel extends Model
         'id_prodi', 
         'id_angkatan', 
         'id_role',
-        'id_dosen'
-
+        'id_dosen',
+        'user_id'
     ];
 
     public function role(): BelongsTo {
@@ -42,12 +42,9 @@ class MahasiswaModel extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-
-
     public function angkatan(): BelongsTo {
-    return $this->belongsTo(AngkatanModel::class, 'id_angkatan', 'id_angkatan');
-}
-
+        return $this->belongsTo(AngkatanModel::class, 'id_angkatan', 'id_angkatan');
+    }
 
     public function prodi(): BelongsTo {
         return $this->belongsTo(ProgramStudiModel::class, 'id_prodi','id_prodi');

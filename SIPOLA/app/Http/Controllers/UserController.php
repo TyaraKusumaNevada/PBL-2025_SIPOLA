@@ -14,6 +14,8 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -73,7 +75,8 @@ class UserController extends Controller
                     $urlShow = url("/user/$id/$role/show_ajax");
                     $urlEdit = url("/user/$id/$role/edit_ajax");
                     $urlDelete = url("/user/$id/$role/delete_ajax");
-                    $urlReset = url("/user/{$id}/reset_ajax"); // route reset password
+                    // $urlReset = url("/user/{$id}/reset_ajax"); // route reset password
+                    $urlReset = url("/user/{$id}/{$role}/reset_ajax");
                 return '
                     <button onclick="modalAction(\'' . $urlShow . '\')" class="btn btn-info btn-sm">
                         <i class="bi bi-eye"></i><span class="ms-2">Detail</span>
@@ -228,74 +231,74 @@ class UserController extends Controller
 
 
     public function update_ajax(Request $request, string $id, string $role) {
-    // Validasi
-    $validator = Validator::make($request->all(), [
-        'id_role' => 'required|exists:role,id_role',
-        'nama' => 'required|string|max:255',
-        'email' => [
-            'required',
-            'email',
-            Rule::unique($role === 'mahasiswa' ? 'mahasiswa' : ($role === 'dosen' ? 'dospem' : 'admin'), 'email')->ignore($id, $role === 'mahasiswa' ? 'id_mahasiswa' : ($role === 'dosen' ? 'id_dosen' : 'id_admin')),
-        ],
-        'nim_nidn' => $role !== 'admin' ? ['required', 'string', 'max:50'] : ['nullable'],
-        'id_prodi' => $role === 'mahasiswa' ? ['required', 'exists:program_studi,id_prodi'] : ['nullable'],
-        'nomor_telepon' => ['nullable', 'string', 'max:20'], // ✅ Validasi nomor telepon
-    ]);
-
-    if ($validator->fails()) {
-        return response()->json([
-            'status' => false,
-            'message' => 'Validasi gagal.',
-            'msgField' => $validator->errors()
+        // Validasi
+        $validator = Validator::make($request->all(), [
+            'id_role' => 'required|exists:role,id_role',
+            'nama' => 'required|string|max:255',
+            'email' => [
+                'required',
+                'email',
+                Rule::unique($role === 'mahasiswa' ? 'mahasiswa' : ($role === 'dosen' ? 'dospem' : 'admin'), 'email')->ignore($id, $role === 'mahasiswa' ? 'id_mahasiswa' : ($role === 'dosen' ? 'id_dosen' : 'id_admin')),
+            ],
+            'nim_nidn' => $role !== 'admin' ? ['required', 'string', 'max:50'] : ['nullable'],
+            'id_prodi' => $role === 'mahasiswa' ? ['required', 'exists:program_studi,id_prodi'] : ['nullable'],
+            'nomor_telepon' => ['nullable', 'string', 'max:20'], // ✅ Validasi nomor telepon
         ]);
-    }
 
-    // Persiapan data update
-    $data = [
-        'id_role' => $request->id_role,
-        'nama' => $request->nama,
-        'email' => $request->email,
-        'nomor_telepon' => $request->nomor_telepon, // ✅ Tambahkan nomor telepon
-    ];
-
-    if ($role === 'mahasiswa') {
-        $data['nim'] = $request->nim_nidn;
-        $data['id_prodi'] = $request->id_prodi;
-        $user = MahasiswaModel::find($id);
-    } elseif ($role === 'dosen') {
-        $data['nidn'] = $request->nim_nidn;
-        $user = DospemModel::find($id);
-    } elseif ($role === 'admin') {
-        $user = AdminModel::find($id);
-    } else {
-        return response()->json([
-            'status' => false,
-            'message' => 'Role tidak valid.'
-        ]);
-    }
-
-    // Proses update
-    if ($user) {
-        try {
-            $user->update($data);
-            return response()->json([
-                'status' => true,
-                'message' => 'Data berhasil diupdate.'
-            ]);
-        } catch (\Exception $e) {
+        if ($validator->fails()) {
             return response()->json([
                 'status' => false,
-                'message' => 'Terjadi kesalahan saat mengupdate data.',
-                'error' => $e->getMessage()
+                'message' => 'Validasi gagal.',
+                'msgField' => $validator->errors()
             ]);
         }
-    } else {
-        return response()->json([
-            'status' => false,
-            'message' => 'Data tidak ditemukan.'
-        ]);
+
+        // Persiapan data update
+        $data = [
+            'id_role' => $request->id_role,
+            'nama' => $request->nama,
+            'email' => $request->email,
+            'nomor_telepon' => $request->nomor_telepon, // ✅ Tambahkan nomor telepon
+        ];
+
+        if ($role === 'mahasiswa') {
+            $data['nim'] = $request->nim_nidn;
+            $data['id_prodi'] = $request->id_prodi;
+            $user = MahasiswaModel::find($id);
+        } elseif ($role === 'dosen') {
+            $data['nidn'] = $request->nim_nidn;
+            $user = DospemModel::find($id);
+        } elseif ($role === 'admin') {
+            $user = AdminModel::find($id);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'Role tidak valid.'
+            ]);
+        }
+
+        // Proses update
+        if ($user) {
+            try {
+                $user->update($data);
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Data berhasil diupdate.'
+                ]);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Terjadi kesalahan saat mengupdate data.',
+                    'error' => $e->getMessage()
+                ]);
+            }
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'Data tidak ditemukan.'
+            ]);
+        }
     }
-}
 
 
     public function confirm_ajax(string $id, string $role) {
@@ -348,55 +351,117 @@ class UserController extends Controller
         return redirect('/');
     }
 
-    public function resetPassword_ajax(Request $request, string $id) {
-        // Cek apakah request dari AJAX dan user adalah admin
+    public function resetPassword_ajax(Request $request, $id, $role) {
         if (($request->ajax() || $request->wantsJson()) && auth()->user()->role === 'admin') {
-            $user = User::find($id);
+            Log::info("Proses reset password dimulai untuk role '$role' dengan ID lokal: $id oleh admin ID: " . auth()->id());
 
-            if (!$user) {
+            $userId = null;
+            $data = null;
+
+            try {
+                if ($role === 'mahasiswa') {
+                    $data = DB::table('mahasiswa')->where('id_mahasiswa', $id)->first();
+                    if (!$data) {
+                        Log::warning("Data mahasiswa dengan ID $id tidak ditemukan.");
+                        return response()->json([
+                            'status' => false,
+                            'message' => 'Data mahasiswa tidak ditemukan.',
+                        ]);
+                    }
+                    $userId = $data->user_id ?? null;
+
+                } elseif ($role === 'dosen') {
+                    $data = DB::table('dospem')->where('id_dosen', $id)->first();
+                    if (!$data) {
+                        Log::warning("Data dosen dengan ID $id tidak ditemukan.");
+                        return response()->json([
+                            'status' => false,
+                            'message' => 'Data dosen tidak ditemukan.',
+                        ]);
+                    }
+
+                    // Ambil user berdasarkan nidn == username
+                    $user = DB::table('users')->where('username', $data->nidn)->first();
+                    if (!$user) {
+                        Log::warning("User tidak ditemukan berdasarkan nidn {$data->nidn}.");
+                        return response()->json([
+                            'status' => false,
+                            'message' => 'User tidak ditemukan berdasarkan NIDN.',
+                        ]);
+                    }
+
+                    $userId = $user->id;
+
+                } elseif ($role === 'admin') {
+                    $data = DB::table('admin')->where('id_admin', $id)->first();
+                    if (!$data) {
+                        Log::warning("Data admin dengan ID $id tidak ditemukan.");
+                        return response()->json([
+                            'status' => false,
+                            'message' => 'Data admin tidak ditemukan.',
+                        ]);
+                    }
+                    $userId = $data->user_id ?? null;
+
+                } else {
+                    Log::warning("Role tidak valid: $role");
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'Role tidak valid.',
+                    ]);
+                }
+
+                if (!$userId) {
+                    Log::warning("User ID tidak ditemukan untuk role $role dengan ID lokal $id.");
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'User ID tidak ditemukan.',
+                    ]);
+                }
+
+                DB::table('users')->where('id', $userId)->update([
+                    'password' => Hash::make('sipola123'),
+                ]);
+                Log::info("Password user (users.id = $userId) berhasil diupdate.");
+
+                // Update password di tabel lokal juga
+                if ($role === 'mahasiswa') {
+                    DB::table('mahasiswa')->where('id_mahasiswa', $id)->update([
+                        'password' => Hash::make('sipola123'),
+                    ]);
+                    Log::info("Password mahasiswa (id_mahasiswa = $id) berhasil diupdate.");
+                } elseif ($role === 'dosen') {
+                    DB::table('dospem')->where('id_dosen', $id)->update([
+                        'password' => Hash::make('sipola123'),
+                    ]);
+                    Log::info("Password dosen (id_dosen = $id) berhasil diupdate.");
+                } elseif ($role === 'admin') {
+                    DB::table('admin')->where('id_admin', $id)->update([
+                        'password' => Hash::make('sipola123'),
+                    ]);
+                    Log::info("Password admin (id_admin = $id) berhasil diupdate.");
+                }
+
+                Log::info("Reset password berhasil untuk user ID: $userId oleh admin ID: " . auth()->id());
+
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Password berhasil direset ke "sipola123".',
+                ]);
+
+            } catch (\Exception $e) {
+                Log::error("Terjadi kesalahan saat reset password untuk $role ID: $id. Pesan: " . $e->getMessage());
                 return response()->json([
                     'status' => false,
-                    'message' => 'User tidak ditemukan.',
-                ]);
+                    'message' => 'Terjadi kesalahan saat reset password.',
+                ], 500);
             }
-
-            // Reset password ke default (misalnya: 'sipola123')
-            $user->password = Hash::make('sipola123');
-            $user->save();
-
-            // Tambahkan juga untuk mahasiswa jika perlu
-            $mahasiswa = MahasiswaModel::where('user_id', $user->id)->first();
-            if ($mahasiswa) {
-                $mahasiswa->password = Hash::make('sipola123');
-                $mahasiswa->save();
-            }
-
-            // Reset password di tabel dospem
-            // $dospem = DospemModel::where('user_id', $user->id)->first();
-            // $dospem = $user->dosen;
-            // if ($dospem) {
-            //     $dospem->password = Hash::make('sipola123');
-            //     $dospem->save();
-            // }
-
-            // // Reset password di tabel admin
-            // $admin = AdminModel::where('user_id', $user->id)->first();
-            // if ($admin) {
-            //     $admin->password = Hash::make('sipola123');
-            //     $admin->save();
-            // }
-
-            return response()->json([
-                'status' => true,
-                'message' => 'Password berhasil direset ke "sipola123".',
-            ]);
         }
 
+        Log::warning("Akses reset password ditolak. Request tidak berasal dari admin atau bukan AJAX.");
         return response()->json([
             'status' => false,
-            'message' => 'Unauthorized atau bukan AJAX request.',
+            'message' => 'Unauthorized.',
         ], 403);
     }
-
-
 }

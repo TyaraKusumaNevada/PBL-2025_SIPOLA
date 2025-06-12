@@ -126,9 +126,9 @@ Route::prefix('user')->group(function () {
     Route::put('{id}/{role}/update_ajax', [UserController::class, 'update_ajax']);
     Route::get('{id}/{role}/delete_ajax', [UserController::class, 'confirm_ajax']);
     Route::delete('{id}/{role}/delete_ajax', [UserController::class, 'delete_ajax']);
-    Route::post('{id}/reset_ajax', [UserController::class, 'resetPassword_ajax'])->name('admin.resetPassword_ajax');
+    Route::post('{id}/{role}/reset_ajax', [UserController::class, 'resetPassword_ajax']);
 });
-// Route::post('/admin/reset-password/{id}', [AdminController::class, 'resetPassword'])->name('admin.resetPassword');
+
 // ----------------------------------------------------------------------------------------
 // ROUTE MAHASISWA (Unggah Prestasi)
 Route::prefix('prestasi')->group(function () {
