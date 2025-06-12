@@ -224,14 +224,13 @@ Route::prefix('/prestasiAdmin')->group(function () {
 
 // --- PROFIL ---
 // --- PROFIL MAHASISWA/ADMIN/DOSEN ---
-Route::get('/profilMahasiswa', [ProfilController::class, 'index'])->name('profil.index');
-Route::get('/profilAdmin', [ProfilController::class, 'indexAdmin'])->name('profil.indexAdmin');
-Route::get('/profilDosen', [ProfilController::class, 'indexDosen'])->name('profilDosen.index');
+Route::get('/profil', [ProfilController::class, 'index'])->name('profil.index');
 
 // --- AKSI PROFIL (Update & Hapus Akademik) ---
 Route::post('/profil/update-profile', [ProfilController::class, 'updateProfile'])->name('profil.update.profile')->middleware('auth');
 Route::post('/profil/update-username', [ProfilController::class, 'updateUsername'])->name('profil.update.username')->middleware('auth');
 Route::post('/profil/update-academic', [ProfilController::class, 'updateAcademicProfile'])->name('profil.update.academic')->middleware('auth');
+Route::post('/profil/delete-academic', [ProfilController::class, 'deleteAcademicItem'])->name('profil.deleteAcademicItem');
 
 // --- LANDING & INFO LOMBA ---
 Route::get('/', [LandingController::class, 'index']);
@@ -257,4 +256,6 @@ Route::prefix('/laporanAdmin')->group(function () {
     Route::post('/list', [LaporanPrestasiController::class, 'list'])->name('laporan.list');
     Route::get('/grafik', [LaporanPrestasiController::class, 'grafik'])->name('laporan.grafik');
     Route::get('/export-pdf', [LaporanPrestasiController::class, 'exportPdf'])->name('laporan.exportPdf');
+    Route::get('/statistikBox', [LaporanPrestasiController::class, 'statistikBox'])->name('laporan.statistikBox');
+    Route::get('/statistikMahasiswa', [LaporanPrestasiController::class, 'statistikMahasiswa'])->name('laporan.statistikMahasiswa');
 });

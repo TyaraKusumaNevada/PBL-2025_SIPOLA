@@ -82,20 +82,35 @@
 </head>
 
 <body>
-    <!-- Tombol kembali -->
-    <a href="{{ url('/landing') }}" class="back-button">
-        <i class="bi bi-arrow-left"></i>
-    </a>
 
-    <div class="container-fluid">
-        <div class="row full-height">
-            <!-- Kolom Gambar -->
-            <div class="col-md-8 d-none d-md-block p-0 position-relative">
-                <img src="{{ asset('image/polinema.png') }}" alt="Gambar Login" class="login-image h-100 w-100">
-                <div class="position-absolute bottom-0 start-0 p-4 text-white text-left">
-                    <h4>Bersama, kita unggul di Polinema!</h4>
-                    <h2><strong>TI FAST, TI BRAVO</strong></h2>
-                </div>
+  <!-- Tombol kembali -->
+  <a href="{{ url('/landing') }}" class="back-button">
+    <i class="bi bi-arrow-left"></i>
+  </a>
+
+  <div class="container-fluid">
+    <div class="row full-height">
+      <!-- Kolom Gambar -->
+      <div class="col-md-8 d-none d-md-block p-0 position-relative">
+        <img src="{{ asset('image/polinema.png') }}" alt="Gambar Login" class="login-image h-100 w-100">
+        <div class="position-absolute bottom-0 start-0 p-4 text-white text-left">
+          <h4>Bersama, kita unggul di Polinema!</h4>
+          <h2><strong>TI FAST, TI BRAVO</strong></h2>
+        </div>
+      </div>
+
+      <!-- Kolom Form Login -->
+      <div class="col-md-4 d-flex align-items-center justify-content-center">
+        <form id="form-login" action="{{ url('/login') }}" method="POST" class="w-75">
+          @csrf
+          <img src="{{ asset('image/logo_sipola.png') }}" alt="Gambar Logo" class="logo-image h-50 w-50 d-block mx-auto">
+
+          <!-- Username -->
+          <div class="mb-3">
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
+              <input type="text" name="username" class="form-control" id="username" placeholder="Username">
+
             </div>
 
             <!-- Kolom Form Login -->
