@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\TambahLombaModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
-class DospemLombaController extends Controller
+class MahasiswaLombaController extends Controller
 {
     public function index() {
         $breadcrumb = (object) [
@@ -22,7 +25,7 @@ class DospemLombaController extends Controller
             ->orderBy('tanggal_mulai', 'desc')
             ->get();
 
-        return view('lombaDospem.index', [
+        return view('lombaMahasiswa.index', [
             'breadcrumb' => $breadcrumb,
             'lombas' => $lomba
         ]);
@@ -31,11 +34,11 @@ class DospemLombaController extends Controller
     public function show_info($id) {
         $lomba = TambahLombaModel::find($id);
 
-        return view('lombaDospem.show_info', ['lomba' => $lomba]);
+        return view('lombaMahasiswa.show_info', ['lomba' => $lomba]);
     }
 
     public function create_ajax() {
-        return view('lombaDospem.create_ajax');
+        return view('lombaMahasiswa.create_ajax');
     }
 
     public function store_ajax(Request $request) {
@@ -123,7 +126,7 @@ class DospemLombaController extends Controller
         // Ambil data lomba yang dibuat oleh user tersebut
         $lomba = TambahLombaModel::where('user_id', $userId)->get();
 
-        return view('lombaDospem.histori', ['breadcrumb' => $breadcrumb, 'lomba' => $lomba]);
+        return view('lombaMahasiswa.histori', ['breadcrumb' => $breadcrumb, 'lomba' => $lomba]);
     }
 
     public function list(Request $request) {
@@ -157,7 +160,7 @@ class DospemLombaController extends Controller
                 return '<span class="text-muted">Tidak ada</span>';
             })
             ->addColumn('aksi', function ($lomba) {
-                $btn  = '<button onclick="modalAction(\''.url('/lombaDospem/' . $lomba->id_tambahLomba . '/show_tambah').'\')" class="btn btn-info btn-sm">
+                $btn  = '<button onclick="modalAction(\''.url('/lombaMahasiswa/' . $lomba->id_tambahLomba . '/show_tambah').'\')" class="btn btn-info btn-sm">
                             <i class="bi bi-eye"></i><span class="ms-2">Detail</span>
                         </button>';
                 return $btn;
@@ -181,6 +184,6 @@ class DospemLombaController extends Controller
     public function show_tambah($id) {
         $lomba = TambahLombaModel::find($id);
 
-        return view('lombaDospem.show_tambah', ['lomba' => $lomba]);
+        return view('lombaMahasiswa.show_tambah', ['lomba' => $lomba]);
     }
 }

@@ -15,7 +15,8 @@
         </div>
     </div>
 @else
-    <form action="{{ url('/lomba/' . $lomba->id_tambahLomba . '/update_ajax') }}" method="POST" enctype="multipart/form-data" id="form-edit">
+    <form action="{{ url('/lomba/verifikasi/' . $lomba->id_tambahLomba . '/updateVerifikasi') }}" method="POST"
+        enctype="multipart/form-data" id="form-edit">
         @csrf
         @method('PUT')
         <div id="modal-master" class="modal-lg modal-dialog-centered" role="document">
@@ -27,7 +28,8 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label">Nama Lomba</label>
-                        <input type="text" name="nama_lomba" class="form-control" value="{{ $lomba->nama_lomba }}" required>
+                        <input type="text" name="nama_lomba" class="form-control" value="{{ $lomba->nama_lomba }}"
+                            required>
                         <div id="error-nama_lomba" class="form-text text-danger"></div>
                     </div>
 
@@ -48,17 +50,16 @@
                             <label class="form-label">Tingkat Lomba</label>
                             <select name="tingkat_lomba" class="form-select" required>
                                 <option value="">-- Pilih Tingkat --</option>
-                                <option value="politeknik"
-                                    {{ $lomba->tingkat_lomba == 'politeknik' ? 'selected' : '' }}>Politeknik
+                                <option value="politeknik" {{ $lomba->tingkat_lomba == 'politeknik' ? 'selected' : '' }}>
+                                    Politeknik
                                 </option>
-                                <option value="kota" 
-                                    {{ $lomba->tingkat_lomba == 'kota' ? 'selected' : '' }}>Kota
+                                <option value="kota" {{ $lomba->tingkat_lomba == 'kota' ? 'selected' : '' }}>Kota
                                 </option>
-                                <option value="provinsi" 
-                                    {{ $lomba->tingkat_lomba == 'provinsi' ? 'selected' : '' }}>Provinsi
+                                <option value="provinsi" {{ $lomba->tingkat_lomba == 'provinsi' ? 'selected' : '' }}>
+                                    Provinsi
                                 </option>
-                                <option value="nasional" 
-                                    {{ $lomba->tingkat_lomba == 'nasional' ? 'selected' : '' }}>Nasional
+                                <option value="nasional" {{ $lomba->tingkat_lomba == 'nasional' ? 'selected' : '' }}>
+                                    Nasional
                                 </option>
                                 <option value="internasional"
                                     {{ $lomba->tingkat_lomba == 'internasional' ? 'selected' : '' }}>Internasional
@@ -68,10 +69,11 @@
                         </div>
                     </div>
 
-                     <div class="row">
+                    <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Penyelenggara</label>
-                            <input type="text" name="penyelenggara_lomba" class="form-control" value="{{ $lomba->penyelenggara_lomba }}" required>
+                            <input type="text" name="penyelenggara_lomba" class="form-control"
+                                value="{{ $lomba->penyelenggara_lomba }}" required>
                             <div id="error-penyelenggara_lomba" class="form-text text-danger"></div>
                         </div>
                         <div class="col-md-6 mb-3">
@@ -81,35 +83,38 @@
                         </div>
                     </div>
 
-                     <div class="row">
+                    <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Tanggal Mulai</label>
-                            <input type="date" name="tanggal_mulai" class="form-control" value="{{ $lomba->tanggal_mulai }}" required>
+                            <input type="date" name="tanggal_mulai" class="form-control"
+                                value="{{ $lomba->tanggal_mulai }}" required>
                             <div id="error-tanggal_mulai" class="form-text text-danger"></div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Tanggal Selesai</label>
-                            <input type="date" name="tanggal_selesai" class="form-control" value="{{ $lomba->tanggal_selesai }}" required>
+                            <input type="date" name="tanggal_selesai" class="form-control"
+                                value="{{ $lomba->tanggal_selesai }}" required>
                             <div id="error-tanggal_selesai" class="form-text text-danger"></div>
                         </div>
                     </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">Link Pendaftaran</label>
-                        <input type="url" name="link_pendaftaran" class="form-control" 
-                            value="{{ old('link_pendaftaran', $lomba->link_pendaftaran) }}" 
-                            placeholder="https://contoh.com/daftar" required>
-                        <div id="error-link_pendaftaran" class="form-text text-danger"></div>
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label for="form-label" class="form-label">Upload Pamflet (Gambar) 
-                            <small
-                                class="text-muted">(Kosongkan jika tidak diubah)
-                            </small>
-                        </label>
-                        <input type="file" name="pamflet_lomba" id="pamflet_lomba" class="form-control" accept="image/*">
-                        <div id="error-pamflet_lomba" class="form-text text-danger"></div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Link Pendaftaran</label>
+                            <input type="url" name="link_pendaftaran" class="form-control"
+                                value="{{ old('link_pendaftaran', $lomba->link_pendaftaran) }}"
+                                placeholder="https://contoh.com/daftar" required>
+                            <div id="error-link_pendaftaran" class="form-text text-danger"></div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="form-label" class="form-label">Upload Pamflet (Gambar)
+                                <small class="text-muted">(Kosongkan jika tidak diubah)
+                                </small>
+                            </label>
+                            <input type="file" name="pamflet_lomba" id="pamflet_lomba" class="form-control"
+                                accept="image/*">
+                            <div id="error-pamflet_lomba" class="form-text text-danger"></div>
+                        </div>
                     </div>
                 </div>
 
@@ -122,7 +127,7 @@
     </form>
 
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             $("#form-edit").validate({
                 rules: {
                     nama_lomba: "required",
@@ -150,7 +155,7 @@
                     //     extension: "File harus berupa gambar (jpg, jpeg, png, gif)."
                     // }
                 },
-                submitHandler: function (form) {
+                submitHandler: function(form) {
                     let formData = new FormData(form);
 
                     $.ajax({
@@ -173,7 +178,7 @@
                                     title: 'Berhasil',
                                     text: response.message
                                 });
-                                dataLomba.ajax.reload();
+                                dataVerifikasiLomba.ajax.reload();
                             } else {
                                 $('.form-text.text-danger').text(''); // Clear all errors
                                 $.each(response.msgField, function(prefix, val) {

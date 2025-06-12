@@ -1,4 +1,4 @@
-<form action="{{ url('/lombaDospem/ajax') }}" method="POST" enctype="multipart/form-data" id="form-tambah">
+<form action="{{ url('/lombaMahasiswa/ajax') }}" method="POST" enctype="multipart/form-data" id="form-tambah">
     @csrf
     <div id="modal-master" class="modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -186,8 +186,8 @@
                                 text: response.message
                             });
 
-                            if (typeof dataHistoriDospem !== 'undefined') {
-                                dataHistoriDospem.ajax.reload();
+                            if (typeof dataHistoriMahasiswa !== 'undefined') {
+                                dataHistoriMahasiswa.ajax.reload();
                             }
 
                             // Reset form dan error

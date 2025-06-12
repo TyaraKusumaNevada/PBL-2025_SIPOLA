@@ -12,6 +12,6 @@ class InfoLombaModel extends Model
     protected $fillable = ['id_lomba'];
 
     public function lomba() {
-        return $this->belongsTo(TambahLomba::class, 'id_lomba');
+        return $this->belongsTo(TambahLombaModel::class, 'id_lomba');
     }
 }
