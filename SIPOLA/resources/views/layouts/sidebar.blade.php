@@ -208,6 +208,14 @@
                 <li class="menu-item {{ Request::is('dospem/mahasiswa_prestasi') ? 'active open' : '' }}">
                     <a href="{{ url('/dospem/mahasiswa_prestasi') }}" class="menu-link">
                         <div class="text-truncate" data-i18n="PrestasiMahasiswa">Info Prestasi</div>
+                <li class="menu-item {{ Request::is('rekomendasi') ? 'active open' : '' }}">
+                    <a href="{{ url('/rekomendasi') }}" class="menu-link">
+                        <div class="text-truncate" data-i18n="Rekomendasi Lomba">Rekomedasi Lomba</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ Request::is('lombaMahasiswa') ? 'active open' : '' }}">
+                    <a href="{{ url('/lombaMahasiswa') }}" class="menu-link">
+                        <div class="text-truncate" data-i18n="LombaTersedia">Lomba Tersedia</div>
                     </a>
                 </li>
                 {{-- <li class="menu-item {{ Request::is('dospem/bimbingan') ? 'active open' : '' }}">
