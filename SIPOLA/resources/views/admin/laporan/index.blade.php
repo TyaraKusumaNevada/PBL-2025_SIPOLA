@@ -15,8 +15,8 @@
                                 </a>
                             </div>
 
-                            <div class="mb-4">
-                                <canvas id="grafikPrestasi" height="100"></canvas>
+                            <div class="mb-4 d-flex justify-content-center">
+                                <canvas id="grafikPrestasi" class="grafik-pie"></canvas>
                             </div>
 
                             <div class="row mb-4">
@@ -62,6 +62,11 @@
         div.dataTables_wrapper div.dataTables_filter {
             margin-top: 1rem;
         }
+
+        .grafik-pie {
+        max-width: 300px !important;
+        max-height: 300px !important;
+    }
     </style>
 @endpush
 
