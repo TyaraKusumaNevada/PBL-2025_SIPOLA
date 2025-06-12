@@ -55,12 +55,6 @@ Route::get('/home', function () {
     return view('welcome');
 });
 
-
-// --- DASHBOARD MAHASISWA ---
-Route::prefix('mahasiswa')->group(function () {
-    Route::get('/dashboard', [DashboardMahasiswaController::class, 'index'])->name('mahasiswa.dashboard.data');
-});
-
 // --- PRESTASI MAHASISWA (UPLOAD) ---
 Route::prefix('prestasi')->group(function () {
     Route::get('/', [PrestasiMahasiswaController::class, 'index']);
@@ -223,12 +217,12 @@ Route::post('/profil/update-academic', [ProfilController::class, 'updateAcademic
 Route::get('/', [LandingController::class, 'index']);
 Route::get('/infolomba', [InfoLombaController::class, 'index'])->name('infolomba');
 
-// -- Dashboard (Mahasiswa) --
+// -- DASHBOARD
+//Mahasiswa
 Route::prefix('mahasiswa')->group(function () {
     Route::get('/dashboard', [DashboardMahasiswaController::class, 'index'])->name('mahasiswa.dashboard.data');
 });
-
-// -- Dashboard (Dospem) --
+//Dospem
 Route::prefix('dospem')->group(function () {
     Route::get('/dashboard', [DashboardDospemController::class, 'index'])->name('dospem.dashboard.data');
 });
