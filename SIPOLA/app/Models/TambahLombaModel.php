@@ -16,6 +16,10 @@ class TambahLombaModel extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function mahasiswa() {
+        return $this->belongsTo(MahasiswaModel::class, 'id_mahasiswa', 'id_mahasiswa');
+    }
+
     public function infoLomba() {
         return $this->hasOne(InfoLombaModel::class, 'id_lomba');
     }
