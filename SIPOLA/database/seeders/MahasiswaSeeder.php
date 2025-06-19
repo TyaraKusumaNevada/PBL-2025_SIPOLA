@@ -14,7 +14,7 @@ class MahasiswaSeeder extends Seeder
             [
                 'id_mahasiswa'   => 1,
                 'id_role'        => 3, // Role Mahasiswa
-                'id_prodi'       => 1, // Sesuaikan dengan id program_studi yang tersedia
+                'id_prodi'       => 3, // Sesuaikan dengan id program_studi yang tersedia
                 'id_angkatan'    => 1,
                 'nama'           => 'Ahmad Fauzi',
                 'nim'            => '2141720001',
@@ -24,11 +24,11 @@ class MahasiswaSeeder extends Seeder
                 'minat'          => 'Cybersecurity, Routing',
                 'created_at'     => now(),
                 'updated_at'     => now(),
-            ],
+                ],
             [
                 'id_mahasiswa'   => 2,
                 'id_role'        => 3,
-                'id_prodi'       => 1,
+                'id_prodi'       => 4,
                 'id_angkatan'    => 1,
                 'nama'           => 'Rina Kurnia',
                 'nim'            => '2141720002',
