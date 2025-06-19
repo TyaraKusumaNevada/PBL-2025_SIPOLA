@@ -19,7 +19,9 @@ use App\Http\Controllers\DospemLombaController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VerifikasiPrestasiController;
 use App\Http\Controllers\LaporanPrestasiController;
-
+use App\Http\Controllers\BobotKriteriaMahasiswaController;
+use App\Http\Controllers\PreferensiMahasiswaController;
+use App\Models\PreferensiMahasiswaModel;
 
 // --- LANDING ---
 Route::get('/', [LandingController::class, 'index']);
@@ -248,8 +250,6 @@ Route::prefix('dospem')->group(function () {
 
 Route::post('/profil/delete-academic', [ProfilController::class, 'deleteAcademicItem'])->name('profil.delete.academic');
 
-
-
 // -- Laporan dan Analisis (Admin)
 Route::prefix('/laporanAdmin')->group(function () {
     Route::get('/', [LaporanPrestasiController::class, 'index'])->name('laporan.index');
@@ -258,4 +258,24 @@ Route::prefix('/laporanAdmin')->group(function () {
     Route::get('/export-pdf', [LaporanPrestasiController::class, 'exportPdf'])->name('laporan.exportPdf');
     Route::get('/statistikBox', [LaporanPrestasiController::class, 'statistikBox'])->name('laporan.statistikBox');
     Route::get('/statistikMahasiswa', [LaporanPrestasiController::class, 'statistikMahasiswa'])->name('laporan.statistikMahasiswa');
+});
+
+Route::prefix('mahasiswa')->group(function () {
+    // //REKOMENDASI
+    Route::get('/rekomendasi', [RekomendasiController::class, 'index'])->name('mahasiswa.rekomendasi.index');
+    Route::get('/rekomendasi/hasil', [RekomendasiController::class, 'hasil'])->name('mahasiswa.rekomendasi.hasil');
+    Route::get('/rekomendasi/detail-aras/{id}', [RekomendasiController::class, 'detailAras'])->name('mahasiswa.rekomendasi.detail_aras');
+    // Route::get('/rekomendasi/aras-detail/{id}', [RekomendasiController::class, 'detailAras']);
+    // Route::get('/rekomendasi/hasil', [RekomendasiController::class, 'hasil'])->name('mahasiswa.rekomendasi.hasil');
+    // // Route::get('/rekomendasi', [RekomendasiController::class, 'index'])->name('mahasiswa.rekomendasi.index');
+
+    //PREFERENSI
+    Route::get('/rekomendasi/preferensi', [PreferensiMahasiswaController::class, 'showFormPreferensi'])->name('mahasiswa.rekomendasi.preferensi');
+    Route::post('/rekomendasi/preferensi', [PreferensiMahasiswaController::class, 'storePreferensi'])->name('mahasiswa.rekomendasi.preferensi.store');
+    // Route::post('/rekomendasi/form_bobot', [PreferensiMahasiswaController::class, 'store'])->name('mahasiswa.rekomendasi.store_bobot');
+    // Route::get('/rekomendasi/form_bobot', [PreferensiMahasiswaController::class, 'create'])->name('mahasiswa.rekomendasi.form_bobot');
+
+    // Bobot
+    Route::get('/rekomendasi/bobot', [BobotKriteriaMahasiswaController::class, 'create'])->name('mahasiswa.rekomendasi.bobot');
+    Route::post('/rekomendasi/bobot', [BobotKriteriaMahasiswaController::class, 'store'])->name('mahasiswa.rekomendasi.bobot.store');
 });
