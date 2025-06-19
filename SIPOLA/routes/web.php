@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardMahasiswaController;
 use App\Http\Controllers\DashboardDospemController;
+use App\Http\Controllers\DashboardAdminController;
 use App\Http\Controllers\InfoLombaController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\PeriodeController;
@@ -246,6 +247,10 @@ Route::prefix('mahasiswa')->group(function () {
 //Dospem
 Route::prefix('dospem')->group(function () {
     Route::get('/dashboard', [DashboardDospemController::class, 'index'])->name('dospem.dashboard.data');
+});
+//Admin
+Route::prefix('admin')->group(function () {
+    Route::get('/dashboard', [DashboardAdminController::class, 'index'])->name('admin.dashboard.data');
 });
 
 Route::post('/profil/delete-academic', [ProfilController::class, 'deleteAcademicItem'])->name('profil.delete.academic');
