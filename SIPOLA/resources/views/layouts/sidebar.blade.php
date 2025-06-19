@@ -3,6 +3,7 @@
     $hakAkses = Auth::user()->id_role;
 @endphp
 
+
 <div class="user-panel d-flex align-items-center px-3 py-3" style="border-bottom: 1px solid #d1d5db;">
     <a href="{{ route('profil.index') }}" class="d-flex align-items-center text-dark text-decoration-none">
         @php
@@ -11,9 +12,11 @@
             $defaultImage = 'storage/foto_profil/user_.jpg';
             $imagePath = file_exists(public_path($userImagePath)) ? asset($userImagePath) : asset($defaultImage);
 
+
             $user = Auth::user();
             $fullName = $user->name ?? ($user->nama ?? ($user->full_name ?? ($user->username ?? 'Guest')));
             $nameParts = explode(' ', trim($fullName));
+
 
             if (count($nameParts) <= 2) {
                 $displayName = $fullName;
@@ -30,6 +33,97 @@
         </span>
     </a>
 </div>
+{{-- @if(role == mahasiswa)
+<div class="user-panel d-flex align-items-center px-3 py-3" style="border-bottom: 1px solid #d1d5db;">
+    <a href="{{ route('profil.index') }}" class="d-flex align-items-center text-dark text-decoration-none">
+        @php
+            $userId = Auth::id();
+            $userImagePath = 'storage/foto_profil/user_' . $userId . '.jpg';
+            $defaultImage = 'storage/foto_profil/user_.jpg';
+            $imagePath = file_exists(public_path($userImagePath)) ? asset($userImagePath) : asset($defaultImage);
+
+
+            $user = Auth::user();
+            $fullName = $user->name ?? ($user->nama ?? ($user->full_name ?? ($user->username ?? 'Guest')));
+            $nameParts = explode(' ', trim($fullName));
+
+
+            if (count($nameParts) <= 2) {
+                $displayName = $fullName;
+            } else {
+                $firstName = $nameParts[0];
+                $lastInitial = strtoupper(substr(end($nameParts), 0, 1));
+                $displayName = $firstName . ' ' . $lastInitial . '.';
+            }
+        @endphp
+        <img id="sidebar-foto-profil" src="{{ $imagePath }}" class="rounded-circle" alt="User Image"
+            style="width: 40px; height: 40px; object-fit: cover; border: 2px solid #d1d5db;">
+        <span id="sidebar-nama-user" class="ms-2 fw-semibold text-dark" title="{{ $fullName }}">
+            {{ $displayName }}
+        </span>
+    </a>
+</div>
+@elseif(role == admin)
+    <div class="user-panel d-flex align-items-center px-3 py-3" style="border-bottom: 1px solid #d1d5db;">
+    <a href="{{ route('profilAdmin.index') }}" class="d-flex align-items-center text-dark text-decoration-none">
+        @php
+            $userId = Auth::id();
+            $userImagePath = 'storage/foto_profil/user_' . $userId . '.jpg';
+            $defaultImage = 'storage/foto_profil/user_.jpg';
+            $imagePath = file_exists(public_path($userImagePath)) ? asset($userImagePath) : asset($defaultImage);
+
+
+            $user = Auth::user();
+            $fullName = $user->name ?? ($user->nama ?? ($user->full_name ?? ($user->username ?? 'Guest')));
+            $nameParts = explode(' ', trim($fullName));
+
+
+            if (count($nameParts) <= 2) {
+                $displayName = $fullName;
+            } else {
+                $firstName = $nameParts[0];
+                $lastInitial = strtoupper(substr(end($nameParts), 0, 1));
+                $displayName = $firstName . ' ' . $lastInitial . '.';
+            }
+        @endphp
+        <img id="sidebar-foto-profil" src="{{ $imagePath }}" class="rounded-circle" alt="User Image"
+            style="width: 40px; height: 40px; object-fit: cover; border: 2px solid #d1d5db;">
+        <span id="sidebar-nama-user" class="ms-2 fw-semibold text-dark" title="{{ $fullName }}">
+            {{ $displayName }}
+        </span>
+    </a>
+</div>
+@elseif(role == dosen)
+<div class="user-panel d-flex align-items-center px-3 py-3" style="border-bottom: 1px solid #d1d5db;">
+    <a href="{{ route('profilDosen.index') }}" class="d-flex align-items-center text-dark text-decoration-none">
+        @php
+            $userId = Auth::id();
+            $userImagePath = 'storage/foto_profil/user_' . $userId . '.jpg';
+            $defaultImage = 'storage/foto_profil/user_.jpg';
+            $imagePath = file_exists(public_path($userImagePath)) ? asset($userImagePath) : asset($defaultImage);
+
+
+            $user = Auth::user();
+            $fullName = $user->name ?? ($user->nama ?? ($user->full_name ?? ($user->username ?? 'Guest')));
+            $nameParts = explode(' ', trim($fullName));
+
+
+            if (count($nameParts) <= 2) {
+                $displayName = $fullName;
+            } else {
+                $firstName = $nameParts[0];
+                $lastInitial = strtoupper(substr(end($nameParts), 0, 1));
+                $displayName = $firstName . ' ' . $lastInitial . '.';
+            }
+        @endphp
+        <img id="sidebar-foto-profil" src="{{ $imagePath }}" class="rounded-circle" alt="User Image"
+            style="width: 40px; height: 40px; object-fit: cover; border: 2px solid #d1d5db;">
+        <span id="sidebar-nama-user" class="ms-2 fw-semibold text-dark" title="{{ $fullName }}">
+            {{ $displayName }}
+        </span>
+    </a>
+</div>
+@endif --}}
 <!-- Menu Items -->
 <ul class="menu-inner">
     <!-- Dashboard Admin -->
@@ -42,6 +136,7 @@
         </li>
     @endif
 
+
     <!-- Dashboard Dospem -->
     @if ($hakAkses == 2)
         <li class="menu-item {{ Request::is('dospem/dashboard') ? 'active open' : '' }}">
@@ -52,6 +147,7 @@
         </li>
     @endif
 
+
     <!-- Dashboard Mahasiswa -->
     @if ($hakAkses == 3)
         <li class="menu-item {{ Request::is('mahasiswa/dashboard') ? 'active open' : '' }}">
@@ -60,8 +156,8 @@
                 <div class="text-truncate" data-i18n="Dashboard">Dashboard</div>
             </a>
         </li>
-         
     @endif
+
 
     {{-- <!-- Profil Admin -->
     @if ($hakAkses == 1)
@@ -73,6 +169,7 @@
         </li>
     @endif
 
+
     <!-- Profil Dospem -->
     @if ($hakAkses == 2)
         <li class="menu-item {{ Request::is('dospem/profil') ? 'active open' : '' }}">
@@ -83,7 +180,9 @@
         </li>
     @endif
 
-    <!-- Profil Mahasiswa -->
+
+    <!-- Profil Mahasiswa -->) ? 'active open' : '' }}">
+            <a href="{{ url('/prestasi') }}" class=
     @if ($hakAkses == 3)
         <li class="menu-item {{ Request::is('mahasiswa/profil') ? 'active open' : '' }}">
             <a href="{{ url('/mahasiswa/profil') }}" class="menu-link d-flex align-items-center">
@@ -93,38 +192,24 @@
         </li>
     @endif --}}
 
+
     <!-- Unggah Prestasi -->
-    @if ($hakAkses == 3)
-        <li class="menu-item {{ Request::is('prestasi') ? 'active open' : '' }}">
-            <a href="{{ url('/prestasi') }}" class="menu-link d-flex align-items-center">
+    {{-- @if ($hakAkses == 3)
+        <li class="menu-item {{ Request::is('prestasi'"menu-link d-flex align-items-center}}">
                 <i class="bi bi-file-earmark-text menu-icon fs-5"></i>
                 <div class="text-truncate" data-i18n="ManajemenLomba">Unggah Prestasi</div>
             </a>
         </li>
-        <li class="menu-item">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="bi bi-journal-text menu-icon fs-5"></i>
-                <div class="text-truncate" data-i18n="InfoLomba">Info Lomba</div>
-            </a>
-            <ul class="menu-sub">
-                <li class="menu-item {{ Request::is('lombaMahasiswa') ? 'active open' : '' }}">
-                    <a href="{{ url('/lombaMahasiswa') }}" class="menu-link">
-                        <div class="text-truncate" data-i18n="LombaTersedia">Lomba Tersedia</div>
-                    </a>
-                </li>
-                <li class="menu-item {{ Request::is('rekomendasi') ? 'active open' : '' }}">
-                    <a href="{{ url('/rekomendasi') }}" class="menu-link">
-                        <div class="text-truncate" data-i18n="Rekomendasi Lomba">Rekomedasi Lomba</div>
-                    </a>
-                </li>
-                <li class="menu-item {{ Request::is('lombaMahasiswa/histori') ? 'active open' : '' }}">
-                    <a href="{{ url('/lombaMahasiswa/histori') }}" class="menu-link">
-                        <div class="text-truncate" data-i18n="HistoriLomba">Histori Lomba</div>
-                    </a>
-                </li>
-            </ul>
-        </li>
-    @endif
+    @endif --}}
+    @if ($hakAkses == 3)
+    <li class="menu-item {{ Request::is('prestasi') ? 'active open' : '' }}">
+        <a href="{{ url('/prestasi') }}" class="menu-link d-flex align-items-center">
+            <i class="bi bi-file-earmark-text menu-icon fs-5"></i>
+            <div class="text-truncate" data-i18n="ManajemenLomba">Unggah Prestasi</div>
+        </a>
+    </li>
+@endif
+
 
     <!-- Menu Admin (Manajemen Lomba) -->
     @if ($hakAkses == 1)
@@ -136,7 +221,8 @@
         </li>
     @endif
 
-   <!-- Menu Dosen Pembimbing -->
+
+    <!-- Menu Dosen Pembimbing -->
     @if ($hakAkses == 2)
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -158,6 +244,7 @@
         </li>
     @endif
 
+
     <!-- Menu Mahasiswa (Lomba User) -->
     @if ($hakAkses == 3)
         <li class="menu-item">
@@ -166,10 +253,34 @@
                 <div class="text-truncate" data-i18n="InfoLomba">Info Lomba</div>
             </a>
             <ul class="menu-sub">
-                <li class="menu-item {{ Request::is('rekomendasi') ? 'active open' : '' }}">
+                {{-- <li class="menu-item {{ Request::is('rekomendasi') ? 'active open' : '' }}">
                     <a href="{{ url('/rekomendasi') }}" class="menu-link">
                         <div class="text-truncate" data-i18n="Rekomendasi Lomba">Rekomedasi Lomba</div>
                     </a>
+                </li>
+                <li class="menu-item {{ Request::is('mahasiswa/preferensi') ? 'active open' : '' }}">
+                    <a href="{{ route('mahasiswa.preferensi.edit') }}" class="menu-link">
+                        <div class="text-truncate" data-i18n="Preferensi Lomba">Preferensi Lomba</div>
+                    </a>
+                </li> --}}
+                {{-- <li class="menu-item {{ Request::is('rekomendasi') ? 'active open' : '' }}">
+                    <a href="{{ route('rekomendasi.index') }}" class="menu-link">
+                        <div class="text-truncate" data-i18n="Rekomendasi Lomba">Rekomendassi Lomba</div>
+                    </a>
+                </li> --}}
+                <li class="menu-item {{ Request::is('mahasiswa/rekomendasi') ? 'active open' : '' }}">
+                    <a href="{{ route('mahasiswa.rekomendasi.index') }}" class="menu-link">
+                        <div class="text-truncate" data-i18n="Rekomendasi Lomba">Rekomendasi Lomba</div>
+                    </a>
+                </li>
+                {{-- <a href="{{ route('mahasiswa.rekomendasi.index') }}" class="menu-link">
+                    <div class="text-truncate" data-i18n="Rekomendasi Lomba">Rekomendasi Lomba</div>
+                </a> --}}
+                {{-- <li class="menu-item {{ Request::is('mahasiswa/bobot') ? 'active open' : '' }}">
+                    <a href="{{ route('mahasiswa.bobot.edit') }}" class="menu-link">
+                        <div class="text-truncate" data-i18n="Bobot Kriteria">Bobot Kriteria</div>
+                    </a>
+                </li> --}}
                 <li class="menu-item {{ Request::is('lombaMahasiswa') ? 'active open' : '' }}">
                     <a href="{{ url('/lombaMahasiswa') }}" class="menu-link">
                         <div class="text-truncate" data-i18n="LombaTersedia">Lomba Tersedia</div>
@@ -180,8 +291,13 @@
                         <div class="text-truncate" data-i18n="HistoriLomba">Histori Lomba</div>
                     </a>
                 </li>
+            </ul>
+        </li>
+    @endif
+
+
     @if ($hakAkses == 2)
-        <!-- Menu Dosen Pembimbing (Lomba Mahasiswa) -->
+        // <!-- Menu Dosen Pembimbing (Lomba Mahasiswa) -->
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="bi bi-journal-text menu-icon fs-5"></i>
@@ -202,6 +318,7 @@
         </li>
     @endif
 
+
     <!-- Manajemen Pengguna -->
     @if ($hakAkses == 1)
         <li class="menu-item {{ Request::is('user*') ? 'active open' : '' }}">
@@ -211,6 +328,7 @@
             </a>
         </li>
     @endif
+
 
     <!-- Manajemen Periode/Angkatan -->
     @if ($hakAkses == 1)
@@ -222,6 +340,7 @@
         </li>
     @endif
 
+
     <!-- Manajemen Prodi -->
     @if ($hakAkses == 1)
         <li class="menu-item {{ Request::is('admin*') ? 'active open' : '' }}">
@@ -231,6 +350,7 @@
             </a>
         </li>
     @endif
+
 
     <!-- Verifikasi Prestasi -->
     @if ($hakAkses == 1)
@@ -242,6 +362,7 @@
         </li>
     @endif
 
+
     <!-- Verifikasi Info Lomba -->
     @if ($hakAkses == 1)
         <li class="menu-item {{ Request::is('lomba/verifikasi*') ? 'active open' : '' }}">
@@ -251,7 +372,7 @@
             </a>
         </li>
     @endif
-    
+   
     <!-- Laporan dan Analisis -->
     @if ($hakAkses == 1)
     <li class="menu-item {{ Request::is('laporanAdmin*') ? 'active open' : '' }}">
@@ -263,14 +384,18 @@
     @endif
 
 
+
+
     <!-- Spacer supaya tombol logout di bawah -->
     <li style="flex-grow: 1;"></li>
+
 
     <!-- Logout -->
     <li class="menu-item">
         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
             @csrf
         </form>
+
 
         <button type="button" class="menu-link text-dark logout-btn" onclick="confirmLogout()"
             style="border: none; background: none; width: 100%; text-align: left; padding: 10px 16px; border-radius: 8px; cursor: pointer;">
@@ -279,6 +404,7 @@
         </button>
     </li>
 </ul>
+
 
 <!-- Custom Sidebar Style -->
 <style>
@@ -290,6 +416,8 @@
         padding-top: 0.25rem;
         margin: 0;
     }
+
+
     .menu-inner a.menu-link,
     .menu-inner button.menu-link {
         padding: 10px 16px;
@@ -301,30 +429,37 @@
         text-decoration: none;
     }
 
+
     .menu-inner a.menu-link:hover,
     .menu-inner button.menu-link:hover {
-        background-color: #4026d1 !important;
+        background-color: #2b3ea0 !important;
         color: #ffffff !important;
     }
 
+
     .menu-item.active>a.menu-link {
-        background-color: #4026d1 !important;
+        background-color: #2b3ea0 !important;
         color: #ffffff !important;
         font-weight: 600;
     }
+
 
     .menu-icon {
         color: inherit;
     }
 
+
     .menu-inner li {
         list-style: none;
     }
+
+
     .user-panel {
         margin: 0;
         padding: 12px 16px;
         background-color: #fff;
     }
+
 
     .menu-item form button.logout-btn:hover {
         background-color: #dc2626 !important;
@@ -333,6 +468,7 @@
     }
 </style>
 
+
 <script>
     function confirmLogout() {
         Swal.fire({
@@ -340,7 +476,7 @@
             text: "Anda akan keluar dari sesi saat ini.",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#dc2626',
+            confirmButtonColor: '#3085d6',
             cancelButtonColor: '#6c757d',
             confirmButtonText: 'Ya, Logout',
             cancelButtonText: 'Batal'

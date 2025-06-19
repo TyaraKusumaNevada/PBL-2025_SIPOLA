@@ -58,7 +58,19 @@ class MahasiswaModel extends Model
         return $this->belongsTo(DospemModel::class, 'id_dosen', 'id_dosen');
     }
 
-    public function tambahLomba(): BelongsTo {
-        return $this->belongsTo(DospemModel::class, 'id_tambahLomba', 'id_tambahLomba');
+    // public function tambahLomba(): BelongsTo {
+    //     return $this->belongsTo(DospemModel::class, 'id_tambahLomba', 'id_tambahLomba');
+    // }
+
+    public function tambahLomba(): HasMany {
+        return $this->hasMany(TambahLombaModel::class, 'id_mahasiswa', 'id_mahasiswa');
+    }
+
+    public function preferensi() {
+        return $this->hasOne(PreferensiMahasiswaModel::class, 'user_id', 'user_id');
+    }
+
+    public function bobot() {
+        return $this->hasOne(BobotKriteriaMahasiswaModel::class, 'user_id', 'user_id');
     }
 }
